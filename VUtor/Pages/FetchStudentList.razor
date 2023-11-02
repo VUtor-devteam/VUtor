@@ -5,9 +5,9 @@
 @using DataAccessLibrary
 @using Microsoft.EntityFrameworkCore
 
-@inject IGenericRepository<TopicEntity> _dbTopics
-@inject IProfileRepository _db
-@inject ApplicationDbContext _context
+@inject IGenericRepository<TopicEntity> repoGenericTopics
+@inject IProfileRepository repoProfiles
+@inject ApplicationDbContext context
 
 <PageTitle>Student List</PageTitle>
 
@@ -288,11 +288,11 @@ else
         // Actions executed on page initialization
         protected override async Task OnInitializedAsync()
         {
-            _users = await _db.LoadData(); // loads table of type ProfileEntity into _users
+            _users = await repoProfiles.LoadData(); // loads table of type ProfileEntity into _users
             _usersDisplay = _users; // stores reference to _users for display purposes
 
-            _topics = await _context.Topics.ToListAsync(); // loads table of Topics to choose from
-            _topicsDisplay = _context.Profiles.Include(p => p.TopicsToLearn).Include(p => p.TopicsToTeach).ToList(); // allows topics to be referenced
+            _topics = await context.Topics.ToListAsync(); // loads table of Topics to choose from
+            _topicsDisplay = context.Profiles.Include(p => p.TopicsToLearn).Include(p => p.TopicsToTeach).ToList(); // allows topics to be referenced
                                                                                                                      // when attempting to display
         }
 
@@ -309,10 +309,10 @@ else
             else
             {
                 var _tTL = new List<TopicEntity>();
-                _tTL.Add(await _dbTopics.GetEntityById<int>(NewUser.TopicToLearnId));
+                _tTL.Add(await repoGenericTopics.GetEntityById<int>(NewUser.TopicToLearnId));
 
                 var _tTT = new List<TopicEntity>();
-                _tTT.Add(await _dbTopics.GetEntityById<int>(NewUser.TopicToTeachId));
+                _tTT.Add(await repoGenericTopics.GetEntityById<int>(NewUser.TopicToTeachId));
 
                 ProfileEntity user = new ProfileEntity
                         {
@@ -324,8 +324,8 @@ else
                             TopicsToTeach = _tTT
                         };
 
-                await _db.Insert(user);
-                await _db.SaveChanges();
+                await repoProfiles.Insert(user);
+                await repoProfiles.SaveChanges();
 
                 await RefetchData();
 
@@ -341,7 +341,7 @@ else
 
         private async Task FilterList()
         {
-            _usersDisplay = await _db.GetProfilesByFilterAsync(name: Filter.Name,
+            _usersDisplay = await repoProfiles.GetProfilesByFilterAsync(name: Filter.Name,
                                                                surname: Filter.Surname, 
                                                                courseName: Filter.CourseName, 
                                                                courseYear: Filter.CourseYear, 
@@ -365,7 +365,7 @@ else
 
         private async Task RefetchData()
         {
-            _users = await _db.LoadData();
+            _users = await repoProfiles.LoadData();
             _usersDisplay = _users;
         }
 
