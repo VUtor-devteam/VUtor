@@ -1,10 +1,10 @@
 ﻿@page "/uploadfiles"
 
-@using DataAccessLibrary.Data
-@using DataAccessLibrary.Models
-@using DataAccessLibrary
-@using Microsoft.AspNetCore.Identity;
-@using Microsoft.EntityFrameworkCore
+@    using DataAccessLibrary.Data
+@    using DataAccessLibrary.Models
+@    using DataAccessLibrary
+@    using Microsoft.AspNetCore.Identity;
+@    using Microsoft.EntityFrameworkCore
 
 
 
@@ -73,6 +73,11 @@
         {
             profile = await userManager.GetUserAsync(user);
         }
+    }
+
+    private async Task CheckFolderExists(string name)
+    {
+       // FolderList = context.
     }
 
     private async Task SubmitForm()

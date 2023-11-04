@@ -2,7 +2,10 @@ using DataAccessLibrary;
 using DataAccessLibrary.Data;
 using DataAccessLibrary.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Azure;
 using Microsoft.EntityFrameworkCore;
+using VUtor.Controllers;
+using DataAccessLibrary.FileRepo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +13,11 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("AzureSql") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+var storageConnectionString = builder.Configuration.GetConnectionString("Storage");
+builder.Services.AddAzureClients(options =>
+{
+    options.AddBlobServiceClient(storageConnectionString);
+});
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<ProfileEntity>(options => options.SignIn.RequireConfirmedAccount = true) //veliau reiktu pakeist i true galbut????
     .AddRoles<IdentityRole>()
@@ -21,6 +29,12 @@ builder.Services.AddScoped<FileRepository>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 var app = builder.Build();
+// Apply migrations at runtime
+using (var serviceScope = app.Services.CreateScope())
+{
+    var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    dbContext.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

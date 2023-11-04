@@ -1,0 +1,105 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-main\\VUtor\\Pages\\files.razor.js",
+      "PackagePath": "staticwebassets\\Pages\\files.razor.js"
+    },
+    {
+      "Id": "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-main\\VUtor\\wwwroot\\Storage\\Accounting\\fksgpusc.pdf",
+      "PackagePath": "staticwebassets\\Storage\\Accounting\\fksgpusc.pdf"
+    },
+    {
+      "Id": "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-main\\VUtor\\wwwroot\\Storage\\Algorithm Theory\\ofnm5ylz.pdf",
+      "PackagePath": "staticwebassets\\Storage\\Algorithm Theory\\ofnm5ylz.pdf"
+    },
+    {
+      "Id": "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-main\\VUtor\\wwwroot\\Storage\\Algorithms and Data Structures\\1fwuu0q4.pdf",
+      "PackagePath": "staticwebassets\\Storage\\Algorithms and Data Structures\\1fwuu0q4.pdf"
+    },
+    {
+      "Id": "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-main\\VUtor\\wwwroot\\Storage\\Algorithms and Data Structures\\50bielui.pdf",
+      "PackagePath": "staticwebassets\\Storage\\Algorithms and Data Structures\\50bielui.pdf"
+    },
+    {
+      "Id": "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-main\\VUtor\\wwwroot\\Storage\\Computer Architecture\\qw4pboxq.pdf",
+      "PackagePath": "staticwebassets\\Storage\\Computer Architecture\\qw4pboxq.pdf"
+    },
+    {
+      "Id": "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-main\\VUtor\\wwwroot\\Storage\\Database Management Systems\\1ulk5ocd.pdf",
+      "PackagePath": "staticwebassets\\Storage\\Database Management Systems\\1ulk5ocd.pdf"
+    },
+    {
+      "Id": "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-main\\VUtor\\wwwroot\\Storage\\Discrete Mathematics\\0rb2rska.pdf",
+      "PackagePath": "staticwebassets\\Storage\\Discrete Mathematics\\0rb2rska.pdf"
+    },
+    {
+      "Id": "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-main\\VUtor\\wwwroot\\Storage\\Discrete Mathematics\\zuwnlpy2.pdf",
+      "PackagePath": "staticwebassets\\Storage\\Discrete Mathematics\\zuwnlpy2.pdf"
+    },
+    {
+      "Id": "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-main\\VUtor\\wwwroot\\Storage\\Informatics Law\\4zcd22qs.pdf",
+      "PackagePath": "staticwebassets\\Storage\\Informatics Law\\4zcd22qs.pdf"
+    },
+    {
+      "Id": "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-main\\VUtor\\wwwroot\\Storage\\Mathematical Logic\\os1bo4bk.pdf",
+      "PackagePath": "staticwebassets\\Storage\\Mathematical Logic\\os1bo4bk.pdf"
+    },
+    {
+      "Id": "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-main\\VUtor\\wwwroot\\Storage\\Object-Oriented Programming\\gi5wgn22.pdf",
+      "PackagePath": "staticwebassets\\Storage\\Object-Oriented Programming\\gi5wgn22.pdf"
+    },
+    {
+      "Id": "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-main\\VUtor\\wwwroot\\Storage\\Procedural Programming\\k5dkyrr2.pdf",
+      "PackagePath": "staticwebassets\\Storage\\Procedural Programming\\k5dkyrr2.pdf"
+    },
+    {
+      "Id": "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-main\\VUtor\\wwwroot\\Storage\\Procedural Programming\\sogsqhbl.pdf",
+      "PackagePath": "staticwebassets\\Storage\\Procedural Programming\\sogsqhbl.pdf"
+    },
+    {
+      "Id": "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-main\\VUtor\\wwwroot\\Storage\\Software Engineering\\hyfhcjl0.pdf",
+      "PackagePath": "staticwebassets\\Storage\\Software Engineering\\hyfhcjl0.pdf"
+    },
+    {
+      "Id": "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-main\\VUtor\\wwwroot\\Storage\\Software Engineering\\worlw3fq.pdf",
+      "PackagePath": "staticwebassets\\Storage\\Software Engineering\\worlw3fq.pdf"
+    },
+    {
+      "Id": "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-main\\VUtor\\wwwroot\\css\\Images\\angle-small-right.png",
+      "PackagePath": "staticwebassets\\css\\Images\\angle-small-right.png"
+    },
+    {
+      "Id": "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-main\\VUtor\\wwwroot\\css\\Images\\angle.png",
+      "PackagePath": "staticwebassets\\css\\Images\\angle.png"
+    },
+    {
+      "Id": "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-main\\VUtor\\wwwroot\\css\\Images\\angle_gray.png",
+      "PackagePath": "staticwebassets\\css\\Images\\angle_gray.png"
+    },
+    {
+      "Id": "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-main\\VUtor\\wwwroot\\css\\Images\\user.jpg",
+      "PackagePath": "staticwebassets\\css\\Images\\user.jpg"
+    },
+    {
+      "Id": "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-main\\VUtor\\wwwroot\\css\\custom.css",
+      "PackagePath": "staticwebassets\\css\\custom.css"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.VUtor.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.build.VUtor.props",
+      "PackagePath": "build\\VUtor.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.buildMultiTargeting.VUtor.props",
+      "PackagePath": "buildMultiTargeting\\VUtor.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.buildTransitive.VUtor.props",
+      "PackagePath": "buildTransitive\\VUtor.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

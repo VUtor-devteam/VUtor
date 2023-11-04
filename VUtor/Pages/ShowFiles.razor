@@ -1,13 +1,14 @@
 ﻿@page "/loadfiles"
 
-@using DataAccessLibrary.Data;
-@using DataAccessLibrary.Models;
-@using DataAccessLibrary;
+@    using DataAccessLibrary.Data;
+@    using DataAccessLibrary.Models;
+@    using DataAccessLibrary;
+    using DataAccessLibrary.FileRepo;
 
 @inject IConfiguration config
 @inject ApplicationDbContext context
-@inject NavigationManager navigationManger
-@inject FileRepository fileManager
+@inject NavigationManager navigationManger;
+@inject FileRepository fileManager;
 
 <AuthorizeView>
     <Authorized>
@@ -27,7 +28,6 @@
                 @foreach(var item in _userFiles)
                 {
                     <tr>
-                        <td>@item.Topic.Title</td>
                         <td>@item.Title</td>
                         <td>@item.Description</td>
                         <td>
@@ -86,7 +86,5 @@
 
     protected override void OnInitialized()
     {
-        dirs = fileManager.GetFoldersInDir(config.GetValue<string>("FileStorage")!);
-        LoadFiles();
     }
 }
