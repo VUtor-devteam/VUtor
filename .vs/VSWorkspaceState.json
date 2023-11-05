@@ -1,7 +1,14 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\VUtor",
+    "\\VUtor\\Areas",
+    "\\VUtor\\Areas\\Identity",
+    "\\VUtor\\Areas\\Identity\\Pages",
+    "\\VUtor\\Areas\\Identity\\Pages\\Account",
+    "\\VUtor\\Areas\\Identity\\Pages\\Account\\Manage",
+    "\\VUtor\\Pages"
   ],
-  "SelectedNode": "\\VUtor.sln",
+  "SelectedNode": "\\VUtor\\Areas\\Identity\\Pages\\Account\\Manage\\_ManageNav.cshtml",
   "PreviewInSolutionExplorer": false
 }
