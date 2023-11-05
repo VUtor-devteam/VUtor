@@ -12,3 +12,17 @@ C:\Users\aiste\OneDrive\Desktop\VUtor-main\DataAccessLibrary\obj\Debug\net7.0\re
 C:\Users\aiste\OneDrive\Desktop\VUtor-main\DataAccessLibrary\obj\Debug\net7.0\DataAccessLibrary.pdb
 C:\Users\aiste\OneDrive\Desktop\VUtor-main\DataAccessLibrary\obj\Debug\net7.0\DataAccessLibrary.genruntimeconfig.cache
 C:\Users\aiste\OneDrive\Desktop\VUtor-main\DataAccessLibrary\obj\Debug\net7.0\ref\DataAccessLibrary.dll
+C:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\DataAccessLibrary\bin\Debug\net7.0\DataAccessLibrary.deps.json
+C:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\DataAccessLibrary\bin\Debug\net7.0\DataAccessLibrary.runtimeconfig.json
+C:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\DataAccessLibrary\bin\Debug\net7.0\DataAccessLibrary.dll
+C:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\DataAccessLibrary\bin\Debug\net7.0\DataAccessLibrary.pdb
+C:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\DataAccessLibrary\obj\Debug\net7.0\DataAccessLibrary.csproj.AssemblyReference.cache
+C:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\DataAccessLibrary\obj\Debug\net7.0\DataAccessLibrary.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\DataAccessLibrary\obj\Debug\net7.0\DataAccessLibrary.AssemblyInfoInputs.cache
+C:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\DataAccessLibrary\obj\Debug\net7.0\DataAccessLibrary.AssemblyInfo.cs
+C:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\DataAccessLibrary\obj\Debug\net7.0\DataAccessLibrary.csproj.CoreCompileInputs.cache
+C:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\DataAccessLibrary\obj\Debug\net7.0\DataAccessLibrary.dll
+C:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\DataAccessLibrary\obj\Debug\net7.0\refint\DataAccessLibrary.dll
+C:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\DataAccessLibrary\obj\Debug\net7.0\DataAccessLibrary.pdb
+C:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\DataAccessLibrary\obj\Debug\net7.0\DataAccessLibrary.genruntimeconfig.cache
+C:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\DataAccessLibrary\obj\Debug\net7.0\ref\DataAccessLibrary.dll

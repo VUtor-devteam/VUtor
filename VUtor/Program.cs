@@ -32,10 +32,10 @@ var app = builder.Build();
 // Apply migrations at runtime
 using (var serviceScope = app.Services.CreateScope())
 {
-    var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    dbContext.Database.Migrate();
-}
-
+    var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    context.Database.EnsureDeleted();
+    context.Database.EnsureCreated();
+};
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

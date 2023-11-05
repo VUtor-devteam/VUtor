@@ -8,6 +8,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\20231016182135_UserFileTable.cs" />
+    <Compile Remove="Data\Migrations\20231016182135_UserFileTable.Designer.cs" />
+    <Compile Remove="Data\Migrations\20231018133051_FilesFoldersAndItems.cs" />
+    <Compile Remove="Data\Migrations\20231018133051_FilesFoldersAndItems.Designer.cs" />
+    <Compile Remove="Data\Migrations\20231019124409_UserItemAnUserFile.cs" />
+    <Compile Remove="Data\Migrations\20231019124409_UserItemAnUserFile.Designer.cs" />
+    <Compile Remove="Data\Migrations\20231019141213_CreationDateUserItem.cs" />
+    <Compile Remove="Data\Migrations\20231019141213_CreationDateUserItem.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.18.0" />
     <PackageReference Include="Dapper" Version="2.1.4" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.12" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.11" />
@@ -21,6 +33,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
   </ItemGroup>
 
 </Project>

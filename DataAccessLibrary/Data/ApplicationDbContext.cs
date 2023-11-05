@@ -68,8 +68,9 @@ namespace DataAccessLibrary.Data
 
             modelBuilder.Entity<Folder>()
                 .HasMany(e => e.SubFolders)
-                .WithMany()
-                .UsingEntity(join => join.ToTable("FolderHierarchy"));
+                .WithOne(e => e.ParentFolder)
+                .HasForeignKey(e => e.ParentFolderId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<UserItem>(e =>
             { 
@@ -82,7 +83,6 @@ namespace DataAccessLibrary.Data
                           v => v.ToString(),
                           v => new profileCreationDate(v))
                       .HasMaxLength(250);
-
             });
 
             modelBuilder.Entity<UserFile>(e =>
@@ -96,6 +96,8 @@ namespace DataAccessLibrary.Data
                     .WithMany(e => e.UserFiles)
                     .HasForeignKey(e => e.TopicId)
                     .IsRequired();
+                e.Property(e => e.BlobUri)
+                    .HasMaxLength(500);
             });
             base.OnModelCreating(modelBuilder);
         }

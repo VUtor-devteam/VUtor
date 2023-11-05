@@ -11,11 +11,13 @@ namespace DataAccessLibrary.FileRepo
     public class FileRepository : GenericRepository<UserFile>, IFileRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly BlobServiceClient _blobServiceClient;
         private readonly BlobContainerClient _blobContainer;
-        public FileRepository(ApplicationDbContext context, BlobContainerClient blobContainerClient) : base(context)
+        public FileRepository(ApplicationDbContext context, BlobServiceClient blobServiceClient) : base(context)
         {
             _context = context;
-            _blobContainer = blobContainerClient;
+            _blobServiceClient = blobServiceClient;
+            _blobContainer = _blobServiceClient.GetBlobContainerClient("user-resources");
         }
 
         public async Task UploadFileAsync(Stream fileStream, string fileName, string contentType, int folderId, string userId)

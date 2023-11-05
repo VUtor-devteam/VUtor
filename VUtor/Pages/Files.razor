@@ -108,7 +108,7 @@
 
 <label class="gray_text">Name</label>
 <div class="form-floating">
-    @if (Folder.Items is not null)
+    @if (Folder.Files is not null)
     {
         <h2>Uploaded files</h2>
         <table class="table table-bordered">
@@ -121,7 +121,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (UserFile item in Folder.Items)
+                @foreach (UserFile item in Folder.Files)
                 {
                     <tr class="mb-2">
                         <td>@item.Topic.Title</td>
@@ -149,7 +149,7 @@
     {
         int folderId = int.Parse(Id);
         context.Topics.ToList();
-        Folder = context.Folders.Where(e => e.Id == folderId).Include(e => e.Items).First();
+        Folder = context.Folders.Where(e => e.Id == folderId).Include(e => e.Files).First();
     }
 
     private string CreateFullPath(string relativePath)

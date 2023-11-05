@@ -1,10 +1,11 @@
 ﻿@page "/uploadfiles"
 
-@    using DataAccessLibrary.Data
-@    using DataAccessLibrary.Models
-@    using DataAccessLibrary
-@    using Microsoft.AspNetCore.Identity;
-@    using Microsoft.EntityFrameworkCore
+@using DataAccessLibrary.Data
+@using DataAccessLibrary.FileRepo;
+@using DataAccessLibrary.Models
+@using DataAccessLibrary
+@using Microsoft.AspNetCore.Identity;
+@using Microsoft.EntityFrameworkCore
 
 
 
@@ -77,7 +78,7 @@
 
     private async Task CheckFolderExists(string name)
     {
-       // FolderList = context.
+        // FolderList = context.
     }
 
     private async Task SubmitForm()
@@ -98,7 +99,7 @@
                 // adding new items to dbsets and saving changes
                 topic.UserFiles.Add(userFile);
                 context.UserFiles.Add(userFile);
-                folder.Items.Add(userFile);
+                folder.Files.Add(userFile);
 
                 context.SaveChanges();
             }
@@ -143,7 +144,7 @@
 
             // check and/or create the folders if they're not there
             // full path
-            string folderPath = fileManager.CreateFolder(storagePath, userFile.Topic.Title);
+            string folderPath = "no";// = fileManager.CreateFolder(storagePath, userFile.Topic.Title);
             // check if no errors occured
             if(folderPath != null)
             {
