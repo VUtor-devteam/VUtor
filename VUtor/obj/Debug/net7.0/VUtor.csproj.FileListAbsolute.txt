@@ -665,3 +665,7 @@ C:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\VUtor\obj\Debug\net7.0\scopedcss
 C:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\VUtor\obj\Debug\net7.0\VUtor.csproj.CopyComplete
 C:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\VUtor\obj\Debug\net7.0\VUtor.genruntimeconfig.cache
 C:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\VUtor\obj\Debug\net7.0\ref\VUtor.dll
+C:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\VUtor\bin\Debug\net7.0\appsettings.Development.json
+C:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\VUtor\obj\Debug\net7.0\scopedcss\Shared\MainLayout.razor.rz.scp.css
+C:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\VUtor\obj\Debug\net7.0\scopedcss\Shared\NavMenu.razor.rz.scp.css
+C:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\VUtor\obj\Debug\net7.0\scopedcss\projectbundle\VUtor.bundle.scp.css

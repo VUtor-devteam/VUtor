@@ -33,8 +33,7 @@ var app = builder.Build();
 using (var serviceScope = app.Services.CreateScope())
 {
     var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    context.Database.EnsureDeleted();
-    context.Database.EnsureCreated();
+    //context.Database.Migrate();
 };
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

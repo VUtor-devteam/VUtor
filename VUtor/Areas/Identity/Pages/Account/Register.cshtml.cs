@@ -98,6 +98,7 @@ namespace VUtor.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             TopicList = await _context.Topics.ToListAsync();
+            Console.WriteLine(TopicList.Count);
             returnUrl ??= Url.Content("~/");
             if (ModelState.IsValid && Input.CourseName != 0 && Input.CourseYear != 0)
             {

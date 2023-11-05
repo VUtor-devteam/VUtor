@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\DesignTimeDbContextFactory.cs" />
     <Compile Remove="Data\Migrations\20231016182135_UserFileTable.cs" />
     <Compile Remove="Data\Migrations\20231016182135_UserFileTable.Designer.cs" />
     <Compile Remove="Data\Migrations\20231018133051_FilesFoldersAndItems.cs" />
