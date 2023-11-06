@@ -3,8 +3,7 @@ using Azure.Storage.Blobs.Models;
 using DataAccessLibrary.Data;
 using DataAccessLibrary.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
+
 
 namespace DataAccessLibrary.FileRepo
 {
