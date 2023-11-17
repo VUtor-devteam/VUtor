@@ -1,5 +1,5 @@
 ﻿
-@page "/profile/{email}"
+@page "/profile"
 
 @using DataAccessLibrary.Data
 @using DataAccessLibrary.Models
@@ -15,25 +15,25 @@
 
 <PageTitle>Profile</PageTitle>
 <h1>Profile</h1>
+<h1>@fullName</h1>
 
-@foreach (var user in _usersDisplay)
+
+@if (userProfile != null)
 {
-    //if (@user.Email != null && @user.Email.Trim().Equals(@email.Trim(), StringComparison.OrdinalIgnoreCase))
-    {
         <div class="edit_container">
             <div class="edit_row_container">
                 <div class="edit_container">
                     <div> 
-                        <label class="specifications">Name:</label>
+                        <label class="specifications"> Name:</label>
                         <div class="mb-2">
-                            <label>@user.Name</label>
+                            <label>@userProfile.Name</label>
                         </div>
                     </div>
 
                     <div>
                         <label class="specifications">Surname:</label>
                         <div class="mb-2">
-                            <label>@user.Surname</label>
+                            <label>@userProfile.Surname</label>
                         </div>
                     </div>
                 </div>
@@ -45,14 +45,14 @@
                 <div>
                     <label class="specifications">Course:</label>
                     <div class="mb-2">
-                        <label>@user.CourseInfo.GetName()</label>
+                        <label>@userProfile.CourseInfo.GetName()</label>
                     </div>
                 </div>
 
                 <div>
                     <label class="specifications">Academic year:</label>
                     <div class="mb-2">
-                        <label>@user.CourseInfo.GetYear()</label>
+                        <label>@userProfile.CourseInfo.GetYear()</label>
                     </div>
                 </div>
             </div>
@@ -61,7 +61,7 @@
                 <div>
                     <label class="specifications">Subject you want to learn:</label>
                     <div class="mb-2">
-                        @foreach (var topic in user.TopicsToLearn)
+                        @foreach (var topic in @userProfile.TopicsToLearn)
                         {
                             <li>@topic.Title</li>
                         }
@@ -73,7 +73,7 @@
                 <div>
                     <label class="specifications">Subject you want to teach:</label>
                     <div class="mb-2">
-                        @foreach (var topic in user.TopicsToTeach)
+                        @foreach (var topic in @userProfile.TopicsToTeach)
                         {
                             <li>@topic.Title</li>
                         }
@@ -81,38 +81,36 @@
                     </div>
                 </div>
             </div>
-            <div class="mb-2"></div>
-
-            @if (@email == @authenticatedUserEmail){
-            <div>
-                 <button @onclick="NavigateToManage" type="submit" class="round_corners edit">Edit profile
-                        <a href="Identity/Account/Manage">!</a>
-                 </button>
+            <div class="mb-2">
+                <a id="manage" class="nav-link text-dark" href="/Identity/Account/Manage" title="Manage">Edit</a>
+            <p>funny text and also @fullName</p>
             </div>
-            }
 
         </div>
-    }
-
 }
 
 @code {
 
     [Parameter]
-    public string email { get; set; }
+    public string fullName { get; set; }
 
-    private string authenticatedUserEmail;
+    private ProfileEntity userProfile;
 
-    private async Task GetUserData()
+    #region Tasks
+
+    // Actions executed on page initialization
+    protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
-
         if (user.Identity.IsAuthenticated)
         {
-            authenticatedUserEmail = user.Identity.Name;
+            var id = user.Identity.Name; // Assuming the email is used as the username
+            userProfile = await repoProfiles.GetProfileByEmailAsync(id);
+            fullName = $"{userProfile.Name} {userProfile.Surname}";
         }
     }
+    #endregion
 
     private void NavigateToManage()
     {
@@ -158,19 +156,4 @@
 
     #endregion
 
-    #region Tasks
-
-    // Actions executed on page initialization
-    protected override async Task OnInitializedAsync()
-    {
-        _users = await repoProfiles.LoadData(); // loads table of type ProfileEntity into _users
-        _usersDisplay = _users; // stores reference to _users for display purposes
-
-        _topics = await context.Topics.ToListAsync(); // loads table of Topics to choose from
-        _topicsDisplay = context.Profiles.Include(p => p.TopicsToLearn).Include(p => p.TopicsToTeach).ToList(); // allows topics to be referenced
-                                                                                                                // when attempting to display
-        await GetUserData();
-    }
-    #endregion
-   
 }

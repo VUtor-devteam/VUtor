@@ -12,5 +12,6 @@ namespace DataAccessLibrary
         Task<List<ProfileEntity>> LoadData();
         Task SaveChanges();
         Task Update(ProfileEntity entity);
+        Task<ProfileEntity> GetProfileByEmailAsync(string email);
     }
 }
