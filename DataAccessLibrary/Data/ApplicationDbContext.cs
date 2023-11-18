@@ -92,10 +92,10 @@ namespace DataAccessLibrary.Data
                     .HasForeignKey(e => e.FolderId)
                     .IsRequired();
 
-                e.HasOne(e=> e.Topic)
+                e.HasMany(e=> e.Topics)
                     .WithMany(e => e.UserFiles)
-                    .HasForeignKey(e => e.TopicId)
-                    .IsRequired();
+                    .UsingEntity(j => j.ToTable("TopicToFiles"));
+
                 e.Property(e => e.BlobUri)
                     .HasMaxLength(500);
             });

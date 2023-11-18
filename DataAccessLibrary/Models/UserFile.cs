@@ -13,8 +13,7 @@ namespace DataAccessLibrary.Models
         public string? Description { get; set; }
         public int FolderId { get; set; }
         public Folder Folder { get; set; }
-        public int TopicId {  get; set; }
-        public TopicEntity Topic { get; set; }
+        public List<TopicEntity> Topics { get; set; }
         public string FileName { get; set; }
         public string BlobUri { get; set; }
     }

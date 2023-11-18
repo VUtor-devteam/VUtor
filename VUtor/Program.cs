@@ -4,8 +4,9 @@ using DataAccessLibrary.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Azure;
 using Microsoft.EntityFrameworkCore;
-using VUtor.Controllers;
 using DataAccessLibrary.FileRepo;
+using Microsoft.AspNetCore.Builder;
+using DataAccessLibrary.FolderRepo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +27,9 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IFileRepository, FileRepository>();
+builder.Services.AddScoped<IFolderRepository, FolderRepository>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddControllers();
 
 var app = builder.Build();
 // Apply migrations at runtime

@@ -310,3 +310,61 @@ full {
     font-size: 16px;
     font-weight: 500;
 }
+
+.folder_table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 15px;
+    vertical-align: top;
+    margin-bottom: 1rem;
+}
+
+.folder_tr {
+    outline: thin solid;
+    border-radius: 10px;
+    border-color: #606061;
+}
+
+.folder_td {
+    padding: 4px 0px 4px 7px;
+    cursor: pointer;
+    color: #606061;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.folder_th {
+    padding: 2px 0px 2px 7px;
+    color: #606061;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.file_table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 15px;
+    vertical-align: top;
+    margin-bottom: 1rem;
+}
+
+.file_tr {
+    outline: thin solid;
+    border-radius: 10px;
+    border-color: #606061;
+}
+
+.file_td {
+    padding: 4px 0px 4px 7px;
+    cursor: pointer;
+    color: #606061;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.file_th {
+    padding: 2px 0px 2px 7px;
+    color: #606061;
+    font-size: 16px;
+    font-weight: 500;
+}

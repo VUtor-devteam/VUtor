@@ -1,0 +1,154 @@
+﻿@page "/library"
+@using DataAccessLibrary.Data;
+@using DataAccessLibrary.Models;
+@using DataAccessLibrary.FileRepo;
+@using DataAccessLibrary.FolderRepo;
+@using Microsoft.EntityFrameworkCore
+@using VUtor.Components;
+
+
+@inject ApplicationDbContext context
+@inject IConfiguration config
+@inject NavigationManager navigationManger
+@inject IFileRepository fileRepo
+@inject IFolderRepository folderRepo
+
+
+
+<PageTitle>Courses</PageTitle>
+
+<h1>Library</h1>
+<div>
+    <div class="edit_row_container form-floating mb-2">
+        <button @onclick="PreviousFolder" type="submit" class="round_corners small_arrow">
+            <img src="css/Images/angle-small-right.png" alt="buttonpng" class="angle_img right" />
+        </button>
+        @if(SelectedFolder != null)
+        {
+            <h2 class="congrats_h2">@SelectedFolder.Path</h2>
+        }
+    </div>
+
+    <div class="edit_row_container">
+        <div class="form-floating mb-2">
+            <input type="text" name="filter" class="round_corners" placeholder="Search" />
+        </div>
+    </div>
+</div>
+@if(SelectedFolder == null)
+{
+    <table class="library_table">
+        <thead>
+            <tr>
+                <th class="library_th">Folder name</th>
+                <th class="library_th">SubFolders</th>
+                <th class="library_th">Files</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var folder in folderList)
+            {
+                <tr class="library_tr" @onclick="() => SelectFolder(folder)">
+                    <td class="library_td">@folder.Name</td>
+                    <td class="library_td">@folder.SubFolders.Count()</td>
+                    <td class="library_td">@folder.Files.Count()</td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    @if (SelectedFolder.SubFolders != null && SelectedFolder.SubFolders.Count() > 0)
+    {
+        <table class="library_table">
+            <thead>
+                <tr>
+                    <th class="library_th">Folder name</th>
+                    <th class="library_th">SubFolders</th>
+                    <th class="library_th">Files</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var folder in subfolderList)
+                {
+                    <tr class="library_tr" @onclick="() => SelectFolder(folder)">
+                        <td class="library_td">@folder.Name</td>
+                        <td class="library_td">@folder.SubFolders.Count()</td>
+                        <td class="library_td">@folder.Files.Count()</td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+    @if (SelectedFolderFiles != null && SelectedFolderFiles.Count() > 0)
+    {
+        <table class="file_table">
+            <thead>
+                <tr>
+                    <th class="file_th">File name</th>
+                    <th class="file_th">Description</th>
+                    <th class="file_th">Topics</th>
+                    <th class="file_th">Creation date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var file in SelectedFolderFiles)
+                {
+                    <tr class="library_tr">
+                        <td class="file_td">@file.Title</td>
+                        <td class="file_td">@file.Description</td>
+                        <td class="file_td">
+                            @foreach (TopicEntity topic in file.Topics)
+                            {
+                                <li>@topic.Title</li>
+                            }
+                        </td>
+                        <td class="file_td">@file.CreationDate.ToString()</td>
+                        <td class="file_td"><a href="@file.BlobUri" download>Download</a></td>
+                       
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+
+@code {
+    private Folder SelectedFolder { get; set; }
+    private List<UserFile> SelectedFolderFiles { get; set; } = new List<UserFile>();
+    private List<Folder> folderList = new List<Folder>();
+    private List<Folder> subfolderList = new List<Folder>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        folderList = await folderRepo.GetParentFolders();
+    }
+
+    public async Task SelectFolder(Folder folder)
+    {
+        SelectedFolder = await folderRepo.GetFolder(folder.Id);
+        subfolderList = await folderRepo.GetSubFolders(SelectedFolder.Id);
+        SelectedFolderFiles = await fileRepo.GetFilesForFolderAsync(SelectedFolder.Id);
+        //navigationManger.NavigateTo($"file/{folder}");
+    }
+    private void HandleFolderSelected(Folder folder)
+    {
+        SelectedFolder = folder;
+    }
+    private async Task PreviousFolder()
+    {
+        if(SelectedFolder.ParentFolderId != null)
+        {
+            await SelectFolder(SelectedFolder.ParentFolder);
+        }
+        else
+        {
+            SelectedFolder = null;
+        }
+    }
+
+}

@@ -1,0 +1,126 @@
+﻿@using DataAccessLibrary.Models;
+@using DataAccessLibrary.FolderRepo;
+@inject IFolderRepository folderRepo;
+
+@if(CurrentFolder == SelectedFolder || CurrentFolder.ParentFolderId == null){
+    <div>
+        <div>
+            @if (CurrentFolder.SubFolders != null && CurrentFolder.SubFolders.Any())
+            {
+                @if (CurrentFolder.SubFolders.Count() == 1)
+                {
+                    <label for="SubFoldersIdOne">Choose a subfolder</label>
+                    <button @onclick="() => SelectFolder(CurrentFolder.SubFolders.First())">
+                        @CurrentFolder.SubFolders.First().Name
+                    </button>
+                }
+                else
+                {
+                    <div>
+                        <label for="SubFoldersIdSelect">Choose a subfolder</label>
+                    </div>
+                    <select @onchange="SubFolderSelected">
+                        @foreach (var subFolder in CurrentFolder.SubFolders)
+                        {
+                            <option value="@subFolder.Id">@subFolder.Name</option>
+                        }
+                    </select>
+                }
+            }
+            <div>
+                <input type="text" @bind="newSubFolderName" placeholder="New sub-folder name" />
+                <button @onclick="CreateNewSubFolder">Create New Sub-Folder</button>
+            </div>
+            <div>
+                <button @onclick="GoBackAFolder">Go back one folder</button>
+            </div>
+        </div>
+    </div>
+    @if (SelectedFolder != null && SelectedFolder != CurrentFolder)
+    {
+        <FolderComp CurrentFolder="@SelectedFolder" OnFolderSelected="SelectFolder" />
+
+    }
+}
+
+@code {
+    [Parameter]
+    public Folder CurrentFolder { get; set; }
+
+    [Parameter]
+    public EventCallback<Folder> OnFolderSelected { get; set; }
+    private Folder SelectedFolder { get; set; }
+    private string newSubFolderName;
+
+    private async Task SelectFolder(Folder folder)
+    {
+        if (folder != null)
+        {
+            if (folder == CurrentFolder)
+            {
+                SelectedFolder = null;
+            }
+            else
+            {
+                SelectedFolder = folder;
+            }
+            await OnFolderSelected.InvokeAsync(SelectedFolder);
+        }
+    }
+    private async Task GoBackAFolder()
+    {
+        if (SelectedFolder == null)
+        {
+            if (CurrentFolder.ParentFolderId == null)
+            {
+                SelectedFolder = null;
+                await OnFolderSelected.InvokeAsync(SelectedFolder);
+            }
+            else
+            {
+                var previousFolder = await folderRepo.GetFolder(CurrentFolder.ParentFolderId.Value);
+                SelectedFolder = previousFolder;
+                await OnFolderSelected.InvokeAsync(SelectedFolder);
+            }
+        }
+        else
+        {
+            if (SelectedFolder.ParentFolderId != null)
+            {
+                var previousFolder = await folderRepo.GetFolder(SelectedFolder.ParentFolderId.Value);
+                SelectedFolder = previousFolder;
+                await OnFolderSelected.InvokeAsync(SelectedFolder);
+            }
+            else
+            {
+                SelectedFolder = null;
+                await OnFolderSelected.InvokeAsync(SelectedFolder);
+            }
+        }
+    }
+
+    private async Task SubFolderSelected(ChangeEventArgs e)
+    {
+        var selectedSubFolderId = int.Parse(e.Value.ToString());
+        // Find the selected subfolder by ID...
+        var selectedSubFolder = await folderRepo.GetFolder(selectedSubFolderId);
+        SelectedFolder = selectedSubFolder;
+        await OnFolderSelected.InvokeAsync(SelectedFolder);
+    }
+
+    private async Task CreateNewSubFolder()
+    {
+        if (!string.IsNullOrEmpty(newSubFolderName))
+        {
+            Console.WriteLine(CurrentFolder.Name);
+            await folderRepo.CreateSubFolder(newSubFolderName, CurrentFolder.Id);
+            await UpdateSubFolderList();
+        }
+        newSubFolderName = string.Empty;
+    }
+
+    private async Task UpdateSubFolderList()
+    {
+        CurrentFolder = await folderRepo.GetFolder(CurrentFolder.Id);
+    }
+}

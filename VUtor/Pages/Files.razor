@@ -1,4 +1,4 @@
-﻿@page "/files/{id}"
+﻿@page "/file/{id}"
 @using DataAccessLibrary.Data;
 @using DataAccessLibrary.Models;
 @using Microsoft.EntityFrameworkCore
@@ -124,7 +124,10 @@
                 @foreach (UserFile item in Folder.Files)
                 {
                     <tr class="mb-2">
-                        <td>@item.Topic.Title</td>
+                        @foreach(TopicEntity topic in item.Topics)
+                        {
+                            <td>topic.Title</td>
+                        }
                         <td>@item.Title</td>
                         <td>@item.Description</td>
                         <td>
