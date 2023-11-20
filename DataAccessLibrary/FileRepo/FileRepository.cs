@@ -6,16 +6,17 @@ using DataAccessLibrary.FileRepo.Model;
 using DataAccessLibrary.Models;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.IdentityModel.Tokens;
+using System.Linq;
 
 namespace DataAccessLibrary.FileRepo
 {
-    public class FileRepository : GenericRepository<UserFile>, IFileRepository
+    public class FileRepository : IFileRepository
     {
         private readonly ApplicationDbContext _context;
         private readonly BlobServiceClient _blobServiceClient;
         private readonly BlobContainerClient _blobContainer;
-        public FileRepository(ApplicationDbContext context, BlobServiceClient blobServiceClient) : base(context)
+        public FileRepository(ApplicationDbContext context, BlobServiceClient blobServiceClient)
         {
             _context = context;
             _blobServiceClient = blobServiceClient;
@@ -51,104 +52,138 @@ namespace DataAccessLibrary.FileRepo
             _context.UserFiles.Add(file);
             await _context.SaveChangesAsync();
             return file;
-    }
-
-        public Task<List<UserFile>> GetFilesForUserAsync(string userId)
-        {
-            return _context.UserFiles.Include(e => e.ProfileId).Where(e => e.ProfileId == userId).ToListAsync();
-        }
-        public Task<UserFile> GetFilesForTitleAsync(string title)
-        {
-            try
-            {
-                return _context.UserFiles.Where(e => e.Title.Contains(title)).FirstAsync();
-            }
-            catch
-            {
-                return null;
-            }
         }
 
-        public Task<UserFile> GetFileAsync(int fileId)
-        {
-            try
-            {
-                return _context.UserFiles.FirstAsync(e => e.Id == fileId);
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        public Task MoveFileAsync(int fileId, int folderId)
-        {
-            var file = _context.UserFiles.FirstOrDefault(e => e.Id == fileId);
+        public async Task EditFile(UserFile file, string? title, string? description, List<int>? topics, int? folderId)
+        {           
             if(file != null)
             {
-                file.FolderId = folderId;
-                 _context.SaveChangesAsync();
+                var topicList = await _context.Topics.ToListAsync(); 
+                if(!file.Title.Equals(title) && !title.IsNullOrEmpty())
+                {
+                    file.Title = title;
+                }
+                if(!description.IsNullOrEmpty() && !file.Description.Equals(description))
+                {
+                    file.Description = description;
+                }
+                if (!topicList.IsNullOrEmpty() && topicList.Count > 0)
+                {
+                    foreach (var topic in topics)
+                    {
+                        if (!file.Topics.Any(x => x.Id == topic))
+                        {
+                            var newToAdd = topicList.Where(x => x.Id == topic).First();
+                            file.Topics.Add(newToAdd);
+                            newToAdd.UserFiles.Add(file);
+                        }
+                    }
+                    foreach (var oldTopic in file.Topics.ToList())
+                    {
+                        if (!topics.Contains(oldTopic.Id))
+                        {
+                            file.Topics.Remove(oldTopic);
+                            oldTopic.UserFiles.Remove(file);
+                        }
+                    }
+                }
+                await _context.SaveChangesAsync();
+                if(folderId != null && !folderId.Equals(file.FolderId))
+                {
+                    var oldFolder = await _context.Folders.Where(x => x.Id == file.FolderId).SingleAsync();
+                    var newFolder = await _context.Folders.Where(x => x.Id == folderId).SingleAsync();
+                    if(oldFolder != null && newFolder != null)
+                    {
+                        oldFolder.Files.Remove(file);
+                        newFolder.Files.Add(file);
+                    }
+                    await _context.SaveChangesAsync();
+                }
             }
-            return Task.CompletedTask;
+        }
+        public async Task<List<UserFile>> GetFilesForBlobUrls(List<string> blobUrls)
+        {
+            List<UserFile> files = new List<UserFile>();
+            foreach (var blobUrl in blobUrls)
+            {
+                try
+                {
+                    var file = await _context.UserFiles.Include(x => x.Profile).Include(x => x.Topics).Where(x => blobUrl.StartsWith(x.BlobUri)).FirstAsync();
+                    files.Add(file);
+                }
+                catch{ }
+            }
+            return files;
         }
 
-        public async Task<BlobDto> DownloadAsync(int fileId)
+
+        public async Task<List<UserFile>> GetFilesForUserAsync(string userId)
         {
-            var blobFile = _context.UserFiles.FindAsync(fileId).Result;
-            if (blobFile != null)
+            return await _context.UserFiles.Include(e => e.ProfileId).Where(e => e.ProfileId == userId).ToListAsync();
+        }
+        public async Task<UserFile> GetFilesForTitleAsync(string title)
+        {
+            try
             {
-                var blobFileName = blobFile.FileName;
-                BlobClient file = _blobContainer.GetBlobClient(blobFileName);
-
-                var data = await file.OpenReadAsync();
-
-                var content = await file.DownloadContentAsync();
-                var contentType = content.Value.Details.ContentType;
-
-                return new BlobDto { Content = data, Name = blobFileName, ContentType = contentType };
+                return await _context.UserFiles.Where(e => e.Title.Contains(title)).FirstAsync();
             }
-            return null;
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<UserFile> GetFileAsync(int fileId)
+        {
+            try
+            {
+                return await _context.UserFiles.FirstAsync(e => e.Id == fileId);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public async Task DeleteFileAsync(int fileId)
         {
-            var file = _context.UserFiles.FindAsync(fileId).Result;
+            var file = await _context.UserFiles.FindAsync(fileId);
             if (file != null)
             {
                 var blob = new BlobClient(new Uri(file.BlobUri));
                 await blob.DeleteAsync();
 
-                var folder = _context.Folders
+                var folder = await _context.Folders
                     .Where(e => e.Id == file.FolderId)
-                    .FirstOrDefault();
+                    .SingleAsync();
                 if (folder != null)
                 {
                     folder.Files.Remove(file);
                 }
-                var user = _context.Profiles
+                var user = await _context.Profiles
                     .Where(e => e.Id == file.ProfileId)
-                    .FirstOrDefault();
+                    .SingleAsync();
                 if (user != null)
                 {
                     user.UserItems.Remove(file);
                 }
 
                 _context.UserFiles.Remove(file);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
         }
-        public Task<List<UserFile>> GetFilesForFolderAsync(int folderId)
+        public async Task<List<UserFile>> GetFilesForFolderAsync(int folderId)
         {
-            return _context.UserFiles
+            return await _context.UserFiles
                 .Include(e => e.Topics)
                 .Where(f => f.FolderId == folderId)
                 .ToListAsync();
         }
 
-        public Task<List<UserFile>> GetFilesForTopicAsync(int topicId)
+        public async Task<List<UserFile>> GetFilesForTopicAsync(int topicId)
         {
-            var topic = _context.Topics.FindAsync(topicId).Result;
-            return _context.UserFiles
+            var topic = await _context.Topics.FindAsync(topicId);
+            return await _context.UserFiles
                 .Where(f => f.Topics.Contains(topic))
                 .ToListAsync();
         }

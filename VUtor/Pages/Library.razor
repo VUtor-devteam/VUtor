@@ -1,17 +1,22 @@
 ﻿@page "/library"
+@using Azure.Search.Documents.Models;
 @using DataAccessLibrary.Data;
 @using DataAccessLibrary.Models;
 @using DataAccessLibrary.FileRepo;
 @using DataAccessLibrary.FolderRepo;
-@using Microsoft.EntityFrameworkCore
+@using DataAccessLibrary;
+@using Microsoft.AspNetCore.Identity;
+@using Microsoft.EntityFrameworkCore;
+@using System.Security.Claims;
 @using VUtor.Components;
+@using DataAccessLibrary.Search;
 
-
-@inject ApplicationDbContext context
+@inject IHttpContextAccessor httpContextAccessor
 @inject IConfiguration config
 @inject NavigationManager navigationManger
 @inject IFileRepository fileRepo
 @inject IFolderRepository folderRepo
+@inject Search search
 
 
 
@@ -19,48 +24,34 @@
 
 <h1>Library</h1>
 <div>
-    <div class="edit_row_container form-floating mb-2">
-        <button @onclick="PreviousFolder" type="submit" class="round_corners small_arrow">
-            <img src="css/Images/angle-small-right.png" alt="buttonpng" class="angle_img right" />
-        </button>
-        @if(SelectedFolder != null)
+    <div>
+        <div>
+            @if (!string.IsNullOrEmpty(ErrorMessage))
+            {
+                <div @onclick="ClearErrorMsg" class="alert alert-danger">@ErrorMessage</div>
+            }
+        </div>
+        @if (SelectedFolder != null)
         {
-            <h2 class="congrats_h2">@SelectedFolder.Path</h2>
+            <h2 class="congrats_h2_left">@SelectedFolder.Path</h2>
         }
+        <div id="HASH">
+            <button @onclick="PreviousFolder" type="button" class="round_corners small_arrow">
+                <img src="css/Images/angle-small-right.png" alt="buttonpng" class="angle_img right" />
+            </button>
+            <button @onclick="UploadFileNavigate" type="button" class="round_corners btn btn-outline-secondary">Upload Files</button>
+        </div>
     </div>
-
-    <div class="edit_row_container">
+    <br />
+    <div>
         <div class="form-floating mb-2">
-            <input type="text" name="filter" class="round_corners" placeholder="Search" />
+            <input @onkeyup="Search" @bind="SearchText" type="text" name="filter" class="round_corners" placeholder="Search" />
         </div>
     </div>
 </div>
-@if(SelectedFolder == null)
+@if(!filesBySearch.Any())
 {
-    <table class="library_table">
-        <thead>
-            <tr>
-                <th class="library_th">Folder name</th>
-                <th class="library_th">SubFolders</th>
-                <th class="library_th">Files</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var folder in folderList)
-            {
-                <tr class="library_tr" @onclick="() => SelectFolder(folder)">
-                    <td class="library_td">@folder.Name</td>
-                    <td class="library_td">@folder.SubFolders.Count()</td>
-                    <td class="library_td">@folder.Files.Count()</td>
-
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    @if (SelectedFolder.SubFolders != null && SelectedFolder.SubFolders.Count() > 0)
+    @if (SelectedFolder == null)
     {
         <table class="library_table">
             <thead>
@@ -71,7 +62,7 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (var folder in subfolderList)
+                @foreach (var folder in folderList)
                 {
                     <tr class="library_tr" @onclick="() => SelectFolder(folder)">
                         <td class="library_td">@folder.Name</td>
@@ -83,72 +74,217 @@ else
             </tbody>
         </table>
     }
-
-    @if (SelectedFolderFiles != null && SelectedFolderFiles.Count() > 0)
+    else
     {
-        <table class="file_table">
-            <thead>
-                <tr>
-                    <th class="file_th">File name</th>
-                    <th class="file_th">Description</th>
-                    <th class="file_th">Topics</th>
-                    <th class="file_th">Creation date</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var file in SelectedFolderFiles)
-                {
-                    <tr class="library_tr">
-                        <td class="file_td">@file.Title</td>
-                        <td class="file_td">@file.Description</td>
-                        <td class="file_td">
-                            @foreach (TopicEntity topic in file.Topics)
-                            {
-                                <li>@topic.Title</li>
-                            }
-                        </td>
-                        <td class="file_td">@file.CreationDate.ToString()</td>
-                        <td class="file_td"><a href="@file.BlobUri" download>Download</a></td>
-                       
+        @if (SelectedFolder.SubFolders != null && SelectedFolder.SubFolders.Count() > 0)
+        {
+            <table class="library_table">
+                <thead>
+                    <tr>
+                        <th class="library_th">Folder name</th>
+                        <th class="library_th">SubFolders</th>
+                        <th class="library_th">Files</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var folder in subfolderList)
+                    {
+                        <tr class="library_tr" @onclick="() => SelectFolder(folder)">
+                            <td class="library_td">@folder.Name</td>
+                            <td class="library_td">@folder.SubFolders.Count()</td>
+                            <td class="library_td">@folder.Files.Count()</td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+        @if (SelectedFolderFiles != null && SelectedFolderFiles.Count() > 0)
+        {
+            <table class="file_table">
+                <thead>
+                    <tr>
+                        <th class="file_th">File name</th>
+                        <th class="file_th">Description</th>
+                        <th class="file_th">Topics</th>
+                        <th class="file_th">Creation date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var file in SelectedFolderFiles)
+                    {
+                        <tr class="library_tr">
+                            <td class="file_td">@file.Title</td>
+                            <td class="file_td">@file.Description</td>
+                            <td class="file_td">
+                                @foreach (TopicEntity topic in file.Topics)
+                                {
+                                    <li>@topic.Title</li>
+                                }
+                            </td>
+                            <td class="file_td">@file.CreationDate.ToString()</td>
+                            <td class="file_td"><a href="@file.BlobUri" download>Download</a></td>
+                            <td class="file_td">
+                                @if (IsCurrentUserUploader(file))
+                                {
+                                    <button @onclick="() => EditFile(file.Id)" style="margin-bottom: 10px; width: 100px; padding: 0 10px 0 10px"
+                                            class="round_corners btn btn-outline-secondary">
+                                        Edit
+                                    </button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
     }
+}
+else
+{
+    <table class="file_table">
+        <thead>
+            <tr>
+                <th class="file_th">File name</th>
+                <th class="file_th">Description</th>
+                <th class="file_th">Topics</th>
+                <th class="file_th">Creation date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var file in filesBySearch)
+            {
+                <tr class="library_tr">
+                    <td class="file_td">@file.Title</td>
+                    <td class="file_td">@file.Description</td>
+                    <td class="file_td">
+                        @foreach (TopicEntity topic in file.Topics)
+                        {
+                            <li>@topic.Title</li>
+                        }
+                    </td>
+                    <td class="file_td">@file.CreationDate.ToString()</td>
+                    <td class="file_td"><a href="@file.BlobUri" download>Download</a></td>
+                    <td class="file_td">
+                        @if (IsCurrentUserUploader(file))
+                        {
+                            <button @onclick="() => EditFile(file.Id)" style="margin-bottom: 10px; width: 100px; padding: 0 10px 0 10px"
+                                    class="round_corners btn btn-outline-secondary">
+                                Edit
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 
 @code {
     private Folder SelectedFolder { get; set; }
     private List<UserFile> SelectedFolderFiles { get; set; } = new List<UserFile>();
     private List<Folder> folderList = new List<Folder>();
+    private List<UserFile> filesBySearch = new List<UserFile>();
     private List<Folder> subfolderList = new List<Folder>();
+    private string ErrorMessage { get; set; }
+    private string SearchText { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        folderList = await folderRepo.GetParentFolders();
+        try
+        {
+            folderList = await folderRepo.GetParentFolders();
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = "Error fetching folders.";
+        }
+    }
+
+    private async Task Search(KeyboardEventArgs e)
+    {
+        filesBySearch.Clear();
+        SearchResults<SearchDocument> searchResults;
+        if(e.Key == "Enter")
+        {
+            searchResults = await search.SearchDocumentsAsync(SearchText);
+            if (searchResults != null)
+            {
+                var blobUrls = search.GetBlobUrls(searchResults);
+                filesBySearch = await fileRepo.GetFilesForBlobUrls(blobUrls);
+                if(filesBySearch == null || filesBySearch.Count <= 0)
+                {
+                    ErrorMessage = $"Nothing found for: {SearchText}";
+                }
+            }
+            SearchText = String.Empty;
+        }
+    }
+
+    private void ClearErrorMsg()
+    {
+        ErrorMessage = String.Empty;
     }
 
     public async Task SelectFolder(Folder folder)
     {
-        SelectedFolder = await folderRepo.GetFolder(folder.Id);
-        subfolderList = await folderRepo.GetSubFolders(SelectedFolder.Id);
-        SelectedFolderFiles = await fileRepo.GetFilesForFolderAsync(SelectedFolder.Id);
-        //navigationManger.NavigateTo($"file/{folder}");
+        try
+        {
+            SelectedFolder = await folderRepo.GetFolder(folder.Id);
+            if (SelectedFolder != null)
+            {
+                subfolderList = await folderRepo.GetSubFolders(SelectedFolder.Id);
+                SelectedFolderFiles = await fileRepo.GetFilesForFolderAsync(SelectedFolder.Id);
+            }
+            else
+            {
+                ErrorMessage = "Selected folder not found";
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = "Error fetching folder or file.";
+        }
     }
+
     private void HandleFolderSelected(Folder folder)
     {
         SelectedFolder = folder;
     }
+
     private async Task PreviousFolder()
     {
-        if(SelectedFolder.ParentFolderId != null)
+        try
         {
-            await SelectFolder(SelectedFolder.ParentFolder);
+            if(SelectedFolder != null && SelectedFolder.ParentFolderId != null)
+            {
+                await SelectFolder(SelectedFolder.ParentFolder);
+            }
+            else
+            {
+                SelectedFolder = null;
+            }
         }
-        else
+        catch (Exception ex)
         {
-            SelectedFolder = null;
+            ErrorMessage = "Error navigating to previous folder.";
         }
     }
+    private async Task UploadFileNavigate()
+    {
+        navigationManger.NavigateTo("uploadfiles");
+    }
+    private void EditFile(int fileId)
+    {
+        navigationManger.NavigateTo($"editfile/{fileId}");
+    }
 
+    private bool IsCurrentUserUploader(UserFile file)
+    {
+        var currentUserId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        Console.WriteLine(currentUserId);
+        Console.WriteLine(file.ProfileId);
+        return file.ProfileId == currentUserId;
+    }
 }

@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessLibrary.FolderRepo
 {
-    public class FolderRepository : GenericRepository<UserFile>, IFolderRepository
+    public class FolderRepository : IFolderRepository
     {
         private readonly ApplicationDbContext _context;
-        public FolderRepository(ApplicationDbContext context) : base(context)
+        public FolderRepository(ApplicationDbContext context)
         {
             _context = context;
         }

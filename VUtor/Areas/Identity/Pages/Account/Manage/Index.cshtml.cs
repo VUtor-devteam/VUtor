@@ -67,7 +67,7 @@ namespace VUtor.Areas.Identity.Pages.Account.Manage
 
         private async Task LoadAsync(ProfileEntity user)
         {
-            TopicList = _context.Topics.ToList();
+            TopicList = await _context.Topics.ToListAsync();
             Username = await _userManager.GetUserNameAsync(user);
             var profile = _context.Profiles.Where(p => p.Id == user.Id).Include(p => p.TopicsToLearn).Include(p => p.TopicsToTeach).First();
             Input = new InputModel

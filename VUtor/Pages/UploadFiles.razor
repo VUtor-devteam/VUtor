@@ -12,7 +12,7 @@
 
 
 @inject IConfiguration config 
-@inject ApplicationDbContext context
+@inject IGenericRepository<TopicEntity> topicRepo
 @inject UserManager<ProfileEntity> userManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IFileRepository fileRepo
@@ -24,69 +24,71 @@
 
 <EditForm Model="@uploadFileModel"  OnSubmit="SubmitForm">
     <div>
-        <label for="Title">Enter resource title</label>
+        <label for="Title" class="custom_small_text">Enter resource title</label>
         <InputText id="title" class="form-control" @bind-Value="uploadFileModel.Title"></InputText>
     </div>
     <div>
-        <label for="Description">Enter a short description</label>
+        <label for="Description" class="custom_small_text">Enter a short description</label>
         <InputText id="description" class="form-control" @bind-Value="uploadFileModel.Description"></InputText>
     </div>
     <div>
-        <label for="TopicId">Choose topic</label>
+        <label for="TopicId" class="custom_small_text">Choose topic</label>
             <select id="topics" class="form-control" @onchange="UpdateTopicsId">
                 <option value="">Select a topic...</option>
                 @foreach (var topic in topicList)
                 {
-                    <option value="@topic.Id">@topic.Title</option>
+                    <option value="@topic.Id" class="custom_small_text">@topic.Title</option>
                 }
             </select>
-            <span asp-validation-for="Input.TopicsToTeach" class="text-danger"></span>
     </div>
-
     <div>
-        <label>Selected Topics:</label>
-            @if (uploadFileModel.TopicsId != null)
+        @if (uploadFileModel.TopicsId.Any())
+        {
+            <label style="margin-top: 10px" class="custom_small_text">Selected Topics:</label>
+            @foreach (var topicId in uploadFileModel.TopicsId)
             {
-                @foreach (var topicId in uploadFileModel.TopicsId)
-                {
-                    var topic = topicList.First(t => t.Id == topicId);
-                    <li>@topic.Title <button @onclick="() => RemoveTopic(topicId)">X</button></li>
-                }
+                var topic = topicList.First(t => t.Id == topicId);
+                <li>@topic.Title <button @onclick="() => RemoveTopic(topicId)" type="button" class="round_corners_small btn btn-outline-secondary">X</button></li>
             }
+        }
     </div>
-
     <div>
-        <label for="FoldersId">Choose where to store</label>
+        <label for="FoldersId" class="custom_small_text">Choose where to store</label>
         <div>
             @if(selectedFolder != null){
-                <p>@selectedFolder.Path</p>
+                <p class="custom_small_text">@selectedFolder.Path</p>
             }
         </div>
     <div>
         @if(selectedFolder == null){
-            <select @onchange="FolderSelected">
+            <div>
                 @if (folderList != null)
                 {
-                    foreach (var folder in folderList)
+                    <select id="folder" style="margin-bottom: 10px" class="form-control-sm" @onchange="FolderSelected">
+                    <option value="">Select a folder...</option>
+                    @foreach (var folder in folderList)
                     {
-                        <option value="@folder.Id">@folder.Name</option>
+                        <option value="@folder.Id" class="custom_small_text">@folder.Name</option>
                     }
+                    </select>
                 }
-            </select>
-        <div>
-                <input type="text" @bind="newFolderName" placeholder="New folder name" />
-                <button @onclick="CreateNewFolder">Create New Folder</button>
-        </div>
+            </div>
+            <div>
+                <input type="text" style="margin-bottom: 10px" @bind="newFolderName" placeholder="New folder name" />
+            </div>
+            <div>
+                    <button @onclick="CreateNewFolder" style="margin-bottom: 10px; width: 170px; padding: 0 10px 0 10px" type="button" class="round_corners btn btn-outline-secondary">Create New Folder</button>
+            </div>
         }else{
             <FolderComp CurrentFolder="@selectedFolder" OnFolderSelected="HandleFolderSelected"/>
         }
     </div>
     </div>
-    <div>
-        <label for="File">Upload your file</label>
-        <InputFile OnChange="@LoadFiles" class="form-control"/>
-    </div>
-    <button @onclick="CaptureFile" class="btn btn-primary mt-3" type="submit">Upload</button>
+        <div>
+            <label for="File"class="custom_small_text">Upload your file</label>
+            <InputFile OnChange="@LoadFiles" style="margin-bottom: 10px" class="form-control" />
+        </div>
+    <button @onclick="CaptureFile" style="margin-bottom: 10px; width: 100px; padding: 0 10px 0 10px" class="round_corners btn btn-outline-secondary" type="submit">Upload</button>
 </EditForm>
 
 
@@ -118,21 +120,22 @@
     }
 
     // LOADING DATA FOR PAGE AND UPLOADING ACTIONS -----------------------------------------
-    protected override void OnInitialized()
-    {
-        topicList = context.Topics.ToList();
-    }
-
     protected override async Task OnInitializedAsync()
     {
-        folderList = await folderRepo.GetFolders();
-        folderList = folderList.Where(e => e.ParentFolderId == null).ToList();
-
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-        if (user.Identity.IsAuthenticated)
+        try
         {
-            profile = await userManager.GetUserAsync(user);
+            topicList = await topicRepo.LoadData();
+            folderList = await folderRepo.GetParentFolders();
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+            if (user.Identity.IsAuthenticated)
+            {
+                profile = await userManager.GetUserAsync(user);
+            }
+        }
+        catch (Exception ex)
+        {
+            errors.Add("Error initializing page.");
         }
     }
     // LOADING DATA FOR PAGE AND UPLOADING ACTIONS -----------------------------------------
@@ -141,20 +144,34 @@
     // FOLDER SELECTING/CREATING SYSTEM ---------------------------------------------------
     private async Task FolderSelected(ChangeEventArgs e)
     {
-        var selectedFolderId = int.Parse(e.Value.ToString());
-        // Find the selected folder by ID...
-        selectedFolder = await folderRepo.GetFolder(selectedFolderId);
+        try
+        {
+            var selectedFolderId = int.Parse(e.Value.ToString());
+            selectedFolder = await folderRepo.GetFolder(selectedFolderId);
+        }
+        catch (Exception ex)
+        {
+            errors.Add("Error selecting folder.");
+        }
     }
 
     private async Task CreateNewFolder()
     {
-        if (!string.IsNullOrEmpty(newFolderName))
+        try
         {
-            await folderRepo.CreateFolder(newFolderName);
-            await UpdateFolderList();
+            if (!string.IsNullOrEmpty(newFolderName))
+            {
+                await folderRepo.CreateFolder(newFolderName);
+                await UpdateFolderList();
+            }
+            newFolderName = string.Empty;
         }
-        newFolderName = string.Empty;
+        catch (Exception ex)
+        {
+            errors.Add("Error creating new folder.");
+        }
     }
+
     private void HandleFolderSelected(Folder folder)
     {
         selectedFolder = folder;
@@ -162,51 +179,90 @@
 
     private async Task UpdateFolderList()
     {
-        folderList = await folderRepo.GetFolders();
+        try
+        {
+            folderList = await folderRepo.GetParentFolders();
+        }
+        catch (Exception ex)
+        {
+            errors.Add("Error updating folder list.");
+        }
     }
     // FOLDER SELECTING/CREATING SYSTEM ---------------------------------------------------
 
     private void UpdateTopicsId(ChangeEventArgs e)
     {
-        var selectedOption = int.Parse(e.Value.ToString());
-        if (!uploadFileModel.TopicsId.Contains(selectedOption))
+        try
         {
-            uploadFileModel.TopicsId.Add(selectedOption);
+            var selectedOption = int.Parse(e.Value.ToString());
+            if (!uploadFileModel.TopicsId.Contains(selectedOption))
+            {
+                uploadFileModel.TopicsId.Add(selectedOption);
+            }
+        }
+        catch (Exception ex)
+        {
+            errors.Add("Error updating topics ID.");
         }
     }
 
     private void RemoveTopic(int topicId)
     {
-        uploadFileModel.TopicsId.Remove(topicId);
+        if (uploadFileModel.TopicsId.Contains(topicId))
+        {
+            uploadFileModel.TopicsId.Remove(topicId);
+        }
+        else
+        {
+            errors.Add($"Topic ID {topicId} not found in list.");
+        }
     }
 
     private void LoadFiles(InputFileChangeEventArgs e)
     {
-        file = e.File;
+        try
+        {
+            file = e.File;
+        }
+        catch (Exception ex)
+        {
+            errors.Add("Error loading file.");
+        }
     }
 
-    private async Task CaptureFile()
+        private async Task CaptureFile()
     {
-        if(file == null)
+        if(file == null || file.Name == null)
         {
             errors.Add("No file was loaded.");
+            return;
+        }
+
+        if(selectedFolder == null)
+        {
+            errors.Add("No folder selected.");
+            return;
+        }
+
+        if(profile == null)
+        {
+            errors.Add("No profile found.");
+            return;
         }
 
         try
         {
             await fileRepo.UploadFileAsync(file, file.Name, uploadFileModel.Title, uploadFileModel.Description, uploadFileModel.TopicsId, selectedFolder.Id, profile.Id);
+            Console.WriteLine(selectedFolder.Path);
+            uploadFileModel.Title = String.Empty;
+            uploadFileModel.Description = String.Empty;
+            uploadFileModel.TopicsId.Clear();
+            selectedFolder = null;
         }
         catch (Exception ex)
         {
-            errors.Add($"File: {file.Name} Error: {ex.Message}");
-            throw;
+            errors.Add($"File: {file.Name} Error.");
         }
-        Console.WriteLine(selectedFolder.Path);
-        uploadFileModel.Title = String.Empty;
-        uploadFileModel.Description = String.Empty;
-        uploadFileModel.TopicsId.Clear();
-        selectedFolder = null;
-
     }
 
     private async Task SubmitForm()

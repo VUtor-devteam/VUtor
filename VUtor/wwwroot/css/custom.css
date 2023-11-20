@@ -31,6 +31,14 @@
     padding: 0 10px 0 10px;
 }
 
+.round_corners_small { /*used for buttons too*/
+    border-radius: 13px;
+    border: 1px solid #606061;
+    width: 30px;
+    height: 30px;
+    padding: 0 5px 0 5px;
+}
+
 .long { /*use to exted .round_corners*/
     width: 300px;
 }
@@ -161,6 +169,18 @@ h1 {
     color: #626063;
     font-size: 25px;
     text-align: center;
+}
+
+.congrats_h2_left {
+    color: #626063;
+    font-size: 25px;
+    text-align: left;
+}
+
+.congrats_h2_right {
+    color: #626063;
+    font-size: 25px;
+    text-align: right;
 }
 
 .specifications {
@@ -367,4 +387,16 @@ full {
     color: #606061;
     font-size: 16px;
     font-weight: 500;
+}
+
+.custom_small_text {
+    padding: 0px 0px 2px 7px;
+    color: #606061;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+#HASH {
+    display: flex;
+    justify-content: space-between;
 }

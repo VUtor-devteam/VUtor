@@ -45,6 +45,10 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "Azure.Search.Documents": {
+              "target": "Package",
+              "version": "[11.5.0, )"
+            },
             "Azure.Storage.Blobs": {
               "target": "Package",
               "version": "[12.18.0, )"
@@ -64,6 +68,14 @@
             "Microsoft.AspNetCore.Mvc.Abstractions": {
               "target": "Package",
               "version": "[2.2.0, )"
+            },
+            "Microsoft.Azure.CognitiveServices.Search.WebSearch": {
+              "target": "Package",
+              "version": "[2.0.0, )"
+            },
+            "Microsoft.Azure.WebJobs.Extensions.Http": {
+              "target": "Package",
+              "version": "[3.2.0, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
@@ -88,6 +100,10 @@
             "Microsoft.Extensions.Configuration.Json": {
               "target": "Package",
               "version": "[7.0.0, )"
+            },
+            "ServiceStack": {
+              "target": "Package",
+              "version": "[8.0.0, )"
             }
           },
           "imports": [
