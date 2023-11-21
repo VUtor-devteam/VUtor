@@ -76,5 +76,30 @@ namespace DataAccessLibrary
                 _pool.Release();
             }
         }
+
+        public async Task<ProfileEntity> GetProfileByIdAsync(string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return null;
+            }
+
+            while (!_pool.WaitOne(TimeSpan.FromTicks(1)))
+                await Task.Delay(TimeSpan.FromSeconds(1));
+
+            try
+            {
+                // Updated query without StringComparison
+                var profile = await _context.Profiles
+                                            .Include(p => p.TopicsToLearn)  // Include TopicsToLearn
+                                            .Include(p => p.TopicsToTeach)  // Include TopicsToTeach
+                                            .FirstOrDefaultAsync(p => p.Id.ToLower() == id.ToLower());
+                return profile;
+            }
+            finally
+            {
+                _pool.Release();
+            }
+        }
     }
 }

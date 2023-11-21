@@ -13,5 +13,6 @@ namespace DataAccessLibrary
         Task SaveChanges();
         Task Update(ProfileEntity entity);
         Task<ProfileEntity> GetProfileByEmailAsync(string email);
+        Task<ProfileEntity> GetProfileByIdAsync(string id);
     }
 }

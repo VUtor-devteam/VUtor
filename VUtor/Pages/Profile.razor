@@ -11,14 +11,12 @@
 @inject IProfileRepository repoProfiles
 @inject ApplicationDbContext context
 @inject AuthenticationStateProvider AuthenticationStateProvider
-@inject NavigationManager NavigationManager
+@inject UserManager<ProfileEntity> userManager
 
 <PageTitle>Profile</PageTitle>
 <h1>Profile</h1>
-<h1>@fullName</h1>
 
-
-@if (userProfile != null)
+@if (profile != null)
 {
         <div class="edit_container">
             <div class="edit_row_container">
@@ -26,14 +24,14 @@
                     <div> 
                         <label class="specifications"> Name:</label>
                         <div class="mb-2">
-                            <label>@userProfile.Name</label>
+                            <label>@profile.Name</label>
                         </div>
                     </div>
 
                     <div>
                         <label class="specifications">Surname:</label>
                         <div class="mb-2">
-                            <label>@userProfile.Surname</label>
+                            <label>@profile.Surname</label>
                         </div>
                     </div>
                 </div>
@@ -45,14 +43,14 @@
                 <div>
                     <label class="specifications">Course:</label>
                     <div class="mb-2">
-                        <label>@userProfile.CourseInfo.GetName()</label>
+                        <label>@profile.CourseInfo.GetName()</label>
                     </div>
                 </div>
 
                 <div>
                     <label class="specifications">Academic year:</label>
                     <div class="mb-2">
-                        <label>@userProfile.CourseInfo.GetYear()</label>
+                        <label>@profile.CourseInfo.GetYear()</label>
                     </div>
                 </div>
             </div>
@@ -61,7 +59,7 @@
                 <div>
                     <label class="specifications">Subject you want to learn:</label>
                     <div class="mb-2">
-                        @foreach (var topic in @userProfile.TopicsToLearn)
+                        @foreach (var topic in @profile.TopicsToLearn)
                         {
                             <li>@topic.Title</li>
                         }
@@ -73,7 +71,7 @@
                 <div>
                     <label class="specifications">Subject you want to teach:</label>
                     <div class="mb-2">
-                        @foreach (var topic in @userProfile.TopicsToTeach)
+                        @foreach (var topic in @profile.TopicsToTeach)
                         {
                             <li>@topic.Title</li>
                         }
@@ -83,18 +81,14 @@
             </div>
             <div class="mb-2">
                 <a id="manage" class="nav-link text-dark" href="/Identity/Account/Manage" title="Manage">Edit</a>
-            <p>funny text and also @fullName</p>
             </div>
-
+            <p></p>
         </div>
 }
 
 @code {
 
-    [Parameter]
-    public string fullName { get; set; }
-
-    private ProfileEntity userProfile;
+    private ProfileEntity? profile;
 
     #region Tasks
 
@@ -105,18 +99,12 @@
         var user = authState.User;
         if (user.Identity.IsAuthenticated)
         {
-            var id = user.Identity.Name; // Assuming the email is used as the username
-            userProfile = await repoProfiles.GetProfileByEmailAsync(id);
-            fullName = $"{userProfile.Name} {userProfile.Surname}";
+            //id = user.Identity.Name; // Assuming the email is used as the username
+            profile = await userManager.GetUserAsync(user);
+
         }
     }
     #endregion
-
-    private void NavigateToManage()
-    {
-        NavigationManager.NavigateTo("Identity/Account/Manage");
-    }
-
 
     #region Fields
 

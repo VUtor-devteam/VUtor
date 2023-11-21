@@ -86,7 +86,7 @@
 @code {
 
     [Parameter]
-    public string email { get; set; }
+    public string id { get; set; } //pataisyti pavadinimus
 
     private ProfileEntity userProfile;
 
@@ -95,21 +95,10 @@
     // Actions executed on page initialization
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-        if (user.Identity.IsAuthenticated)
-        {
-            var email = user.Identity.Name; // Assuming the email is used as the username
-            userProfile = await repoProfiles.GetProfileByEmailAsync(email);
-        }
+        
+        userProfile = await repoProfiles.GetProfileByIdAsync(id);
     }
     #endregion
-
-    private void NavigateToManage()
-    {
-        NavigationManager.NavigateTo("Identity/Account/Manage");
-    }
-
 
     #region Fields
 
