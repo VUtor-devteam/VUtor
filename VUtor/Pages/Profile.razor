@@ -16,7 +16,7 @@
 <PageTitle>Profile</PageTitle>
 <h1>Profile</h1>
 
-@if (profile != null)
+@if (userProfile != null)
 {
         <div class="edit_container">
             <div class="edit_row_container">
@@ -24,14 +24,14 @@
                     <div> 
                         <label class="specifications"> Name:</label>
                         <div class="mb-2">
-                            <label>@profile.Name</label>
+                        <label>@userProfile.Name</label>
                         </div>
                     </div>
 
                     <div>
                         <label class="specifications">Surname:</label>
                         <div class="mb-2">
-                            <label>@profile.Surname</label>
+                        <label>@userProfile.Surname</label>
                         </div>
                     </div>
                 </div>
@@ -43,14 +43,14 @@
                 <div>
                     <label class="specifications">Course:</label>
                     <div class="mb-2">
-                        <label>@profile.CourseInfo.GetName()</label>
+                    <label>@userProfile.CourseInfo.GetName()</label>
                     </div>
                 </div>
 
                 <div>
                     <label class="specifications">Academic year:</label>
                     <div class="mb-2">
-                        <label>@profile.CourseInfo.GetYear()</label>
+                    <label>@userProfile.CourseInfo.GetYear()</label>
                     </div>
                 </div>
             </div>
@@ -59,7 +59,7 @@
                 <div>
                     <label class="specifications">Subject you want to learn:</label>
                     <div class="mb-2">
-                        @foreach (var topic in @profile.TopicsToLearn)
+                    @foreach (var topic in @userProfile.TopicsToLearn)
                         {
                             <li>@topic.Title</li>
                         }
@@ -71,7 +71,7 @@
                 <div>
                     <label class="specifications">Subject you want to teach:</label>
                     <div class="mb-2">
-                        @foreach (var topic in @profile.TopicsToTeach)
+                    @foreach (var topic in @userProfile.TopicsToTeach)
                         {
                             <li>@topic.Title</li>
                         }
@@ -88,7 +88,10 @@
 
 @code {
 
-    private ProfileEntity? profile;
+    [Parameter]
+    public string email { get; set; }
+
+    private ProfileEntity userProfile;
 
     #region Tasks
 
@@ -99,9 +102,8 @@
         var user = authState.User;
         if (user.Identity.IsAuthenticated)
         {
-            //id = user.Identity.Name; // Assuming the email is used as the username
-            profile = await userManager.GetUserAsync(user);
-
+            var email = user.Identity.Name; // Assuming the email is used as the username
+            userProfile = await repoProfiles.GetProfileByEmailAsync(email);
         }
     }
     #endregion
