@@ -12,6 +12,11 @@ namespace DataAccessLibrary.Search
     {
         private readonly IConfiguration _config;
         private readonly SearchClient _searchClient;
+
+        public Search()
+        {
+
+        }
         public Search(IConfiguration configuration){
             _config = configuration;
 

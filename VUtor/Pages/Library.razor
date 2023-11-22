@@ -36,10 +36,10 @@
             <h2 class="congrats_h2_left">@SelectedFolder.Path</h2>
         }
         <div id="HASH">
-            <button @onclick="PreviousFolder" type="button" class="round_corners small_arrow">
+            <button id="previousFolder" @onclick="PreviousFolder" type="button" class="round_corners small_arrow">
                 <img src="css/Images/angle-small-right.png" alt="buttonpng" class="angle_img right" />
             </button>
-            <button @onclick="UploadFileNavigate" type="button" class="round_corners btn btn-outline-secondary">Upload Files</button>
+            <button id="upload" @onclick="UploadFileNavigate" type="button" class="round_corners btn btn-outline-secondary">Upload Files</button>
         </div>
     </div>
     <br />
@@ -51,7 +51,7 @@
 </div>
 @if(!filesBySearch.Any())
 {
-    @if (SelectedFolder == null)
+    @if (SelectedFolder == null && folderList != null)
     {
         <table class="library_table">
             <thead>
@@ -76,7 +76,7 @@
     }
     else
     {
-        @if (SelectedFolder.SubFolders != null && SelectedFolder.SubFolders.Count() > 0)
+        @if (SelectedFolder?.SubFolders != null && SelectedFolder.SubFolders.Count() > 0)
         {
             <table class="library_table">
                 <thead>
@@ -100,7 +100,7 @@
             </table>
         }
 
-        @if (SelectedFolderFiles != null && SelectedFolderFiles.Count() > 0)
+        @if (SelectedFolder?.SubFolders != null && SelectedFolder.SubFolders.Count() > 0)
         {
             <table class="file_table">
                 <thead>
@@ -128,7 +128,7 @@
                             <td class="file_td">
                                 @if (IsCurrentUserUploader(file))
                                 {
-                                    <button @onclick="() => EditFile(file.Id)" style="margin-bottom: 10px; width: 100px; padding: 0 10px 0 10px"
+                                    <button id="editButtonFolder" @onclick="() => EditFile(file.Id)" style="margin-bottom: 10px; width: 100px; padding: 0 10px 0 10px"
                                             class="round_corners btn btn-outline-secondary">
                                         Edit
                                     </button>
@@ -169,7 +169,7 @@ else
                     <td class="file_td">
                         @if (IsCurrentUserUploader(file))
                         {
-                            <button @onclick="() => EditFile(file.Id)" style="margin-bottom: 10px; width: 100px; padding: 0 10px 0 10px"
+                            <button id="editButtonSearch" @onclick="() => EditFile(file.Id)" style="margin-bottom: 10px; width: 100px; padding: 0 10px 0 10px"
                                     class="round_corners btn btn-outline-secondary">
                                 Edit
                             </button>
@@ -182,13 +182,13 @@ else
 }
 
 @code {
-    private Folder SelectedFolder { get; set; }
+    public Folder SelectedFolder { get; set; } = new Folder();
     private List<UserFile> SelectedFolderFiles { get; set; } = new List<UserFile>();
-    private List<Folder> folderList = new List<Folder>();
+    public List<Folder> folderList = new List<Folder>();
     private List<UserFile> filesBySearch = new List<UserFile>();
     private List<Folder> subfolderList = new List<Folder>();
-    private string ErrorMessage { get; set; }
-    private string SearchText { get; set; }
+    public string ErrorMessage { get; set; }
+    public string SearchText { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -253,7 +253,7 @@ else
         SelectedFolder = folder;
     }
 
-    private async Task PreviousFolder()
+    public async Task PreviousFolder()
     {
         try
         {
@@ -280,7 +280,7 @@ else
         navigationManger.NavigateTo($"editfile/{fileId}");
     }
 
-    private bool IsCurrentUserUploader(UserFile file)
+    public bool IsCurrentUserUploader(UserFile file)
     {
         var currentUserId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         Console.WriteLine(currentUserId);
