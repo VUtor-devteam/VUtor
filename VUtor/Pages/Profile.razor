@@ -12,6 +12,7 @@
 @inject ApplicationDbContext context
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<ProfileEntity> userManager
+@inject RatingRepository ratingRepo
 
 <PageTitle>Profile</PageTitle>
 <h1>Profile</h1>
@@ -24,7 +25,7 @@
                     <div> 
                         <label class="specifications"> Name:</label>
                         <div class="mb-2">
-                        <label>@userProfile.Name</label>
+                        <label>@userProfile.Name and @userProfile.Id</label>
                         </div>
                     </div>
 
@@ -79,10 +80,15 @@
                     </div>
                 </div>
             </div>
+            <div>
+                <label class="specifications"> Rating:</label>
+                <div class="mb-2">
+                <label>@averageRating.ToString("0.##")</label>
+                </div>
+            </div>
             <div class="mb-2">
                 <a id="manage" class="nav-link text-dark" href="/Identity/Account/Manage" title="Manage">Edit</a>
             </div>
-            <p></p>
         </div>
 }
 
@@ -90,6 +96,8 @@
 
     [Parameter]
     public string email { get; set; }
+
+    public double averageRating { get; set; }
 
     private ProfileEntity userProfile;
 
@@ -105,6 +113,9 @@
             var email = user.Identity.Name; // Assuming the email is used as the username
             userProfile = await repoProfiles.GetProfileByEmailAsync(email);
         }
+
+        averageRating = await ratingRepo.GetAverageRatingAsync(userProfile.Id); // Ensure userProfile.Id is a string
+
     }
     #endregion
 

@@ -12,6 +12,9 @@ namespace DataAccessLibrary.Data
         public DbSet<UserFile> UserFiles { get; set; }
         public DbSet<Folder> Folders { get; set; }
         public DbSet<UserItem> UserItems { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
+
+
 
 
 
