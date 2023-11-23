@@ -42,7 +42,6 @@ namespace DataAccessLibrary.FolderRepo
                     parentFolder = await _context.Folders.Where(e => e.ParentFolderId == parentFolderId).FirstAsync();
                 }
                 catch{}
-                Console.WriteLine(parentFolder.Name);
             }
 
             if (parentFolder == null)

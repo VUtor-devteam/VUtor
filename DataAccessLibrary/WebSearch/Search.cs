@@ -5,17 +5,19 @@ using Azure.Search.Documents.Models;
 using Microsoft.Extensions.Configuration;
 using Azure.Search.Documents.Indexes.Models;
 using ServiceStack;
+using DataAccessLibrary.WebSearch;
 
 namespace DataAccessLibrary.Search
 {
-    public class Search
+    public class Search : ISearch
     {
         private readonly IConfiguration _config;
-        private readonly SearchClient _searchClient;
+        public SearchClient _searchClient;
 
-        public Search()
+        public Search(IConfiguration configuration, SearchClient search)
         {
-
+            _searchClient = search;
+            _config = configuration;
         }
         public Search(IConfiguration configuration){
             _config = configuration;

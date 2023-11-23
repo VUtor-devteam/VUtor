@@ -15,6 +15,10 @@ namespace DataAccessLibrary.Data
         public DbSet<Folder> Folders { get; set; }
         public DbSet<UserItem> UserItems { get; set; }
 
+        public ApplicationDbContext()
+        {
+        }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IConfiguration config)
             : base(options)
         {

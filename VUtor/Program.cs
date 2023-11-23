@@ -8,6 +8,7 @@ using DataAccessLibrary.FileRepo;
 using Microsoft.AspNetCore.Builder;
 using DataAccessLibrary.FolderRepo;
 using DataAccessLibrary.Search;
+using DataAccessLibrary.WebSearch;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +30,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IFileRepository, FileRepository>();
 builder.Services.AddScoped<IFolderRepository, FolderRepository>();
-builder.Services.AddScoped<Search>();
+builder.Services.AddScoped<ISearch, Search>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddControllers();
 

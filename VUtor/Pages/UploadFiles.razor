@@ -12,6 +12,7 @@
 
 
 @inject IConfiguration config 
+@inject ApplicationDbContext context
 @inject IGenericRepository<TopicEntity> topicRepo
 @inject UserManager<ProfileEntity> userManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -104,9 +105,9 @@
 }
 
 @code {
-    private UploadFileModel uploadFileModel = new UploadFileModel();
-    private List<TopicEntity> topicList;
-    private List<string> errors = new();
+    public UploadFileModel uploadFileModel = new UploadFileModel();
+    private List<TopicEntity> topicList = new List<TopicEntity>();
+    public List<string> errors = new();
     private Folder selectedFolder;
     private IBrowserFile? file;
     private List<Folder> folderList;
@@ -124,7 +125,7 @@
     {
         try
         {
-            topicList = await topicRepo.LoadData();
+            topicList = context.Topics.ToList();
             folderList = await folderRepo.GetParentFolders();
             var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
             var user = authState.User;
@@ -190,7 +191,7 @@
     }
     // FOLDER SELECTING/CREATING SYSTEM ---------------------------------------------------
 
-    private void UpdateTopicsId(ChangeEventArgs e)
+    public void UpdateTopicsId(ChangeEventArgs e)
     {
         try
         {
@@ -265,7 +266,7 @@
         }
     }
 
-    private async Task SubmitForm()
+    public async Task SubmitForm()
     {
         errors.Clear();
     }

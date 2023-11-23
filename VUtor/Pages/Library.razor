@@ -5,6 +5,7 @@
 @using DataAccessLibrary.FileRepo;
 @using DataAccessLibrary.FolderRepo;
 @using DataAccessLibrary;
+@using DataAccessLibrary.WebSearch;
 @using Microsoft.AspNetCore.Identity;
 @using Microsoft.EntityFrameworkCore;
 @using System.Security.Claims;
@@ -16,7 +17,7 @@
 @inject NavigationManager navigationManger
 @inject IFileRepository fileRepo
 @inject IFolderRepository folderRepo
-@inject Search search
+@inject ISearch search
 
 
 
@@ -51,7 +52,7 @@
 </div>
 @if(!filesBySearch.Any())
 {
-    @if (SelectedFolder == null && folderList != null)
+    @if(String.IsNullOrEmpty(SelectedFolder.Name) && folderList != null)
     {
         <table class="library_table">
             <thead>
@@ -100,7 +101,7 @@
             </table>
         }
 
-        @if (SelectedFolder?.SubFolders != null && SelectedFolder.SubFolders.Count() > 0)
+        @if (SelectedFolder?.Files != null && SelectedFolder.Files.Count() > 0)
         {
             <table class="file_table">
                 <thead>
@@ -185,10 +186,16 @@ else
     public Folder SelectedFolder { get; set; } = new Folder();
     private List<UserFile> SelectedFolderFiles { get; set; } = new List<UserFile>();
     public List<Folder> folderList = new List<Folder>();
-    private List<UserFile> filesBySearch = new List<UserFile>();
+    private List<UserFile> filesBySearch;
     private List<Folder> subfolderList = new List<Folder>();
     public string ErrorMessage { get; set; }
     public string SearchText { get; set; }
+
+    protected override void OnInitialized()
+    {
+        filesBySearch = new List<UserFile>();
+        base.OnInitialized();
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -257,13 +264,13 @@ else
     {
         try
         {
-            if(SelectedFolder != null && SelectedFolder.ParentFolderId != null)
+            if (SelectedFolder != null && SelectedFolder.ParentFolderId != null)
             {
                 await SelectFolder(SelectedFolder.ParentFolder);
             }
             else
             {
-                SelectedFolder = null;
+                SelectedFolder = new();
             }
         }
         catch (Exception ex)
@@ -271,6 +278,7 @@ else
             ErrorMessage = "Error navigating to previous folder.";
         }
     }
+
     private async Task UploadFileNavigate()
     {
         navigationManger.NavigateTo("uploadfiles");

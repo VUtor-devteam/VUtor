@@ -54,7 +54,7 @@ namespace DataAccessLibrary.FileRepo
             return file;
         }
 
-        public async Task EditFile(UserFile file, string? title, string? description, List<int>? topics, int? folderId)
+        public async Task EditFile(UserFile file, string title, string description, List<int> topics, int folderId)
         {           
             if(file != null)
             {
@@ -129,7 +129,7 @@ namespace DataAccessLibrary.FileRepo
             }
             catch
             {
-                return null;
+                return new UserFile();
             }
         }
 

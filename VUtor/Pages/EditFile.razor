@@ -223,7 +223,7 @@ else
         }
     }
 
-    private async Task SaveChanges()
+    public async Task SaveChanges()
     {
         if(selectedFolder != null)
         {
@@ -231,7 +231,7 @@ else
         }
         else
         {
-            await fileRepo.EditFile(file, editFile.Title, editFile.Description, editFile.Topics, null);
+            await fileRepo.EditFile(file, editFile.Title, editFile.Description, editFile.Topics, editFile.Folder.Id);
         }
         //await fileRepo.UpdateFile(file);
         navigationManager.NavigateTo("library");
