@@ -97,7 +97,7 @@ namespace VUtor.Areas.Identity.Pages.Account.Manage
         {
             TopicList = _context.Topics.ToList();
             var user = await _userManager.GetUserAsync(User);
-            var profile = _context.Profiles.Where(p => p.Id == user.Id).Include(p => p.TopicsToLearn).Include(p => p.TopicsToTeach).First();
+            var profile = _context.Profiles.Where(p => p.Id == user.Id).Include(p => p.TopicsToLearn).Include(p => p.TopicsToTeach).FirstOrDefault();
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
