@@ -11,6 +11,7 @@
 @inject ApplicationDbContext context
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
+@inject RatingRepository ratingRepo
 
 <PageTitle>Profile</PageTitle>
 <h1>Profile</h1>
@@ -79,6 +80,31 @@
                 </div>
             </div>
         </div>
+        <div>
+            <label class="specifications"> Rating:</label>
+            <div class="mb-2">
+                <label>@averageRating.ToString("0.##")</label>
+            </div>
+        </div>
+        <div>
+            <label class="specifications">Select a rating:</label>
+            <div class="form-floating">
+                @for (int i = 1; i <= 5; i++)
+                {
+                    <div>
+                        <input type="radio"
+                            asp-for="Input.Rating"
+                            value="@i"
+                            id="@("rating" + i)" 
+                            name="Rating"
+                            @onchange="UpdateRating" />
+                        <label class="label form-floating mb-2" for="@("rating" + i)"> @i </label>
+                    </div>
+                }
+                <span asp-validation-for="Input.Rating"></span>
+            </div>
+            <label class="specifications">Selected rating:  @selectedRating</label>
+        </div>
 
     </div>
 }
@@ -88,17 +114,53 @@
     [Parameter]
     public string id { get; set; } //pataisyti pavadinimus
 
+    public double averageRating { get; set; }
+
     private ProfileEntity userProfile;
+
+    private ProfileEntity visiterProfile;
 
     #region Tasks
 
     // Actions executed on page initialization
     protected override async Task OnInitializedAsync()
     {
-        
+
         userProfile = await repoProfiles.GetProfileByIdAsync(id);
     }
     #endregion
+
+    private int selectedRating = 0;
+
+    private async Task UpdateRating(ChangeEventArgs e)
+    {
+        selectedRating = Convert.ToInt32(e.Value.ToString());
+
+        var rating = new Rating
+            {
+                RecipientId = id, // Assuming 'id' is the recipient's ID
+                ReviewerId = await GetCurrentUserIdAsync(), // You need to implement this method to get the current user's ID
+                Score = selectedRating
+            };
+
+        await ratingRepo.AddOrUpdateRatingAsync(rating);
+
+        averageRating = await ratingRepo.GetAverageRatingAsync(id); // Ensure userProfile.Id is a string
+    }
+
+    private async Task<string> GetCurrentUserIdAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user.Identity.IsAuthenticated)
+        {
+            var email = user.Identity.Name; // Assuming the email is used as the username
+            visiterProfile = await repoProfiles.GetProfileByEmailAsync(email);
+        }
+
+        return visiterProfile.Id;
+
+    }
 
     #region Fields
 

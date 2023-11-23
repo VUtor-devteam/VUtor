@@ -1,6 +1,7 @@
 {
   "ExpandedNodes": [
     "",
+    "\\DataAccessLibrary",
     "\\VUtor",
     "\\VUtor\\Areas",
     "\\VUtor\\Areas\\Identity",
@@ -9,6 +10,6 @@
     "\\VUtor\\Areas\\Identity\\Pages\\Account\\Manage",
     "\\VUtor\\Pages"
   ],
-  "SelectedNode": "\\VUtor\\appsettings.json",
+  "SelectedNode": "\\DataAccessLibrary\\ProfileRepository.cs",
   "PreviewInSolutionExplorer": false
 }
