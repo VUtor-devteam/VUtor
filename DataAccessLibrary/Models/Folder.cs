@@ -13,7 +13,9 @@ namespace DataAccessLibrary.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Path { get; set; }
-        public List<UserItem> Items { get; set; } = new List<UserItem>();
-        public List<Folder>? SubFolders { get; set; } = new List<Folder>();        
+        public int? ParentFolderId { get; set; }
+        public Folder? ParentFolder { get; set; }
+        public List<UserFile> Files { get; set; } = new List<UserFile>();
+        public List<Folder> SubFolders { get; set; } = new List<Folder>();  
     }
 }

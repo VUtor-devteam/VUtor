@@ -9,129 +9,137 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = VUtor
 build_property.RootNamespace = VUtor
-build_property.ProjectDir = C:\Users\Lenovo\Desktop\VUtor\VUtor\
+build_property.ProjectDir = c:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\VUtor\
 build_property.RazorLangVersion = 7.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\Lenovo\Desktop\VUtor\VUtor
+build_property.MSBuildProjectDirectory = c:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\VUtor
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/App.razor]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/App.razor]
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/Courses.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ291cnNlcy5yYXpvcg==
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Components/FolderComp.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xGb2xkZXJDb21wLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/FetchStudentList.razor]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Pages/EditFile.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRWRpdEZpbGUucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Pages/FetchStudentList.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRmV0Y2hTdHVkZW50TGlzdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/Files.razor]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Pages/Files.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRmlsZXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/FileTreeView.razor]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Pages/FileTreeView.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRmlsZVRyZWVWaWV3LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/Index.razor]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Pages/Index.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/Profile.razor]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Pages/Library.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTGlicmFyeS5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Pages/Profile.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvZmlsZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/Review.razor]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Pages/Review.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUmV2aWV3LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/ShowFiles.razor]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Pages/ShowFiles.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hvd0ZpbGVzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/UploadFiles.razor]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Pages/UploadFiles.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXBsb2FkRmlsZXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Shared/LoginDisplay.razor]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Shared/LoginDisplay.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXExvZ2luRGlzcGxheS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/_Imports.razor]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Shared/MainLayout.razor]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Shared/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-8hyod69ikx
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Shared/NavMenu.razor]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Shared/NavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE5hdk1lbnUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-lez05xduuu
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Areas/Identity/Pages/Account/Login.cshtml]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Areas/Identity/Pages/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Areas/Identity/Pages/Account/LogOut.cshtml]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Areas/Identity/Pages/Account/LogOut.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxMb2dPdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Areas/Identity/Pages/Account/Manage/Index.cshtml]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Areas/Identity/Pages/Account/Manage/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxNYW5hZ2VcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Areas/Identity/Pages/Account/Manage/_ManageNav.cshtml]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Areas/Identity/Pages/Account/Manage/_ManageNav.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxNYW5hZ2VcX01hbmFnZU5hdi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Areas/Identity/Pages/Account/Register.cshtml]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Areas/Identity/Pages/Account/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Areas/Identity/Pages/Account/_ViewImports.cshtml]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Areas/Identity/Pages/Account/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxfVmlld0ltcG9ydHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Areas/Identity/Pages/Shared/_LoginPartial.cshtml]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Areas/Identity/Pages/Shared/_LoginPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcU2hhcmVkXF9Mb2dpblBhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Areas/Identity/Pages/_ValidationScriptsPartial.cshtml]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Areas/Identity/Pages/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZhbGlkYXRpb25TY3JpcHRzUGFydGlhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Areas/Identity/Pages/_ViewImports.cshtml]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Areas/Identity/Pages/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Areas/Identity/Pages/_ViewStart.cshtml]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Areas/Identity/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/Error.cshtml]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/Shared/_Layout.cshtml]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Pages/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/Shared/_LoginPartial.cshtml]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Pages/Shared/_LoginPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9Mb2dpblBhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/Shared/_ValidationScriptsPartial.cshtml]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Pages/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/_Host.cshtml]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Pages/_Host.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX0hvc3QuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/_ViewImports.cshtml]
+[c:/Users/aiste/OneDrive/Desktop/VUtor-dev/VUtor/VUtor/Pages/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
