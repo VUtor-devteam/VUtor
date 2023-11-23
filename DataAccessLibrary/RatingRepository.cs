@@ -43,10 +43,16 @@ namespace DataAccessLibrary
 
             if (!ratings.Any())
             {
-                return 0; // Return 0 or some default value if there are no ratings
+                return -1; // Or handle as needed if there are no ratings
             }
 
             return ratings.Average(r => r.Score);
+        }
+
+        public async Task<Rating> GetRatingByReviewerAsync(string recipientId, string reviewerId)
+        {
+            return await _context.Ratings
+                                 .FirstOrDefaultAsync(r => r.RecipientId == recipientId && r.ReviewerId == reviewerId);
         }
     }
 }

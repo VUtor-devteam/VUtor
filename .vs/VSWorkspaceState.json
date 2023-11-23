@@ -2,6 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\DataAccessLibrary",
+    "\\DataAccessLibrary\\Models",
+    "\\DataAccessLibrary\\Models\\User",
+    "\\DataAccessLibrary\\Models\\User\\UserItems",
     "\\VUtor",
     "\\VUtor\\Areas",
     "\\VUtor\\Areas\\Identity",
@@ -10,6 +13,6 @@
     "\\VUtor\\Areas\\Identity\\Pages\\Account\\Manage",
     "\\VUtor\\Pages"
   ],
-  "SelectedNode": "\\DataAccessLibrary\\ProfileRepository.cs",
+  "SelectedNode": "\\DataAccessLibrary\\Models\\ProfileEntity.cs",
   "PreviewInSolutionExplorer": false
 }
