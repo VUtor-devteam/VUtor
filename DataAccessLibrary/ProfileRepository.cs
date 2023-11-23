@@ -1,4 +1,5 @@
-﻿using DataAccessLibrary;
+﻿using Azure.Storage.Blobs.Models;
+using DataAccessLibrary;
 using DataAccessLibrary.Data;
 using DataAccessLibrary.Models;
 using Microsoft.EntityFrameworkCore;
@@ -17,19 +18,34 @@ namespace DataAccessLibrary
             if (!Semaphore.TryOpenExisting("DbContextSemaphore", out _pool))
                 _pool = new Semaphore(1, 1, "DbContextSemaphore");
         }
-
+        public async Task<ProfileEntity> GetProfilesByIdAsync(string id)
+        {
+            if (!string.IsNullOrWhiteSpace(id))
+            {
+                var profile = await _context.Profiles
+                    .Include(x => x.TopicsToLearn)
+                    .Include(x => x.TopicsToTeach)
+                    .Include(x => x.UserItems)
+                    .Where(x => x.Id == id).SingleAsync();
+                return profile;
+            }
+            return null;
+        }
         public async Task<List<ProfileEntity>> GetProfilesByNameAsync(string name, string surname)
         {
-            List<ProfileEntity> profiles = await LoadData();
+            List<ProfileEntity> profiles = new List<ProfileEntity>();
 
             if (!profiles.IsNullOrEmpty())
             {
                 while (!_pool.WaitOne(TimeSpan.FromTicks(1)))
                     await Task.Delay(TimeSpan.FromSeconds(1));
-                profiles = profiles.Where(profile =>
-                    (string.IsNullOrWhiteSpace(name) || (profile.Name != null && profile.Name.Contains(name, StringComparison.OrdinalIgnoreCase))) &&
+                profiles = await _context.Profiles
+                    .Include(x => x.TopicsToLearn)
+                    .Include(x => x.TopicsToTeach)
+                    .Include(x => x.UserItems).
+                    Where(profile =>(string.IsNullOrWhiteSpace(name) || (profile.Name != null && profile.Name.Contains(name, StringComparison.OrdinalIgnoreCase))) &&
                     (string.IsNullOrWhiteSpace(surname) || (profile.Surname != null && profile.Surname.Contains(surname, StringComparison.OrdinalIgnoreCase))))
-                    .ToList();
+                    .ToListAsync();
             }
             _pool.Release();
 
