@@ -1,12 +1,8 @@
-﻿
-#nullable disable
-
-using DataAccessLibrary.Data;
+﻿using DataAccessLibrary.Data;
 using DataAccessLibrary.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
@@ -29,8 +25,6 @@ namespace VUtor.Areas.Identity.Pages.Account.Manage
 
         public string Username { get; set; }
         public List<TopicEntity> TopicList { get; set; } = new List<TopicEntity>();
-
-
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -70,6 +64,8 @@ namespace VUtor.Areas.Identity.Pages.Account.Manage
             TopicList = await _context.Topics.ToListAsync();
             Username = await _userManager.GetUserNameAsync(user);
             var profile = _context.Profiles.Where(p => p.Id == user.Id).Include(p => p.TopicsToLearn).Include(p => p.TopicsToTeach).First();
+
+            // Assign users data to to show the current info
             Input = new InputModel
             {
                 Name = user.Name,
@@ -97,7 +93,12 @@ namespace VUtor.Areas.Identity.Pages.Account.Manage
         {
             TopicList = _context.Topics.ToList();
             var user = await _userManager.GetUserAsync(User);
-            var profile = _context.Profiles.Where(p => p.Id == user.Id).Include(p => p.TopicsToLearn).Include(p => p.TopicsToTeach).FirstOrDefault();
+            var profile = _context.Profiles
+                .Where(p => p.Id == user.Id)
+                .Include(p => p.TopicsToLearn)
+                .Include(p => p.TopicsToTeach)
+                .FirstOrDefault();
+
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
@@ -111,17 +112,20 @@ namespace VUtor.Areas.Identity.Pages.Account.Manage
 
             if (Input.Name != user.Name)
             {
+                // Update the user's name
                 user.Name = Input.Name;
             }
 
             if (Input.Surname != user.Surname)
             {
+                // Update the user's surname
                 user.Surname = Input.Surname;
             }
 
             var newCourseInfo = new CourseData((int)Input.CourseName, (int)Input.CourseYear);
             if (!user.CourseInfo.Equals(newCourseInfo))
             {
+                // Update the user's course year and name
                 user.CourseInfo = newCourseInfo;
             }
 

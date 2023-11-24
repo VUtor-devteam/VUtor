@@ -11,25 +11,18 @@ namespace DataAccessLibrary.FolderRepo
         {
             _context = context;
         }
+        #region Creating 
 
-        public Task<int> AddFilesToFolder(int folderId, List<UserFile> files)
+        public async Task<Folder> CreateFolder(string name)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> AddFileToFolder(int folderId, UserFile file)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> AddSubFolder(int folderId, int subFolderId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<int> AddSubFolders(int folderId, List<int> subFolders)
-        {
-            throw new NotImplementedException();
+            var folder = new Folder
+            {
+                Name = name,
+                Path = name
+            };
+            await _context.Folders.AddAsync(folder);
+            await _context.SaveChangesAsync();
+            return folder;
         }
 
         public async Task<Folder> CreateFolder(string name, int? parentFolderId)
@@ -39,7 +32,10 @@ namespace DataAccessLibrary.FolderRepo
             {
                 try
                 {
-                    parentFolder = await _context.Folders.Where(e => e.ParentFolderId == parentFolderId).FirstAsync();
+                    parentFolder = await _context
+                        .Folders
+                        .Where(e => e.ParentFolderId == parentFolderId)
+                        .FirstAsync();
                 }
                 catch{}
             }
@@ -71,18 +67,6 @@ namespace DataAccessLibrary.FolderRepo
             }
         }
 
-        public async Task<Folder> CreateFolder(string name)
-        {
-            var folder = new Folder
-            {
-                Name = name,
-                Path = name
-            };
-            await _context.Folders.AddAsync(folder);
-            await _context.SaveChangesAsync();
-            return folder;
-        }
-
         public async Task<Folder> CreateSubFolder(string name, int parentFolderId)
         {
             Folder parentFolder = null;
@@ -111,34 +95,18 @@ namespace DataAccessLibrary.FolderRepo
             }
             return null;
         }
+        #endregion
 
-        public async Task DeleteFolder(int id)
-        {
-            var folder = await _context.Folders.Include(e => e.SubFolders).Where(e => e.Id == id).SingleAsync();
-            if (folder != null)
-            {
-                if(folder.ParentFolderId != null)
-                {
-                    try
-                    {
-                        var parentFolder = await _context.Folders.Include(e => e.SubFolders).Where(e => e.ParentFolderId == folder.ParentFolderId).FirstAsync();
-                    }catch { }
-                }
-                if(folder.SubFolders != null)
-                {
-                    foreach(var subFolder in folder.SubFolders)
-                    {
-                        await DeleteFolder(subFolder.Id);
-                    }
-                }
-                _context.Folders.Remove(folder);
-            }
-            await _context.SaveChangesAsync();
-        }
+        #region Retrieve
 
         public async Task<Folder> GetFolder(int id)
         {
-            return await _context.Folders.Include(x => x.SubFolders).Include(x => x.Files).Where(x => x.Id == id).SingleAsync();
+            return await _context
+                .Folders
+                .Include(x => x.SubFolders)
+                .Include(x => x.Files)
+                .Where(x => x.Id == id)
+                .SingleAsync();
         }
 
         public async Task<List<Folder>> GetFolders()
@@ -160,6 +128,7 @@ namespace DataAccessLibrary.FolderRepo
         {
             List<Folder> subFolders = new List<Folder>();
             var folder = await GetFolder(id);
+
             foreach (var subFolder in folder.SubFolders)
             {
                 var sub = await GetFolder(subFolder.Id);
@@ -167,10 +136,42 @@ namespace DataAccessLibrary.FolderRepo
             }
             return subFolders;
         }
+        #endregion
 
-        public Task MoveFolder(int folderId, int newParentId)
+        #region Delete
+        public async Task DeleteFolder(int id)
         {
-            throw new NotImplementedException();
+            var folder = await _context
+                .Folders
+                .Include(e => e.SubFolders)
+                .Where(e => e.Id == id)
+                .SingleAsync();
+
+            if (folder != null)
+            {
+                if (folder.ParentFolderId != null)
+                {
+                    try
+                    {
+                        var parentFolder = await _context.Folders
+                            .Include(e => e.SubFolders)
+                            .Where(e => e.ParentFolderId == folder.ParentFolderId)
+                            .FirstAsync();
+                    }
+                    catch { }
+                }
+                if (folder.SubFolders != null)
+                {
+                    foreach (var subFolder in folder.SubFolders)
+                    {
+                        await DeleteFolder(subFolder.Id);
+                    }
+                }
+                _context.Folders.Remove(folder);
+            }
+            await _context.SaveChangesAsync();
         }
+        #endregion
+
     }
 }

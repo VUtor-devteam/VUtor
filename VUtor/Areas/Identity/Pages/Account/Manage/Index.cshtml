@@ -5,6 +5,7 @@
     ViewData["Title"] = "Profile";
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
+<!-- Wieving and editing personal info -->
 
 <h3>@ViewData["Title"]</h3>
 <partial name="_StatusMessage" for="StatusMessage" />
@@ -16,16 +17,23 @@
                 <input asp-for="Username" class="form-control" placeholder="Username" disabled />
                 <label asp-for="Username" class="form-label"></label>
             </div>
+            <!-- Users name-->
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="form-floating mb-3">
                 <input asp-for="Input.Name" class="form-control" placeholder="Name" />
                 <label asp-for="Input.Name" class="form-label"></label>
             </div>
+            <!-- Users name-->
+
+            <!-- Users surname-->
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="form-floating mb-3">
                 <input asp-for="Input.Surname" class="form-control" placeholder="Please edit your surname." />
                 <label asp-for="Input.Surname" class="form-label"></label>
             </div>
+            <!-- Users surname-->
+
+            <!-- Users course year-->
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="form-floating mb-3">
                 <select asp-for="Input.CourseYear" id="courseYear" class="form-control" placeholder="Please edit your academic year .">
@@ -36,6 +44,9 @@
                 </select>
                 <label asp-for="Input.CourseYear" class="form-label"></label>
             </div>
+            <!-- Users course year-->
+
+            <!-- Users course name-->
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div class="form-floating mb-3">
                 <select asp-for="Input.CourseName" id="courseName" class="form-control" placeholder="Please edit your course name.">
@@ -46,6 +57,9 @@
                 </select>
                 <label asp-for="Input.CourseName" class="form-label"></label>
             </div>
+            <!-- Users course name-->
+
+            <!-- Users topics to learn -->
             <div class="edit_row_container">
                 <div>
                     <label class="specifications">Select a subject(s) you wish to learn:</label>
@@ -60,6 +74,9 @@
                     </div>
                 </div>
             </div>
+            <!-- Users topics to learn -->
+
+            <!-- Users topics to teach -->
             <div class="edit_row_container">
                 <div>
                     <label class="specifications">Select a subject(s) you wish to teach:</label>
@@ -74,12 +91,15 @@
                     </div>
                 </div>
             </div>
-            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+            <!-- Users topics to teach -->
 
+            <!-- Submit -->
+            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
         </form>
     </div>
 </div>
 
+<!-- For using multiple select -->
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 

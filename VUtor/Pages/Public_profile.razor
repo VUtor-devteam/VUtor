@@ -1,10 +1,12 @@
 ﻿@page "/profile/{id}"
 
 @using DataAccessLibrary.Data
+@using DataAccessLibrary.GenericRepo;
 @using DataAccessLibrary.Models
 @using DataAccessLibrary
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.AspNetCore.Identity;
+@using DataAccessLibrary.RatingRepo;
 
 @inject IGenericRepository<TopicEntity> repoGenericTopics
 @inject IProfileRepository repoProfiles
@@ -64,6 +66,8 @@
                     {
                         <li>@topic.Title</li>
                     }
+
+                    <!--<label>Subject you want to learn</label>-->
                 </div>
             </div>
 
@@ -74,6 +78,7 @@
                     {
                         <li>@topic.Title</li>
                     }
+                    <!--<label>Subject you want to teach</label>-->
                 </div>
             </div>
         </div>
@@ -104,6 +109,7 @@
                     }
                     <span asp-validation-for="Input.Rating"></span>
                 </div>
+                <label class="specifications">Selected rating: @selectedRating</label>
             </div>
         }
 

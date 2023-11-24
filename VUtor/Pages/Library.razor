@@ -1,29 +1,28 @@
 ﻿@page "/library"
-@using Azure.Search.Documents.Models;
-@using DataAccessLibrary.Data;
-@using DataAccessLibrary.Models;
-@using DataAccessLibrary.FileRepo;
-@using DataAccessLibrary.FolderRepo;
-@using DataAccessLibrary;
-@using DataAccessLibrary.WebSearch;
-@using Microsoft.AspNetCore.Identity;
-@using Microsoft.EntityFrameworkCore;
-@using System.Security.Claims;
-@using VUtor.Components;
-@using DataAccessLibrary.Search;
+@using Azure.Search.Documents.Models
+@using DataAccessLibrary.Data
+@using DataAccessLibrary.Models
+@using DataAccessLibrary.FileRepo
+@using DataAccessLibrary.FolderRepo
+@using DataAccessLibrary
+@using DataAccessLibrary.WebSearch
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@using System.Security.Claims
+@using VUtor.Components
+@using DataAccessLibrary.Search
 
-@inject IHttpContextAccessor httpContextAccessor
-@inject IConfiguration config
-@inject NavigationManager navigationManger
-@inject IFileRepository fileRepo
-@inject IFolderRepository folderRepo
-@inject ISearch search
-
-
+@inject IHttpContextAccessor HttpContextAccessor
+@inject IConfiguration Config
+@inject NavigationManager NavigationManager
+@inject IFileRepository FileRepo
+@inject IFolderRepository FolderRepo
+@inject ISearch Search
 
 <PageTitle>Courses</PageTitle>
 
 <h1>Library</h1>
+<!-- Primary library components -->
 <div>
     <div>
         <div>
@@ -37,7 +36,7 @@
             <h2 class="congrats_h2_left">@SelectedFolder.Path</h2>
         }
         <div id="HASH">
-            <button id="previousFolder" @onclick="PreviousFolder" type="button" class="round_corners small_arrow">
+            <button id="previousFolder" @onclick="PreviousFolderNavigate" type="button" class="round_corners small_arrow">
                 <img src="css/Images/angle-small-right.png" alt="buttonpng" class="angle_img right" />
             </button>
             <button id="upload" @onclick="UploadFileNavigate" type="button" class="round_corners btn btn-outline-secondary">Upload Files</button>
@@ -46,13 +45,16 @@
     <br />
     <div>
         <div class="form-floating mb-2">
-            <input @onkeyup="Search" @bind="SearchText" type="text" name="filter" class="round_corners" placeholder="Search" />
+            <input @onkeyup="SearchLibrary" @bind="SearchText" type="text" name="filter" class="round_corners" placeholder="Search" />
         </div>
     </div>
 </div>
-@if(!filesBySearch.Any())
+<!-- /Primary library components -->
+
+<!-- Parent folders when folder has not been selected and/or search has not been activated -->
+@if (!FilesBySearch.Any())
 {
-    @if(String.IsNullOrEmpty(SelectedFolder.Name) && folderList != null)
+    @if (string.IsNullOrEmpty(SelectedFolder.Name) && FolderList != null)
     {
         <table class="library_table">
             <thead>
@@ -63,20 +65,21 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var folder in folderList)
+                @foreach (var folder in FolderList)
                 {
                     <tr class="library_tr" @onclick="() => SelectFolder(folder)">
                         <td class="library_td">@folder.Name</td>
                         <td class="library_td">@folder.SubFolders.Count()</td>
                         <td class="library_td">@folder.Files.Count()</td>
-
                     </tr>
                 }
             </tbody>
         </table>
+<!-- /Parent folders when folder has not been selected and/or search has not been activated -->
     }
     else
     {
+<!-- Subfolders if there are any -->
         @if (SelectedFolder?.SubFolders != null && SelectedFolder.SubFolders.Count() > 0)
         {
             <table class="library_table">
@@ -88,19 +91,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var folder in subfolderList)
+                    @foreach (var folder in SubfolderList)
                     {
                         <tr class="library_tr" @onclick="() => SelectFolder(folder)">
                             <td class="library_td">@folder.Name</td>
                             <td class="library_td">@folder.SubFolders.Count()</td>
                             <td class="library_td">@folder.Files.Count()</td>
-
                         </tr>
                     }
                 </tbody>
             </table>
         }
+<!-- /Subfolders if there are any -->
 
+<!-- Files if there are any -->
         @if (SelectedFolder?.Files != null && SelectedFolder.Files.Count() > 0)
         {
             <table class="file_table">
@@ -119,7 +123,7 @@
                             <td class="file_td">@file.Title</td>
                             <td class="file_td">@file.Description</td>
                             <td class="file_td">
-                                @foreach (TopicEntity topic in file.Topics)
+                                @foreach (var topic in file.Topics)
                                 {
                                     <li>@topic.Title</li>
                                 }
@@ -129,7 +133,7 @@
                             <td class="file_td">
                                 @if (IsCurrentUserUploader(file))
                                 {
-                                    <button id="editButtonFolder" @onclick="() => EditFile(file.Id)" style="margin-bottom: 10px; width: 100px; padding: 0 10px 0 10px"
+                                    <button id="editButtonFolder" @onclick="() => EditFileNavigate(file.Id)" style="margin-bottom: 10px; width: 100px; padding: 0 10px 0 10px"
                                             class="round_corners btn btn-outline-secondary">
                                         Edit
                                     </button>
@@ -141,9 +145,11 @@
             </table>
         }
     }
+<!-- /Files if there are any -->
 }
 else
 {
+<!-- Files found for SEARCH -->
     <table class="file_table">
         <thead>
             <tr>
@@ -154,13 +160,13 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var file in filesBySearch)
+            @foreach (var file in FilesBySearch)
             {
                 <tr class="library_tr">
                     <td class="file_td">@file.Title</td>
                     <td class="file_td">@file.Description</td>
                     <td class="file_td">
-                        @foreach (TopicEntity topic in file.Topics)
+                        @foreach (var topic in file.Topics)
                         {
                             <li>@topic.Title</li>
                         }
@@ -170,7 +176,7 @@ else
                     <td class="file_td">
                         @if (IsCurrentUserUploader(file))
                         {
-                            <button id="editButtonSearch" @onclick="() => EditFile(file.Id)" style="margin-bottom: 10px; width: 100px; padding: 0 10px 0 10px"
+                            <button id="editButtonSearch" @onclick="() => EditFileNavigate(file.Id)" style="margin-bottom: 10px; width: 100px; padding: 0 10px 0 10px"
                                     class="round_corners btn btn-outline-secondary">
                                 Edit
                             </button>
@@ -180,20 +186,17 @@ else
             }
         </tbody>
     </table>
+<!-- /Files found for SEARCH -->
 }
 
 @code {
-    public Folder SelectedFolder { get; set; } = new Folder();
-    private List<UserFile> SelectedFolderFiles { get; set; } = new List<UserFile>();
-    public List<Folder> folderList = new List<Folder>();
-    private List<UserFile> filesBySearch;
-    private List<Folder> subfolderList = new List<Folder>();
-    public string ErrorMessage { get; set; }
-    public string SearchText { get; set; }
+
+    #region Initial
+    public List<Folder> FolderList = new List<Folder>();
 
     protected override void OnInitialized()
     {
-        filesBySearch = new List<UserFile>();
+        FilesBySearch = new List<UserFile>();
         base.OnInitialized();
     }
 
@@ -201,48 +204,57 @@ else
     {
         try
         {
-            folderList = await folderRepo.GetParentFolders();
+            FolderList = await FolderRepo.GetParentFolders();
         }
-        catch (Exception ex)
+        catch
         {
             ErrorMessage = "Error fetching folders.";
         }
     }
+    #endregion
 
-    private async Task Search(KeyboardEventArgs e)
+    #region Search 
+    public string SearchText { get; set; }
+    private List<UserFile> FilesBySearch;
+
+    private async Task SearchLibrary(KeyboardEventArgs e)
     {
-        filesBySearch.Clear();
+        FilesBySearch.Clear();
         SearchResults<SearchDocument> searchResults;
-        if(e.Key == "Enter")
+        if (e.Key == "Enter")
         {
-            searchResults = await search.SearchDocumentsAsync(SearchText);
+            searchResults = await Search.SearchDocumentsAsync(SearchText);
             if (searchResults != null)
             {
-                var blobUrls = search.GetBlobUrls(searchResults);
-                filesBySearch = await fileRepo.GetFilesForBlobUrls(blobUrls);
-                if(filesBySearch == null || filesBySearch.Count <= 0)
+                var blobUrls = Search.GetBlobUrls(searchResults);
+                FilesBySearch = await FileRepo.GetFilesForBlobUrls(blobUrls);
+
+                if (FilesBySearch == null || FilesBySearch.Count <= 0)
                 {
                     ErrorMessage = $"Nothing found for: {SearchText}";
                 }
             }
-            SearchText = String.Empty;
+            SearchText = string.Empty;
         }
     }
+    #endregion
 
-    private void ClearErrorMsg()
-    {
-        ErrorMessage = String.Empty;
-    }
+    #region Select Folder
+    public Folder SelectedFolder { get; set; } = new Folder();
+    private List<UserFile> SelectedFolderFiles { get; set; } = new List<UserFile>();
+    private List<Folder> SubfolderList = new List<Folder>();
 
     public async Task SelectFolder(Folder folder)
     {
         try
         {
-            SelectedFolder = await folderRepo.GetFolder(folder.Id);
+            SelectedFolder = await FolderRepo
+            .GetFolder(folder.Id);
+
             if (SelectedFolder != null)
             {
-                subfolderList = await folderRepo.GetSubFolders(SelectedFolder.Id);
-                SelectedFolderFiles = await fileRepo.GetFilesForFolderAsync(SelectedFolder.Id);
+                SubfolderList = await FolderRepo.GetSubFolders(SelectedFolder.Id);
+                SelectedFolderFiles = await FileRepo.GetFilesForFolderAsync(SelectedFolder.Id);
             }
             else
             {
@@ -259,8 +271,10 @@ else
     {
         SelectedFolder = folder;
     }
+    #endregion
 
-    public async Task PreviousFolder()
+    #region Navigate
+    public async Task PreviousFolderNavigate()
     {
         try
         {
@@ -273,7 +287,7 @@ else
                 SelectedFolder = new();
             }
         }
-        catch (Exception ex)
+        catch
         {
             ErrorMessage = "Error navigating to previous folder.";
         }
@@ -281,18 +295,34 @@ else
 
     private async Task UploadFileNavigate()
     {
-        navigationManger.NavigateTo("uploadfiles");
+        NavigationManager
+        .NavigateTo("uploadfiles");
     }
-    private void EditFile(int fileId)
+
+    private void EditFileNavigate(int fileId)
     {
-        navigationManger.NavigateTo($"editfile/{fileId}");
+        NavigationManager
+        .NavigateTo($"editfile/{fileId}");
     }
+    #endregion
+
+    #region Checking
+    public string ErrorMessage { get; set; }
 
     public bool IsCurrentUserUploader(UserFile file)
     {
-        var currentUserId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        Console.WriteLine(currentUserId);
-        Console.WriteLine(file.ProfileId);
+        var currentUserId = HttpContextAccessor
+        .HttpContext
+        .User
+        .FindFirst(ClaimTypes.NameIdentifier)?
+        .Value;
+
         return file.ProfileId == currentUserId;
     }
+
+    private void ClearErrorMsg()
+    {
+        ErrorMessage = string.Empty;
+    }
+    #endregion
 }

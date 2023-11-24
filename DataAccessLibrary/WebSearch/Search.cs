@@ -6,22 +6,30 @@ using Microsoft.Extensions.Configuration;
 using Azure.Search.Documents.Indexes.Models;
 using ServiceStack;
 using DataAccessLibrary.WebSearch;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DataAccessLibrary.Search
 {
+    // This class represents the search functionality
     public class Search : ISearch
     {
         private readonly IConfiguration _config;
-        public SearchClient _searchClient;
+        private readonly SearchClient _searchClient;
 
-        public Search(IConfiguration configuration, SearchClient search)
+        // Constructor with dependency injection
+        public Search(IConfiguration configuration, SearchClient searchClient)
         {
-            _searchClient = search;
             _config = configuration;
+            _searchClient = searchClient;
         }
-        public Search(IConfiguration configuration){
+
+        // Constructor without dependency injection
+        public Search(IConfiguration configuration)
+        {
             _config = configuration;
 
+            // Get Azure Search service configuration values from appsettings.json
             string serviceName = _config.GetValue<string>("AzureSearchServiceName");
             string indexName = _config.GetValue<string>("AzureSearchIndexName");
             string queryApiKey = _config.GetValue<string>("AzureSearchQeuryKey");
@@ -29,25 +37,31 @@ namespace DataAccessLibrary.Search
             Uri serviceEndpoint = new Uri($"https://{serviceName}.search.windows.net/");
             AzureKeyCredential credential = new AzureKeyCredential(queryApiKey);
 
+            // Create a new instance of SearchClient
             _searchClient = new SearchClient(serviceEndpoint, indexName, credential);
         }
 
+        // Search documents based on the provided searchText
         public async Task<SearchResults<SearchDocument>> SearchDocumentsAsync(string searchText)
         {
-            if (!searchText.IsNullOrEmpty())
+            if (!string.IsNullOrEmpty(searchText))
             {
                 SearchOptions options = new SearchOptions
                 {
                     IncludeTotalCount = true,
-                    Size = 10, // number of results to retrieve
-                    QueryType = SearchQueryType.Full, // enable semantic search
+                    Size = 10, // Number of results to retrieve
+                    QueryType = SearchQueryType.Full, // Enable semantic search
                 };
-                options.Select.Add("*"); // fields to retrieve
+                options.Select.Add("*"); // Fields to retrieve
+
+                // Perform the search and return the results
                 return await _searchClient.SearchAsync<SearchDocument>(searchText, options);
             }
+
             return null;
         }
 
+        // Get the blob URLs from the search results
         public List<string> GetBlobUrls(SearchResults<SearchDocument> searchResults)
         {
             var blobUrls = new List<string>();
@@ -62,6 +76,7 @@ namespace DataAccessLibrary.Search
                     blobUrls.Add(decodedPath);
                 }
             }
+
             return blobUrls;
         }
     }

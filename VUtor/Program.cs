@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Builder;
 using DataAccessLibrary.FolderRepo;
 using DataAccessLibrary.Search;
 using DataAccessLibrary.WebSearch;
+using DataAccessLibrary.ProfileRepo;
+using DataAccessLibrary.RatingRepo;
+using DataAccessLibrary.GenericRepo;
 
 var builder = WebApplication.CreateBuilder(args);
 
