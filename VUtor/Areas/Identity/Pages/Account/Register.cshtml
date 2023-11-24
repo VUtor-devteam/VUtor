@@ -13,6 +13,7 @@
 <div class="row">
     <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data">
         <div class="login_container">
+<!-- Users email-->
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div>
                 <label class="specifications">Enter email:</label>
@@ -21,6 +22,9 @@
                     <span asp-validation-for="Input.Email" class="text-danger"></span>
                 </div>
             </div>
+<!-- Users email-->
+
+<!-- Users name-->
             <div class="edit_row_container">
                 <div>
                     <label class="specifications">Enter name:</label>
@@ -28,28 +32,33 @@
                         <input asp-for="Input.Name" class="round_corners" />
                         <span asp-validation-for="Input.Name" class="text-danger"></span>
                     </div>
+<!-- Users name-->
 
+<!-- Users surname-->
                     <label class="specifications">Enter surname:</label>
                     <div class="form-floating mb-2">
                         <input asp-for="Input.Surname" class="round_corners" />
                         <span asp-validation-for="Input.Surname" class="text-danger"></span>
                     </div>
                 </div>
+<!-- Users surname-->
 
+<!-- Users password-->
                 <div>
                     <label class="specifications">Enter password:</label>
                     <div class="form-floating mb-2">
                         <input asp-for="Input.Password" class="round_corners" autocomplete="new-password" aria-required="true" />
                         <span asp-validation-for="Input.Password" class="text-danger"></span>
                     </div>
-
                     <label class="specifications">Confirm password:</label>
                     <div class="form-floating mb-2">
                         <input asp-for="Input.ConfirmPassword" class="round_corners" autocomplete="new-password" aria-required="true" />
                         <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                     </div>
-
                 </div>
+<!-- Users password-->
+
+<!-- Users course name-->
             </div>
              <div class="edit_row_container">
                 <div>
@@ -64,7 +73,9 @@
                         <span asp-validation-for="Input.CourseName"></span>
                     </div>
                 </div>
+<!-- Users course name-->
 
+<!-- Users course year-->
                 <div>
                     <label class="specifications" for="Input.CourseYear">Select acaddemic year:</label>
                     <div class="form-floating mb-2">
@@ -78,6 +89,9 @@
                     </div>
                 </div>
             </div>
+<!-- Users course year-->
+
+<!-- Users topics to learn -->
             <div class="edit_row_container">
                 <div>
                     <label class="specifications">Select a subject(s) you wish to learn:</label>
@@ -92,6 +106,9 @@
                     </div>
                 </div>
             </div>
+<!-- Users topics to learn -->
+
+<!-- Users topics to teach -->
             <div class="edit_row_container">
                 <div>
                     <label class="specifications">Select a subject(s) you wish to teach:</label>
@@ -106,13 +123,16 @@
                     </div>
                 </div>
             </div>
+<!-- Users topics to teach -->
+
+<!-- Submit -->
             <div class="form-floating mb-3"></div>
             <button id="registerSubmit" type="submit" class=" round_corners login">Register</button>
         </div>
     </form>
 </div>
 
-
+<!-- Adding multiple select -->
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 

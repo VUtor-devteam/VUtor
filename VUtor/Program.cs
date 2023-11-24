@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Builder;
 using DataAccessLibrary.FolderRepo;
 using DataAccessLibrary.Search;
 using DataAccessLibrary.WebSearch;
+using DataAccessLibrary.ProfileRepo;
+using DataAccessLibrary.RatingRepo;
+using DataAccessLibrary.GenericRepo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +25,7 @@ builder.Services.AddAzureClients(options =>
     options.AddBlobServiceClient(storageConnectionString);
 });
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddDefaultIdentity<ProfileEntity>(options => options.SignIn.RequireConfirmedAccount = true) //veliau reiktu pakeist i true galbut????
+builder.Services.AddDefaultIdentity<ProfileEntity>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddRazorPages();
@@ -32,6 +35,7 @@ builder.Services.AddScoped<IFileRepository, FileRepository>();
 builder.Services.AddScoped<IFolderRepository, FolderRepository>();
 builder.Services.AddScoped<ISearch, Search>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<RatingRepository>();
 builder.Services.AddControllers();
 
 var app = builder.Build();

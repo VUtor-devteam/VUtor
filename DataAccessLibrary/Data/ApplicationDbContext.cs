@@ -14,6 +14,9 @@ namespace DataAccessLibrary.Data
         public DbSet<UserFile> UserFiles { get; set; }
         public DbSet<Folder> Folders { get; set; }
         public DbSet<UserItem> UserItems { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
+
+
 
         public ApplicationDbContext()
         {
@@ -26,7 +29,7 @@ namespace DataAccessLibrary.Data
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=tcp:vutor-server.database.windows.net,1433;Initial Catalog=vutor_db;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication= Active Directory Default",
+            optionsBuilder.UseSqlServer("Server=tcp:vutor-server.database.windows.net,1433;Initial Catalog=vutor_db;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication= Active Directory Default;",
                 options => options.EnableRetryOnFailure().MaxBatchSize(100));
             base.OnConfiguring(optionsBuilder);
         }

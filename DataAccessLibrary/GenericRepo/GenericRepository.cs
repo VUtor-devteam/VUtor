@@ -1,7 +1,7 @@
 using DataAccessLibrary.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataAccessLibrary
+namespace DataAccessLibrary.GenericRepo
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity>
         where TEntity : class

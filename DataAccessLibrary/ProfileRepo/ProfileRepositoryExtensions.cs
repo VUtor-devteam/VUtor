@@ -1,6 +1,6 @@
 ﻿using DataAccessLibrary.Models;
 
-namespace DataAccessLibrary
+namespace DataAccessLibrary.ProfileRepo
 {
     public static class ProfileExtensions
     {
@@ -8,8 +8,8 @@ namespace DataAccessLibrary
         {
             return profiles
                     .Where(profile =>
-                    (string.IsNullOrWhiteSpace(name) || (profile.Name != null && profile.Name.Contains(name, StringComparison.OrdinalIgnoreCase))) &&
-                    (string.IsNullOrWhiteSpace(surname) || (profile.Surname != null && profile.Surname.Contains(surname, StringComparison.OrdinalIgnoreCase))) &&
+                    (string.IsNullOrWhiteSpace(name) || profile.Name != null && profile.Name.Contains(name, StringComparison.OrdinalIgnoreCase)) &&
+                    (string.IsNullOrWhiteSpace(surname) || profile.Surname != null && profile.Surname.Contains(surname, StringComparison.OrdinalIgnoreCase)) &&
                     (courseName == 0 || profile.CourseInfo.CourseName.Equals(courseName)) &&
                     (courseYear == 0 || profile.CourseInfo.CourseYear.Equals(courseYear)) &&
                     (topicsLearn == 0 || profile.TopicsToLearn.Any(topic => topic.Id.Equals(topicsLearn))) &&

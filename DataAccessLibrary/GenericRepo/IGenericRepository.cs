@@ -1,4 +1,4 @@
-﻿namespace DataAccessLibrary
+﻿namespace DataAccessLibrary.GenericRepo
 {
     public interface IGenericRepository<TEntity>
         where TEntity : class

@@ -1,13 +1,15 @@
-﻿@using DataAccessLibrary.Models;
+﻿@using DataAccessLibrary.Models; 
 @using DataAccessLibrary.FolderRepo;
 
-@inject IFolderRepository folderRepo;
+@inject IFolderRepository folderRepo; 
 
-@if(CurrentFolder == SelectedFolder || CurrentFolder.ParentFolderId == null){
+@if (CurrentFolder == SelectedFolder || CurrentFolder.ParentFolderId == null)
+{
     <div>
         <div>
             @if (CurrentFolder.SubFolders != null && CurrentFolder.SubFolders.Any())
             {
+                <!-- When current folder has one subfolder it is shown as a button -->
                 @if (CurrentFolder.SubFolders.Count() == 1)
                 {
                     <div>
@@ -18,9 +20,11 @@
                             @CurrentFolder.SubFolders.First().Name
                         </button>
                     </div>
+                    <!-- When current folder has one subfolder it is shown as a button -->
                 }
                 else
                 {
+                    <!-- When current folder has many subfolder, they are shown in a dropdown-->
                     <div>
                         <label class="custom_small_text" for="SubFoldersIdSelect">Choose a subfolder</label>
                     </div>
@@ -31,30 +35,39 @@
                             <option class="custom_small_text" value="@subFolder.Id">@subFolder.Name</option>
                         }
                     </select>
+                    <!-- When current folder has many subfolder, they are shown in a dropdown-->
                 }
             }
+            <!-- To create a new (sub)folder-->
             <div>
                 <input style="margin-bottom: 10px" type="text" @bind="newSubFolderName" placeholder="New sub-folder name" />
             </div>
             <div>
-                <button style="margin-bottom: 10px; width: 120px; padding: 0 10px 0 10px" type="button" class="round_corners btn btn-outline-secondary" @onclick="CreateNewSubFolder">Create</button>
+                <button style="margin-bottom: 10px; width: 120px; padding: 0 10px 0 10px" 
+                type="button" class="round_corners btn btn-outline-secondary"
+                @onclick="CreateNewSubFolder">Create</button>
             </div>
             <div>
-                <button style="margin-bottom: 10px; width: 200px; padding: 0 10px 0 10px" type="button" class="round_corners btn btn-outline-secondary" @onclick="GoBackAFolder">Go back one folder</button>
+                <button style="margin-bottom: 10px; width: 200px; padding: 0 10px 0 10px" 
+                type="button" class="round_corners btn btn-outline-secondary" 
+                @onclick="GoBackAFolder">Go back one folder</button>
             </div>
+            <!-- To create a new (sub)folder-->
         </div>
     </div>
+<!-- Navigate through folders -->
     @if (SelectedFolder != null && SelectedFolder != CurrentFolder)
     {
         <FolderComp CurrentFolder="@SelectedFolder" OnFolderSelected="SelectFolder" />
-
     }
 }
-@if(errors.Count() > 0)
+
+<!-- Shows errors immidiately -->
+@if (errors.Count() > 0)
 {
     <h2>Errors</h2>
     <ul class="text-danger">
-        @foreach(var error in errors)
+        @foreach (var error in errors)
         {
             <li>@error</li>
         }
@@ -62,15 +75,18 @@
 }
 
 @code {
-    [Parameter]
-    public Folder CurrentFolder { get; set; }
 
     [Parameter]
-    public EventCallback<Folder> OnFolderSelected { get; set; }
-    private Folder SelectedFolder { get; set; }
-    private List<string> errors = new();
-    private string newSubFolderName;
+    public Folder CurrentFolder { get; set; } // The currently selected folder
 
+    [Parameter]
+    public EventCallback<Folder> OnFolderSelected { get; set; } // Event callback for when a folder is selected
+
+    private Folder SelectedFolder { get; set; } // The currently selected subfolder
+    private List<string> errors = new(); // List to store any errors that occur
+    private string newSubFolderName; // The name of the new subfolder to be created
+
+    // Method to select a folder
     private async Task SelectFolder(Folder folder)
     {
         if (folder != null)
@@ -86,19 +102,25 @@
             await OnFolderSelected.InvokeAsync(SelectedFolder);
         }
     }
+
+    // Method to go back to the parent folder
     private async Task GoBackAFolder()
     {
-        try{
+        try
+        {
             if (SelectedFolder == null)
             {
                 if (CurrentFolder.ParentFolderId == null)
                 {
+                    // Sets the Selected Folder as null which will show the top folders 
                     SelectedFolder = null;
                     await OnFolderSelected.InvokeAsync(SelectedFolder);
                 }
                 else
                 {
+                    // When folder has not been chosen yet goes back to the parent folder
                     var previousFolder = await folderRepo.GetFolder(CurrentFolder.ParentFolderId.Value);
+
                     SelectedFolder = previousFolder;
                     await OnFolderSelected.InvokeAsync(SelectedFolder);
                 }
@@ -107,21 +129,27 @@
             {
                 if (SelectedFolder.ParentFolderId != null)
                 {
+                    // When folder is selected goes back to parent folder
                     var previousFolder = await folderRepo.GetFolder(SelectedFolder.ParentFolderId.Value);
+
                     SelectedFolder = previousFolder;
                     await OnFolderSelected.InvokeAsync(SelectedFolder);
                 }
                 else
                 {
+                    // When folder is selected, goes back to top folders
                     SelectedFolder = null;
                     await OnFolderSelected.InvokeAsync(SelectedFolder);
                 }
             }
-        }catch(Exception ex){
+        }
+        catch
+        {
             errors.Add("Error selecting folder.");
         }
     }
 
+    // Method to handle the selection of a subfolder
     private async Task SubFolderSelected(ChangeEventArgs e)
     {
         try
@@ -129,40 +157,45 @@
             var selectedSubFolderId = int.Parse(e.Value.ToString());
             // Find the selected subfolder by ID...
             var selectedSubFolder = await folderRepo.GetFolder(selectedSubFolderId);
+
             SelectedFolder = selectedSubFolder;
             await OnFolderSelected.InvokeAsync(SelectedFolder);
         }
-        catch(Exception ex){
+        catch
+        {
             errors.Add("Error selecting subfolder.");
         }
     }
 
+    // Method to create a new subfolder
     private async Task CreateNewSubFolder()
     {
         try
         {
             if (!string.IsNullOrEmpty(newSubFolderName))
             {
-                Console.WriteLine(CurrentFolder.Name);
                 await folderRepo.CreateSubFolder(newSubFolderName, CurrentFolder.Id);
                 await UpdateSubFolderList();
             }
             newSubFolderName = string.Empty;
         }
-        catch(Exception ex){
+        catch
+        {
             errors.Add("Error creating new subfolder.");
         }
     }
 
+    // Method to update the list of subfolders
     private async Task UpdateSubFolderList()
     {
         try
         {
             CurrentFolder = await folderRepo.GetFolder(CurrentFolder.Id);
         }
-        catch (Exception ex)
+        catch
         {
             errors.Add("Error updating subfolder list.");
         }
     }
+
 }
