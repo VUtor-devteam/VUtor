@@ -25,7 +25,7 @@
                 <div>
                     <label class="specifications">Name:</label>
                     <div class="mb-2">
-                        <label>@userProfile.Name and @id</label>
+                        <label>@userProfile.Name</label>
                     </div>
                 </div>
 
@@ -64,8 +64,6 @@
                     {
                         <li>@topic.Title</li>
                     }
-
-                    <!--<label>Subject you want to learn</label>-->
                 </div>
             </div>
 
@@ -76,7 +74,6 @@
                     {
                         <li>@topic.Title</li>
                     }
-                    <!--<label>Subject you want to teach</label>-->
                 </div>
             </div>
         </div>
@@ -85,9 +82,6 @@
             <div class="mb-2">
                 <label>@averageRating.ToString("0.##")</label>
             </div>
-        </div>
-        <div>
-            <label class="specifications">@id and @currentUserId</label>
         </div>
 
         @if (id != currentUserId)
@@ -110,7 +104,6 @@
                     }
                     <span asp-validation-for="Input.Rating"></span>
                 </div>
-                <label class="specifications">Selected rating: @selectedRating</label>
             </div>
         }
 
