@@ -33,6 +33,7 @@ builder.Services.AddScoped<IFolderRepository, FolderRepository>();
 builder.Services.AddScoped<ISearch, Search>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<RatingRepository>();
+builder.Services.AddScoped<StudyGroupRepository>();
 builder.Services.AddControllers();
 
 var app = builder.Build();

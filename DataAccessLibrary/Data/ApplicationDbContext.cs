@@ -15,7 +15,8 @@ namespace DataAccessLibrary.Data
         public DbSet<Folder> Folders { get; set; }
         public DbSet<UserItem> UserItems { get; set; }
         public DbSet<Rating> Ratings { get; set; }
-
+        public DbSet<StudyGroup> StudyGroups { get; set; }
+        public DbSet<StudyGroupMember> StudyGroupMembers { get; set; }
 
 
         public ApplicationDbContext()

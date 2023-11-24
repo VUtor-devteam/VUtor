@@ -418,3 +418,7 @@ FodyWeavers.xsd
 /VUtor/obj/project.nuget.cache
 /VUtor/obj/VUtor.csproj.nuget.dgspec.json
 /VUtor/obj/VUtor.csproj.nuget.g.props
+obj/
+bin/
+
+.vs/

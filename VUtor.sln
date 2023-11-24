@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VUtor", "VUtor\VUtor.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLibrary", "DataAccessLibrary\DataAccessLibrary.csproj", "{D27CB4C5-6058-4E89-B92B-93B562D4719F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VUtor.UnitTests", "VUtor.UnitTests\VUtor.UnitTests.csproj", "{793E70BF-20F9-4C40-BE55-531F5B1972E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VUtor.UnitTests", "VUtor.UnitTests\VUtor.UnitTests.csproj", "{793E70BF-20F9-4C40-BE55-531F5B1972E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
