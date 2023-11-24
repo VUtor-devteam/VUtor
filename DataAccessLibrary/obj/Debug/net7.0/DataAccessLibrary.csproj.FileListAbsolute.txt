@@ -26,3 +26,17 @@ C:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\DataAccessLibrary\obj\Debug\net7
 C:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\DataAccessLibrary\obj\Debug\net7.0\DataAccessLibrary.pdb
 C:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\DataAccessLibrary\obj\Debug\net7.0\DataAccessLibrary.genruntimeconfig.cache
 C:\Users\aiste\OneDrive\Desktop\VUtor-dev\VUtor\DataAccessLibrary\obj\Debug\net7.0\ref\DataAccessLibrary.dll
+C:\Users\Lenovo\Desktop\VUtor\DataAccessLibrary\bin\Debug\net7.0\DataAccessLibrary.deps.json
+C:\Users\Lenovo\Desktop\VUtor\DataAccessLibrary\bin\Debug\net7.0\DataAccessLibrary.runtimeconfig.json
+C:\Users\Lenovo\Desktop\VUtor\DataAccessLibrary\bin\Debug\net7.0\DataAccessLibrary.dll
+C:\Users\Lenovo\Desktop\VUtor\DataAccessLibrary\bin\Debug\net7.0\DataAccessLibrary.pdb
+C:\Users\Lenovo\Desktop\VUtor\DataAccessLibrary\obj\Debug\net7.0\DataAccessLibrary.csproj.AssemblyReference.cache
+C:\Users\Lenovo\Desktop\VUtor\DataAccessLibrary\obj\Debug\net7.0\DataAccessLibrary.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Lenovo\Desktop\VUtor\DataAccessLibrary\obj\Debug\net7.0\DataAccessLibrary.AssemblyInfoInputs.cache
+C:\Users\Lenovo\Desktop\VUtor\DataAccessLibrary\obj\Debug\net7.0\DataAccessLibrary.AssemblyInfo.cs
+C:\Users\Lenovo\Desktop\VUtor\DataAccessLibrary\obj\Debug\net7.0\DataAccessLibrary.csproj.CoreCompileInputs.cache
+C:\Users\Lenovo\Desktop\VUtor\DataAccessLibrary\obj\Debug\net7.0\DataAccessLibrary.dll
+C:\Users\Lenovo\Desktop\VUtor\DataAccessLibrary\obj\Debug\net7.0\refint\DataAccessLibrary.dll
+C:\Users\Lenovo\Desktop\VUtor\DataAccessLibrary\obj\Debug\net7.0\DataAccessLibrary.pdb
+C:\Users\Lenovo\Desktop\VUtor\DataAccessLibrary\obj\Debug\net7.0\DataAccessLibrary.genruntimeconfig.cache
+C:\Users\Lenovo\Desktop\VUtor\DataAccessLibrary\obj\Debug\net7.0\ref\DataAccessLibrary.dll

@@ -11,7 +11,6 @@
 using System;
 using System.Reflection;
 
-[assembly: Microsoft.AspNetCore.Identity.UI.UIFrameworkAttribute("Bootstrap5")]
 [assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("aspnet-VUtor-d2a1ddd3-920c-4b9a-a0d7-2e16995573c9")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("VUtor")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
