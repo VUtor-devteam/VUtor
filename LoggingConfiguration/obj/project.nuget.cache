@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "1X/yCv1esyMnwD3uV7N4FUa5L+HyI3xhryISj00pF5BcUqW3SX88wjzPyzSO2HtClcF0xOnk8ZKXBGhfqczh9A==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\gusta\\OneDrive\\Documents\\Vilnius University\\PSI\\development\\LoggingConfiguration\\LoggingConfiguration.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\gusta\\.nuget\\packages\\serilog\\3.1.1\\serilog.3.1.1.nupkg.sha512",
+    "C:\\Users\\gusta\\.nuget\\packages\\serilog.sinks.console\\5.0.0\\serilog.sinks.console.5.0.0.nupkg.sha512",
+    "C:\\Users\\gusta\\.nuget\\packages\\serilog.sinks.file\\5.0.0\\serilog.sinks.file.5.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

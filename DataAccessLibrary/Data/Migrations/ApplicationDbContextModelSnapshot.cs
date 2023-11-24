@@ -17,7 +17,7 @@ namespace DataAccessLibrary.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.11")
+                .HasAnnotation("ProductVersion", "7.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -34,11 +34,16 @@ namespace DataAccessLibrary.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ParentFolderId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Path")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ParentFolderId");
 
                     b.ToTable("Folders");
                 });
@@ -126,6 +131,30 @@ namespace DataAccessLibrary.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("DataAccessLibrary.Models.Rating", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("RecipientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReviewerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Ratings");
+                });
+
             modelBuilder.Entity("DataAccessLibrary.Models.TopicEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -161,16 +190,11 @@ namespace DataAccessLibrary.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("FolderId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ProfileId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("FolderId");
 
                     b.HasIndex("ProfileId");
 
@@ -179,21 +203,6 @@ namespace DataAccessLibrary.Data.Migrations
                     b.HasDiscriminator<string>("Discriminator").HasValue("UserItem");
 
                     b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("FolderFolder", b =>
-                {
-                    b.Property<int>("FolderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SubFoldersId")
-                        .HasColumnType("int");
-
-                    b.HasKey("FolderId", "SubFoldersId");
-
-                    b.HasIndex("SubFoldersId");
-
-                    b.ToTable("FolderHierarchy", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -363,9 +372,29 @@ namespace DataAccessLibrary.Data.Migrations
                     b.ToTable("ProfilesTeachingTopics", (string)null);
                 });
 
+            modelBuilder.Entity("TopicEntityUserFile", b =>
+                {
+                    b.Property<int>("TopicsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserFilesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("TopicsId", "UserFilesId");
+
+                    b.HasIndex("UserFilesId");
+
+                    b.ToTable("TopicToFiles", (string)null);
+                });
+
             modelBuilder.Entity("DataAccessLibrary.Models.UserFile", b =>
                 {
                     b.HasBaseType("DataAccessLibrary.Models.UserItem");
+
+                    b.Property<string>("BlobUri")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -374,24 +403,30 @@ namespace DataAccessLibrary.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("FolderId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TopicId")
-                        .HasColumnType("int");
-
-                    b.HasIndex("TopicId");
+                    b.HasIndex("FolderId");
 
                     b.HasDiscriminator().HasValue("UserFile");
                 });
 
+            modelBuilder.Entity("DataAccessLibrary.Models.Folder", b =>
+                {
+                    b.HasOne("DataAccessLibrary.Models.Folder", "ParentFolder")
+                        .WithMany("SubFolders")
+                        .HasForeignKey("ParentFolderId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("ParentFolder");
+                });
+
             modelBuilder.Entity("DataAccessLibrary.Models.UserItem", b =>
                 {
-                    b.HasOne("DataAccessLibrary.Models.Folder", null)
-                        .WithMany("Items")
-                        .HasForeignKey("FolderId");
-
                     b.HasOne("DataAccessLibrary.Models.ProfileEntity", "Profile")
                         .WithMany("UserItems")
                         .HasForeignKey("ProfileId")
@@ -399,21 +434,6 @@ namespace DataAccessLibrary.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Profile");
-                });
-
-            modelBuilder.Entity("FolderFolder", b =>
-                {
-                    b.HasOne("DataAccessLibrary.Models.Folder", null)
-                        .WithMany()
-                        .HasForeignKey("FolderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataAccessLibrary.Models.Folder", null)
-                        .WithMany()
-                        .HasForeignKey("SubFoldersId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -497,30 +517,42 @@ namespace DataAccessLibrary.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DataAccessLibrary.Models.UserFile", b =>
+            modelBuilder.Entity("TopicEntityUserFile", b =>
                 {
-                    b.HasOne("DataAccessLibrary.Models.TopicEntity", "Topic")
-                        .WithMany("UserFiles")
-                        .HasForeignKey("TopicId")
+                    b.HasOne("DataAccessLibrary.Models.TopicEntity", null)
+                        .WithMany()
+                        .HasForeignKey("TopicsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Topic");
+                    b.HasOne("DataAccessLibrary.Models.UserFile", null)
+                        .WithMany()
+                        .HasForeignKey("UserFilesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DataAccessLibrary.Models.UserFile", b =>
+                {
+                    b.HasOne("DataAccessLibrary.Models.Folder", "Folder")
+                        .WithMany("Files")
+                        .HasForeignKey("FolderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Folder");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Models.Folder", b =>
                 {
-                    b.Navigation("Items");
+                    b.Navigation("Files");
+
+                    b.Navigation("SubFolders");
                 });
 
             modelBuilder.Entity("DataAccessLibrary.Models.ProfileEntity", b =>
                 {
                     b.Navigation("UserItems");
-                });
-
-            modelBuilder.Entity("DataAccessLibrary.Models.TopicEntity", b =>
-                {
-                    b.Navigation("UserFiles");
                 });
 #pragma warning restore 612, 618
         }

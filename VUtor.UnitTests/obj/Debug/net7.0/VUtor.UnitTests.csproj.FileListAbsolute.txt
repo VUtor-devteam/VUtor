@@ -1,0 +1,7 @@
+C:\Users\gusta\OneDrive\Documents\Vilnius University\PSI\development\VUtor.UnitTests\bin\Debug\net7.0\CoverletSourceRootsMapping
+C:\Users\gusta\OneDrive\Documents\Vilnius University\PSI\development\VUtor.UnitTests\obj\Debug\net7.0\VUtor.UnitTests.csproj.AssemblyReference.cache
+C:\Users\gusta\OneDrive\Documents\Vilnius University\PSI\development\VUtor.UnitTests\obj\Debug\net7.0\MvcTestingAppManifest.json
+C:\Users\gusta\OneDrive\Documents\Vilnius University\PSI\development\VUtor.UnitTests\obj\Debug\net7.0\VUtor.UnitTests.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\gusta\OneDrive\Documents\Vilnius University\PSI\development\VUtor.UnitTests\obj\Debug\net7.0\VUtor.UnitTests.AssemblyInfoInputs.cache
+C:\Users\gusta\OneDrive\Documents\Vilnius University\PSI\development\VUtor.UnitTests\obj\Debug\net7.0\VUtor.UnitTests.AssemblyInfo.cs
+C:\Users\gusta\OneDrive\Documents\Vilnius University\PSI\development\VUtor.UnitTests\obj\Debug\net7.0\VUtor.UnitTests.csproj.CoreCompileInputs.cache

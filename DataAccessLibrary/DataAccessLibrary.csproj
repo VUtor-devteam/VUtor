@@ -8,9 +8,26 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\DesignTimeDbContextFactory.cs" />
+    <Compile Remove="Data\Migrations\20231016182135_UserFileTable.cs" />
+    <Compile Remove="Data\Migrations\20231016182135_UserFileTable.Designer.cs" />
+    <Compile Remove="Data\Migrations\20231018133051_FilesFoldersAndItems.cs" />
+    <Compile Remove="Data\Migrations\20231018133051_FilesFoldersAndItems.Designer.cs" />
+    <Compile Remove="Data\Migrations\20231019124409_UserItemAnUserFile.cs" />
+    <Compile Remove="Data\Migrations\20231019124409_UserItemAnUserFile.Designer.cs" />
+    <Compile Remove="Data\Migrations\20231019141213_CreationDateUserItem.cs" />
+    <Compile Remove="Data\Migrations\20231019141213_CreationDateUserItem.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Azure.Search.Documents" Version="11.5.0" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.18.0" />
     <PackageReference Include="Dapper" Version="2.1.4" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.12" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.11" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Azure.CognitiveServices.Search.WebSearch" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Http" Version="3.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.11">
       <PrivateAssets>all</PrivateAssets>
@@ -21,6 +38,17 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+    <PackageReference Include="Serilog" Version="3.1.1" />
+    <PackageReference Include="ServiceStack" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Users\gusta\OneDrive\Documents\Vilnius University\PSI\development\DataAccessLibrary\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\Users\gusta\OneDrive\Documents\Vilnius University\PSI\development\DataAccessLibrary\.editorconfig" />
   </ItemGroup>
 
 </Project>

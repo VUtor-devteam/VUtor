@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\VUtor",
+    "\\VUtor\\Pages"
   ],
-  "SelectedNode": "\\VUtor.sln",
+  "SelectedNode": "\\VUtor\\Pages\\FetchStudentList.razor",
   "PreviewInSolutionExplorer": false
 }

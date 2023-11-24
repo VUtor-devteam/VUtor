@@ -1,111 +1,117 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
 
-namespace DataAccessLibrary.Models
+namespace DataAccessLibrary.Models;
+
+public record profileCreationDate
 {
-    public record profileCreationDate
+    DateTime Date;
+
+    public profileCreationDate()
     {
-        DateTime Date;
+        CultureInfo culture = new CultureInfo("en-US");
+        Thread.CurrentThread.CurrentCulture = culture;
+        Date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+    }
 
-        public profileCreationDate()
+    public profileCreationDate(string dateAsString)
+    {
+        if (!dateAsString.IsNullOrEmpty())
         {
-            CultureInfo culture = new CultureInfo("en-US");
-            Thread.CurrentThread.CurrentCulture = culture;
-            Date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
-        }
-
-        public profileCreationDate(string dateAsString)
-        {
-            if (!dateAsString.IsNullOrEmpty())
+            try
             {
                 Date = DateTime.ParseExact(dateAsString, "MM/dd/yyyy", CultureInfo.CurrentCulture);
             }
-            else
+            catch (FormatException)
             {
-                Date = DateTime.MinValue;
+                Date = DateTime.ParseExact(dateAsString, "MM/d/yyyy", CultureInfo.CurrentCulture);
             }
         }
-
-        public override string ToString()
+        else
         {
-            CultureInfo culture = new CultureInfo("en-US");
-            Thread.CurrentThread.CurrentCulture = culture;
-            return Date.ToShortDateString();
+            Date = DateTime.MinValue;
         }
     }
-    public enum CourseName : int
+
+    public override string ToString()
     {
-        None = 0,
-        PS = 1,
-        ISI = 2,
-        VDA = 3,
-        MMT = 4,
-        IT = 5,
-        FDM = 6,
-        DM = 7
+        CultureInfo culture = new CultureInfo("en-US");
+        Thread.CurrentThread.CurrentCulture = culture;
+        return Date.ToShortDateString();
     }
-    public enum CourseYear : int
+}
+public enum CourseName : int
+{
+    None = 0,
+    PS = 1,
+    ISI = 2,
+    VDA = 3,
+    MMT = 4,
+    IT = 5,
+    FDM = 6,
+    DM = 7
+}
+public enum CourseYear : int
+{
+    None = 0,
+    I = 1,
+    II = 2,
+    III = 3,
+    IV = 4
+}
+public struct CourseData : IEquatable<CourseData>
+{
+    public int CourseName { get; set; }
+    public int CourseYear { get; set; }
+    public CourseData()
     {
-        None = 0,
-        I = 1,
-        II = 2,
-        III = 3,
-        IV = 4
+        CourseName = 0;
+        CourseYear = 0;
     }
-    public struct CourseData : IEquatable<CourseData>
+    public CourseData(int courseName, int courseYear)
     {
-        public int CourseName { get; set; }
-        public int CourseYear { get; set; }
-        public CourseData()
+        this.CourseName = courseName;
+        this.CourseYear = courseYear;
+    }
+    public CourseData(string conversionString)
+    {
+        if (!conversionString.IsNullOrEmpty())
+        {
+            string[] values = conversionString.Split(' ');
+            CourseName = int.Parse(values[0]);
+            CourseYear = int.Parse(values[1]);
+        }
+        else
         {
             CourseName = 0;
             CourseYear = 0;
         }
-        public CourseData(int courseName, int courseYear)
-        {
-            this.CourseName = courseName;
-            this.CourseYear = courseYear;
-        }
-        public CourseData(string conversionString)
-        {
-            if (!conversionString.IsNullOrEmpty())
-            {
-                string[] values = conversionString.Split(' ');
-                CourseName = int.Parse(values[0]);
-                CourseYear = int.Parse(values[1]);
-            }
-            else
-            {
-                CourseName = 0;
-                CourseYear = 0;
-            }
-        }
+    }
 
-        public string GetName()
-        {
-            var nameEnum = (CourseName)CourseName;
+    public string GetName()
+    {
+        var nameEnum = (CourseName)CourseName;
 
-            return nameEnum.ToString();
-        }
+        return nameEnum.ToString();
+    }
 
-        public string GetYear()
-        {
-            var yearEnum = (CourseYear)CourseYear;
+    public string GetYear()
+    {
+        var yearEnum = (CourseYear)CourseYear;
 
-            return yearEnum.ToString();
-        }
+        return yearEnum.ToString();
+    }
 
-        public override string ToString()
-        {
-            return CourseName + " " + CourseYear;
-        }
+    public override string ToString()
+    {
+        return CourseName + " " + CourseYear;
+    }
 
-        // IEquatable 
-        public bool Equals(CourseData other)
-        {
-            if (CourseName == other.CourseName && CourseYear == other.CourseYear)
-                return true;
-            else return false;
-        }
+    // IEquatable 
+    public bool Equals(CourseData other)
+    {
+        if (CourseName == other.CourseName && CourseYear == other.CourseYear)
+            return true;
+        else return false;
     }
 }
