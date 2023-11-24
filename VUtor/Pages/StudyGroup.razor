@@ -44,7 +44,7 @@ else
                     <td>@group.GroupDate</td>
                     <td>@(group.GroupPlace ? "Live" : "Online")</td>
                     <td>@group.Subject</td>
-                    <td>@(await studyGroupRepo.GetMemberCount(group.Id))</td>
+                    <td>@(studyGroupRepo.GetMemberCount(group.Id)+1)</td>
                     <td><button @onclick="()=> JoinStudyGroup(group.Id)">Join This Study Group</button></td>
                 </tr>
             }
