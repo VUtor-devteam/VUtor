@@ -1,0 +1,43 @@
+﻿@page "/dashboard"
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Components.Authorization
+@using DataAccessLibrary.Models
+@using System.Security.Claims
+@using System.Diagnostics;
+@using DataAccessLibrary
+
+@inject UserManager<ProfileEntity> UserManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IMatchmakingService MatchmakingService
+
+<PageTitle>Dashboard</PageTitle>
+
+@if (MatchedTutors != null && MatchedTutors.Any())
+{
+    <h1>Possible tutors for you:</h1>
+    <ul>
+        @foreach (var tutor in MatchedTutors)
+        {
+            <li>@tutor.Name  @tutor.Surname</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No possible tutors found.</p>
+}
+
+
+
+@code {
+
+    private List<ProfileEntity> MatchedTutors { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var user = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
+        var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        MatchedTutors = await MatchmakingService.FindTutors(userId) ?? new List<ProfileEntity>();
+    }
+}

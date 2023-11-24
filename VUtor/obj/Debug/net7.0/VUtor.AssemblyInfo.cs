@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("VUtor")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+099789d6f8ba7d400491b5aabb6278eb62eb0156")]
 [assembly: System.Reflection.AssemblyProductAttribute("VUtor")]
 [assembly: System.Reflection.AssemblyTitleAttribute("VUtor")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

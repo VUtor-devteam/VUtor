@@ -2,9 +2,6 @@
   "ExpandedNodes": [
     "",
     "\\DataAccessLibrary",
-    "\\DataAccessLibrary\\Models",
-    "\\DataAccessLibrary\\Models\\User",
-    "\\DataAccessLibrary\\Models\\User\\UserItems",
     "\\VUtor",
     "\\VUtor\\Areas",
     "\\VUtor\\Areas\\Identity",
@@ -13,6 +10,6 @@
     "\\VUtor\\Areas\\Identity\\Pages\\Account\\Manage",
     "\\VUtor\\Pages"
   ],
-  "SelectedNode": "\\DataAccessLibrary\\Models\\ProfileEntity.cs",
+  "SelectedNode": "\\DataAccessLibrary\\MatchmakingService.cs",
   "PreviewInSolutionExplorer": false
 }

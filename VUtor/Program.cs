@@ -20,6 +20,7 @@ builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<FileRepository>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<RatingRepository>();
+builder.Services.AddScoped<IMatchmakingService, MatchmakingService>();
 
 var app = builder.Build();
 

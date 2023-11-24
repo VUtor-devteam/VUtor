@@ -140,7 +140,7 @@ namespace VUtor.Areas.Identity.Pages.Account
                     await _userManager.ConfirmEmailAsync(user, code);
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     await _context.SaveChangesAsync();
-                    return LocalRedirect(returnUrl);
+                    return LocalRedirect("/dashboard"); //Redirection to the dashboard page after successful registration
 
                 }
                 foreach (var error in result.Errors)
