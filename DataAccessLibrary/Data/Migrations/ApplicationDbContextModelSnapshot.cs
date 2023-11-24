@@ -155,6 +155,53 @@ namespace DataAccessLibrary.Data.Migrations
                     b.ToTable("Ratings");
                 });
 
+            modelBuilder.Entity("DataAccessLibrary.Models.StudyGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CreatorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("GroupDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("GroupPlace")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StudyGroups");
+                });
+
+            modelBuilder.Entity("DataAccessLibrary.Models.StudyGroupMember", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ParticipantId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StudyGroupId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StudyGroupMembers");
+                });
+
             modelBuilder.Entity("DataAccessLibrary.Models.TopicEntity", b =>
                 {
                     b.Property<int>("Id")
