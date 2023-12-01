@@ -45,11 +45,11 @@
                         <EditForm Model="@studyGroup" OnValidSubmit="@HandleValidSubmit">
                             <div>
                                 <div class="edit_row_container mb-2">
-                                    <div class="form-group mb-2">
+                                    <div class="form-group mb-2 gray_text">
                                         <label for="groupDate">Group Date:</label>
-                                        <InputDate id="groupDate" class="form-control round_corners " @bind-Value="@studyGroup.GroupDate" />
+                                        <InputDate id="groupDate" class="form-control round_corners" @bind-Value="@studyGroup.GroupDate" />
                                     </div>
-                                    <div class="form-group mb-2">
+                                    <div class="form-group mb-2 gray_text">
                                         <label for="groupPlace">Group Place:</label>
                                         <InputSelect id="groupPlace" class="form-control round_corners" @bind-Value="@studyGroup.GroupPlace" placeholder="Group place">
                                             <option value="true">Live</option>
@@ -66,11 +66,11 @@
                                     </div>
                                 </div>
                                 <div class="form-floating mb-2 description">
-                                    <textarea type="text" name="filter" class="description" placeholder="Enter a description" rows=" 10" cols="50" />
+                                    <textarea @bind="@studyGroup.Description" type="text" name="filter" class="description" placeholder="Enter a description" rows=" 10" cols="50" />
                                 </div>
                             </div>
 
-                            <div class="modal-footer">
+                            <div class="modal-footer edit_row_container">
                                 <button type="submit" @onclick='eventargs => SaveModal("exampleModalCenter")' class="round_corners edit" data-dismiss="modal">Save</button>
                                 <button type="button" @onclick='eventargs => HideModal("exampleModalCenter")' class="round_corners edit" data-dismiss="modal">Close</button>
                             </div>
@@ -108,7 +108,7 @@ else
         <tbody>
             @foreach (var (group, isMember) in studyGroupsWithMembership)
             {
-                <tr class="library_tr">
+                <tr class="library_tr tooltip">
                     <td class="library_td">@group.CreatorId</td>
                     <td class="library_td">@(DateOnly.FromDateTime(group.GroupDate))</td>
                     <td class="library_td">@(group.GroupPlace ? "Live" : "Online")</td>
@@ -195,7 +195,7 @@ else
         return visiterProfile.Id;
 
     }
-    @* --------------------------------------------------------------*@
+    @* --------------------------MODULE------------------------------------*@
 
     private IJSObjectReference module;
 
@@ -245,7 +245,7 @@ else
             await module.InvokeAsync<string>("HideModal", elementID);   //--JS function
         }
     }
-    @* --------------------------------------------------------------*@
+    @* -----------------------------CREATING A GROUP---------------------------------*@
 
     private DataAccessLibrary.Models.StudyGroup studyGroup = new DataAccessLibrary.Models.StudyGroup() { GroupDate = DateTime.Now };
 
