@@ -14,39 +14,116 @@
 @inject UserManager<ProfileEntity> userManager
 @inject StudyGroupRepository studyGroupRepo
 
+@inject IJSRuntime JS;
+@inject IConfiguration config
 
-<h3>Study Groups</h3>
 
-<div class="mb-2">
-    <a id="manage" class="nav-link text-dark" href="/studygroupcreate" title="/studygroupcreate">Create your own study group</a>
+<h1>Study Groups</h1>
+
+<div class="row">
+    <div calss="col-lg-12"> 
+        <button type="button" @onclick='eventArgs=>ShowModal("exampleModalCenter")' class="round_corners long btn btn-outline-secondary" data-toggle="modal" data-target="#exampleModalCenter">
+            Create your own study group
+        </button>
+    </div>
+
+    <div calss="col-lg-12">
+        <!-- Modal -->
+        <div class="modal fade show" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="display:none; background: #00000080">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div>
+                        <div class="publication gray_text">
+                            New study group
+                        </div>
+                        <button type="button" @onclick='eventargs => HideModal("exampleModalCenter")' class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="form-floating mb-3"></div>
+                    <div class="modal-body full">
+                        <EditForm Model="@studyGroup" OnValidSubmit="@HandleValidSubmit">
+                            <div>
+                                <div class="edit_row_container mb-2">
+                                    <div class="form-group mb-2">
+                                        <label for="groupDate">Group Date:</label>
+                                        <InputDate id="groupDate" class="form-control round_corners " @bind-Value="@studyGroup.GroupDate" />
+                                    </div>
+                                    <div class="form-group mb-2">
+                                        <label for="groupPlace">Group Place:</label>
+                                        <InputSelect id="groupPlace" class="form-control round_corners" @bind-Value="@studyGroup.GroupPlace" placeholder="Group place">
+                                            <option value="true">Live</option>
+                                            <option value="false">Online</option>
+                                        </InputSelect>
+                                    </div>
+                                </div>
+                                <div class="edit_row_container mb-2">
+                                    <div class="form-group mb-2">
+                                        <InputText id="subject" class="form-control round_corners" @bind-Value="@studyGroup.Subject" placeholder="Subject"/>
+                                    </div>
+                                    <div class="form-group mb-2">
+                                        <InputText id="creatorId" class="form-control round_corners" @bind-Value="@studyGroup.CreatorId" placeholder="Creator ID" />
+                                    </div>
+                                </div>
+                                <div class="form-floating mb-2 description">
+                                    <textarea type="text" name="filter" class="description" placeholder="Enter a description" rows=" 10" cols="50" />
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="submit" @onclick='eventargs => SaveModal("exampleModalCenter")' class="round_corners edit" data-dismiss="modal">Save</button>
+                                <button type="button" @onclick='eventargs => HideModal("exampleModalCenter")' class="round_corners edit" data-dismiss="modal">Close</button>
+                            </div>
+                        </EditForm>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </div>
+
+@* --------------------------------------------------------------*@
+
 @if (studyGroups == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <table class="table">
+    <table class="library_table">
         <thead>
             <tr>
-                <th>Creator ID</th>
-                <th>Meeting Date</th>
-                <th>Meeting Place</th>
-                <th>Subject</th>
-                <th>Member Count</th>
-                <th>Become member</th>
+                <th class="library_th">Creator ID</th>
+                <th class ="library_th">Meeting Date</th>
+                <th class="library_th">Meeting Place</th>
+                <th class="library_th">Subject</th>
+                <th class="library_th">Member Count</th>
+                <th class="library_th">Become member</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var group in studyGroups)
+            @foreach (var (group, isMember) in studyGroupsWithMembership)
             {
-                <tr>
-                    <td>@group.CreatorId</td>
-                    <td>@group.GroupDate</td>
-                    <td>@(group.GroupPlace ? "Live" : "Online")</td>
-                    <td>@group.Subject</td>
-                    <td>@(studyGroupRepo.GetMemberCount(group.Id)+1)</td>
-                    <td><button @onclick="()=> JoinStudyGroup(group.Id)">Join This Study Group</button></td>
+                <tr class="library_tr">
+                    <td class="library_td">@group.CreatorId</td>
+                    <td class="library_td">@(DateOnly.FromDateTime(group.GroupDate))</td>
+                    <td class="library_td">@(group.GroupPlace ? "Live" : "Online")</td>
+                    <td class="library_td">@group.Subject</td>
+                    <td class="library_td">@group.MemberNumber</td>
+                    <td class="library_td">
+                        @if (isMember)
+                        {
+                            <button class="round_corners btn btn-outline-secondary" @onclick="()=> LeaveStudyGroup(group.Id)">Leave Group</button>
+                        }
+                        else
+                        {
+                            <button class="round_corners btn btn-outline-secondary" @onclick="()=> JoinStudyGroup(group.Id)">Join This Study Group</button>
+                        }
+                    </td>
                 </tr>
             }
         </tbody>
@@ -55,31 +132,52 @@ else
 
 @code {
     private List<DataAccessLibrary.Models.StudyGroup> studyGroups;
+    private List<(DataAccessLibrary.Models.StudyGroup studyGroup, bool isMember)> studyGroupsWithMembership;
+    string userId = "null";
 
     private ProfileEntity visiterProfile;
-
-    public int members;
 
     protected override async Task OnInitializedAsync()
     {
         studyGroups = await studyGroupRepo.GetAllStudyGroupsAsync();
+        userId = await GetUserId(); // Use await to get the result of the asynchronous method
+        studyGroupsWithMembership = await studyGroupRepo.GetStudyGroupsWithMembershipStatus(userId);
     }
 
     private async Task JoinStudyGroup(int studyGroupId)
     {
-        var userId = await GetUserId(); // Use await to get the result of the asynchronous method
-        if (userId == null)
+        var userId = await GetUserId();
+        await studyGroupRepo.AddMemberAsync(studyGroupId, userId);
+        await IncrementMemberCount(studyGroupId);
+        studyGroupsWithMembership = await studyGroupRepo.GetStudyGroupsWithMembershipStatus(userId);
+    }
+
+    private async Task LeaveStudyGroup(int studyGroupId)
+    {
+        var userId = await GetUserId();
+        await studyGroupRepo.RemoveMemberAsync(studyGroupId, userId);
+        await DecrementMemberCount(studyGroupId);
+        // Refresh the list or UI as needed
+        studyGroupsWithMembership = await studyGroupRepo.GetStudyGroupsWithMembershipStatus(userId);
+    }
+
+    private async Task IncrementMemberCount(int studyGroupId)
+    {
+        var studyGroup = await studyGroupRepo.GetStudyGroupByIdAsync(studyGroupId);
+        if (studyGroup != null)
         {
-            // Handle the case where the user ID couldn't be retrieved
-            return;
+            studyGroup.MemberNumber++;
+            await studyGroupRepo.UpdateStudyGroupAsync(studyGroup);
         }
+    }
 
-        var isAlreadyMember = await studyGroupRepo.IsMember(studyGroupId, userId);
-
-        if (!isAlreadyMember)
+    private async Task DecrementMemberCount(int studyGroupId)
+    {
+        var studyGroup = await studyGroupRepo.GetStudyGroupByIdAsync(studyGroupId);
+        if (studyGroup != null && studyGroup.MemberNumber > 0)
         {
-            await studyGroupRepo.AddMemberAsync(studyGroupId, userId);
-            // Implement UI update or success notification
+            studyGroup.MemberNumber--;
+            await studyGroupRepo.UpdateStudyGroupAsync(studyGroup);
         }
     }
 
@@ -91,9 +189,81 @@ else
         {
             var email = user.Identity.Name; // Assuming the email is used as the username
             visiterProfile = await repoProfiles.GetProfileByEmailAsync(email);
+
         }
 
         return visiterProfile.Id;
 
+    }
+    @* --------------------------------------------------------------*@
+
+    private IJSObjectReference module;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender != null)
+        {
+            module = await JS.InvokeAsync<IJSObjectReference>("import", "./Pages/StudyGroup.razor.js");
+        }
+    }
+
+    protected async void ShowModal(string elementID)
+    {
+        if (module != null)
+        {
+            await module.InvokeAsync<string>("showModal", elementID);
+        }
+        else
+        {
+            module = await JS.InvokeAsync<IJSObjectReference>("import", "./Pages/StudyGroup.razor.js");
+            await module.InvokeAsync<string>("showModal", elementID);   //--JS function
+        }
+    }
+
+    protected async void HideModal(string elementID)
+    {
+        if (module != null)
+        {
+            await module.InvokeAsync<string>("HideModal", elementID);
+        }
+        else
+        {
+            module = await JS.InvokeAsync<IJSObjectReference>("import", "./Pages/StudyGroup.razor.js");
+            await module.InvokeAsync<string>("HideModal", elementID);   //--JS function
+        }
+    }
+
+    protected async void SaveModal(string elementID)
+    {
+        if (module != null)
+        {
+            await module.InvokeAsync<string>("HideModal", elementID);
+        }
+        else
+        {
+            module = await JS.InvokeAsync<IJSObjectReference>("import", "./Pages/StudyGroup.razor.js");
+            await module.InvokeAsync<string>("HideModal", elementID);   //--JS function
+        }
+    }
+    @* --------------------------------------------------------------*@
+
+    private DataAccessLibrary.Models.StudyGroup studyGroup = new DataAccessLibrary.Models.StudyGroup() { GroupDate = DateTime.Now };
+
+    private string errorMessage = string.Empty;
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            await studyGroupRepo.AddStudyGroupAsync(studyGroup);
+            // Implement post-submission logic here (e.g., navigation or notification)
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred: {ex.Message}");
+            // Update the UI to inform the user
+            errorMessage = "An error occurred while creating the study group. Please try again.";
+
+        }
     }
 }

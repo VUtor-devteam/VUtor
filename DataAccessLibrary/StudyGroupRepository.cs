@@ -24,10 +24,15 @@ namespace DataAccessLibrary
              return await _context.StudyGroups.ToListAsync();
          }
 
-        public int GetMemberCount(int studyGroupId)
+        public async Task<StudyGroup> GetStudyGroupByIdAsync(int studyGroupId)
         {
-              return _context.StudyGroupMembers
-                .Count(member => member.StudyGroupId == studyGroupId);
+            return await _context.StudyGroups.FindAsync(studyGroupId);
+        }
+
+        public async Task UpdateStudyGroupAsync(StudyGroup studyGroup)
+        {
+            _context.StudyGroups.Update(studyGroup);
+            await _context.SaveChangesAsync();
         }
 
         public async Task AddStudyGroupAsync(StudyGroup group)
@@ -49,5 +54,28 @@ namespace DataAccessLibrary
             await _context.SaveChangesAsync();
         }
 
+        public async Task RemoveMemberAsync(int studyGroupId, string userId)
+        {
+            var member = await _context.StudyGroupMembers
+                                       .FirstOrDefaultAsync(m => m.StudyGroupId == studyGroupId && m.ParticipantId == userId);
+            if (member != null)
+            {
+                _context.StudyGroupMembers.Remove(member);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        // Method to get study groups with membership status
+        public async Task<List<(StudyGroup studyGroup, bool isMember)>> GetStudyGroupsWithMembershipStatus(string userId)
+        {
+            return await _context.StudyGroups
+                .Select(group => new
+                {
+                    StudyGroup = group,
+                    IsMember = _context.StudyGroupMembers.Any(member => member.StudyGroupId == group.Id && member.ParticipantId == userId)
+                })
+                .ToListAsync()
+                .ContinueWith(task => task.Result.Select(g => (g.StudyGroup, g.IsMember)).ToList());
+        }
     }
 }
