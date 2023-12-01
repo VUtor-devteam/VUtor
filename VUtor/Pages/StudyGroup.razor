@@ -108,7 +108,7 @@ else
         <tbody>
             @foreach (var (group, isMember) in studyGroupsWithMembership)
             {
-                <tr class="library_tr tooltip">
+                <tr class="library_tr">
                     <td class="library_td">@group.CreatorId</td>
                     <td class="library_td">@(DateOnly.FromDateTime(group.GroupDate))</td>
                     <td class="library_td">@(group.GroupPlace ? "Live" : "Online")</td>
