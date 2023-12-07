@@ -1,0 +1,64 @@
+﻿@page "/studygroupcreate"
+
+@using DataAccessLibrary.Data
+@using DataAccessLibrary.GenericRepo;
+@using DataAccessLibrary.Models
+@using DataAccessLibrary
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Identity;
+
+@inject IGenericRepository<TopicEntity> repoGenericTopics
+@inject IProfileRepository repoProfiles
+@inject ApplicationDbContext context
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UserManager<ProfileEntity> userManager
+@inject StudyGroupRepository studyGroupRepo
+
+<h3>Create Study Group</h3>
+
+<EditForm Model="@studyGroup" OnValidSubmit="@HandleValidSubmit">
+
+    <div class="form-group">
+        <label for="creatorId">Creator ID:</label>
+        <InputText id="creatorId" class="form-control" @bind-Value="@studyGroup.CreatorId" />
+    </div>
+    <div class="form-group">
+        <label for="groupDate">Group Date:</label>
+        <InputDate id="groupDate" class="form-control" @bind-Value="@studyGroup.GroupDate" />
+    </div>
+    <div class="form-group">
+        <label for="groupPlace">Group Place:</label>
+        <InputSelect id="groupPlace" class="form-control" @bind-Value="@studyGroup.GroupPlace">
+            <option value="true">Live</option>
+            <option value="false">Online</option>
+        </InputSelect>
+    </div>
+    <div class="form-group">
+        <label for="subject">Subject:</label>
+        <InputText id="subject" class="form-control" @bind-Value="@studyGroup.Subject" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Study Group</button>
+</EditForm>
+
+@code {
+    private DataAccessLibrary.Models.StudyGroup studyGroup = new DataAccessLibrary.Models.StudyGroup() { GroupDate = DateTime.Now };
+
+    private string errorMessage = string.Empty;
+
+    private async Task HandleValidSubmit()
+    {
+        try
+        {
+            await studyGroupRepo.AddStudyGroupAsync(studyGroup);
+            // Implement post-submission logic here (e.g., navigation or notification)
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred: {ex.Message}");
+            // Update the UI to inform the user
+            errorMessage = "An error occurred while creating the study group. Please try again.";
+            
+        }
+    }
+}

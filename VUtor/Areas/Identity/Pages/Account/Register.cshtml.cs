@@ -68,10 +68,10 @@ namespace VUtor.Areas.Identity.Pages.Account
             public CourseYear CourseYear { get; set; }
 
             [Display(Name = "Topic To Learn")]
-            public int TopicToLearn { get; set; }
+            public List<int> TopicsToLearn { get; set; } = new List<int>();
 
             [Display(Name = "Topic To Teach")]
-            public int TopicToTeach { get; set; }
+            public List<int> TopicsToTeach { get; set; } = new List<int>();
 
             [Required]
             [EmailAddress]
@@ -94,10 +94,12 @@ namespace VUtor.Areas.Identity.Pages.Account
             TopicList = await _context.Topics.ToListAsync();
             ReturnUrl = returnUrl;
         }
-
+    
+        [HttpPost]
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             TopicList = await _context.Topics.ToListAsync();
+
             returnUrl ??= Url.Content("~/");
             if (ModelState.IsValid && Input.CourseName != 0 && Input.CourseYear != 0)
             {
@@ -108,24 +110,21 @@ namespace VUtor.Areas.Identity.Pages.Account
                 user.CourseInfo = new CourseData((int)Input.CourseName, (int)Input.CourseYear);
                 user.CreationDate = new profileCreationDate();
                 _context.Attach(user);
+                Console.WriteLine(Input.TopicsToLearn.Count());
+                Console.WriteLine(Input.TopicsToTeach.Count());
 
                 foreach (var topic in TopicList)
                 {
-                    if (topic.Id.Equals(Input.TopicToLearn))
+                    if(Input.TopicsToLearn.Contains(topic.Id))
                     {
-                        _context.Attach(topic);
-                        topic.LearningProfiles.Add(user);
                         user.TopicsToLearn.Add(topic);
                     }
-                    if (topic.Id.Equals(Input.TopicToTeach))
+                    if(Input.TopicsToTeach.Contains(topic.Id))
                     {
-                        _context.Attach(topic);
-                        topic.TeachingProfiles.Add(user);
                         user.TopicsToTeach.Add(topic);
                     }
                 }
-
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                await _userManager.SetUserNameAsync(user, user.Id);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 

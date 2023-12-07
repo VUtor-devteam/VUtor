@@ -1,0 +1,99 @@
+﻿@page "/studygroups"
+
+@using DataAccessLibrary.Data
+@using DataAccessLibrary.GenericRepo;
+@using DataAccessLibrary.Models
+@using DataAccessLibrary
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Identity;
+
+@inject IGenericRepository<TopicEntity> repoGenericTopics
+@inject IProfileRepository repoProfiles
+@inject ApplicationDbContext context
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UserManager<ProfileEntity> userManager
+@inject StudyGroupRepository studyGroupRepo
+
+
+<h3>Study Groups</h3>
+
+<div class="mb-2">
+    <a id="manage" class="nav-link text-dark" href="/studygroupcreate" title="/studygroupcreate">Create your own study group</a>
+</div>
+@if (studyGroups == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Creator ID</th>
+                <th>Meeting Date</th>
+                <th>Meeting Place</th>
+                <th>Subject</th>
+                <th>Member Count</th>
+                <th>Become member</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var group in studyGroups)
+            {
+                <tr>
+                    <td>@group.CreatorId</td>
+                    <td>@group.GroupDate</td>
+                    <td>@(group.GroupPlace ? "Live" : "Online")</td>
+                    <td>@group.Subject</td>
+                    <td>@(studyGroupRepo.GetMemberCount(group.Id)+1)</td>
+                    <td><button @onclick="()=> JoinStudyGroup(group.Id)">Join This Study Group</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<DataAccessLibrary.Models.StudyGroup> studyGroups;
+
+    private ProfileEntity visiterProfile;
+
+    public int members;
+
+    protected override async Task OnInitializedAsync()
+    {
+        studyGroups = await studyGroupRepo.GetAllStudyGroupsAsync();
+    }
+
+    private async Task JoinStudyGroup(int studyGroupId)
+    {
+        var userId = await GetUserId(); // Use await to get the result of the asynchronous method
+        if (userId == null)
+        {
+            // Handle the case where the user ID couldn't be retrieved
+            return;
+        }
+
+        var isAlreadyMember = await studyGroupRepo.IsMember(studyGroupId, userId);
+
+        if (!isAlreadyMember)
+        {
+            await studyGroupRepo.AddMemberAsync(studyGroupId, userId);
+            // Implement UI update or success notification
+        }
+    }
+
+    private async Task<string> GetUserId()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user.Identity.IsAuthenticated)
+        {
+            var email = user.Identity.Name; // Assuming the email is used as the username
+            visiterProfile = await repoProfiles.GetProfileByEmailAsync(email);
+        }
+
+        return visiterProfile.Id;
+
+    }
+}

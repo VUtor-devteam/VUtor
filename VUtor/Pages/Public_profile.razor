@@ -1,10 +1,12 @@
 ﻿@page "/profile/{id}"
 
 @using DataAccessLibrary.Data
+@using DataAccessLibrary.GenericRepo;
 @using DataAccessLibrary.Models
 @using DataAccessLibrary
 @using Microsoft.EntityFrameworkCore
 @using Microsoft.AspNetCore.Identity;
+@using DataAccessLibrary.RatingRepo;
 
 @inject IGenericRepository<TopicEntity> repoGenericTopics
 @inject IProfileRepository repoProfiles
@@ -25,7 +27,7 @@
                 <div>
                     <label class="specifications">Name:</label>
                     <div class="mb-2">
-                        <label>@userProfile.Name and @id</label>
+                        <label>@userProfile.Name</label>
                     </div>
                 </div>
 
@@ -85,9 +87,6 @@
             <div class="mb-2">
                 <label>@averageRating.ToString("0.##")</label>
             </div>
-        </div>
-        <div>
-            <label class="specifications">@id and @currentUserId</label>
         </div>
 
         @if (id != currentUserId)

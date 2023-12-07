@@ -14,6 +14,21 @@
 @inject UserManager<ProfileEntity> userManager
 @inject RatingRepository ratingRepo
 
+@using DataAccessLibrary.Data
+@using DataAccessLibrary.GenericRepo;
+@using DataAccessLibrary.Models
+@using DataAccessLibrary
+@using DataAccessLibrary.RatingRepo;
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Identity;
+
+@inject IGenericRepository<TopicEntity> repoGenericTopics
+@inject IProfileRepository repoProfiles
+@inject ApplicationDbContext context
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UserManager<ProfileEntity> userManager
+@inject RatingRepository ratingRepo
+
 <PageTitle>Profile</PageTitle>
 <h1>Profile</h1>
 
@@ -25,7 +40,7 @@
                     <div> 
                         <label class="specifications"> Name:</label>
                         <div class="mb-2">
-                        <label>@userProfile.Name and @userProfile.Id</label>
+                        <label>@userProfile.Name</label>
                         </div>
                     </div>
 

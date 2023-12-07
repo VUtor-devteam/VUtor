@@ -11,8 +11,9 @@
 
 
 <div class="row">
-    <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+    <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data">
         <div class="login_container">
+<!-- Users email-->
             <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
             <div>
                 <label class="specifications">Enter email:</label>
@@ -21,6 +22,9 @@
                     <span asp-validation-for="Input.Email" class="text-danger"></span>
                 </div>
             </div>
+<!-- Users email-->
+
+<!-- Users name-->
             <div class="edit_row_container">
                 <div>
                     <label class="specifications">Enter name:</label>
@@ -28,31 +32,35 @@
                         <input asp-for="Input.Name" class="round_corners" />
                         <span asp-validation-for="Input.Name" class="text-danger"></span>
                     </div>
+<!-- Users name-->
 
+<!-- Users surname-->
                     <label class="specifications">Enter surname:</label>
                     <div class="form-floating mb-2">
                         <input asp-for="Input.Surname" class="round_corners" />
                         <span asp-validation-for="Input.Surname" class="text-danger"></span>
                     </div>
                 </div>
+<!-- Users surname-->
 
+<!-- Users password-->
                 <div>
                     <label class="specifications">Enter password:</label>
                     <div class="form-floating mb-2">
                         <input asp-for="Input.Password" class="round_corners" autocomplete="new-password" aria-required="true" />
                         <span asp-validation-for="Input.Password" class="text-danger"></span>
                     </div>
-
                     <label class="specifications">Confirm password:</label>
                     <div class="form-floating mb-2">
                         <input asp-for="Input.ConfirmPassword" class="round_corners" autocomplete="new-password" aria-required="true" />
                         <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                     </div>
-
                 </div>
-            </div>
+<!-- Users password-->
 
-            <div class="edit_row_container">
+<!-- Users course name-->
+            </div>
+             <div class="edit_row_container">
                 <div>
                     <label class="specifications" for="Input.CourseName"> Select course name:</label>
                     <div class="form-floating mb-1">
@@ -65,7 +73,9 @@
                         <span asp-validation-for="Input.CourseName"></span>
                     </div>
                 </div>
+<!-- Users course name-->
 
+<!-- Users course year-->
                 <div>
                     <label class="specifications" for="Input.CourseYear">Select acaddemic year:</label>
                     <div class="form-floating mb-2">
@@ -79,47 +89,72 @@
                     </div>
                 </div>
             </div>
+<!-- Users course year-->
 
+<!-- Users topics to learn -->
             <div class="edit_row_container">
                 <div>
-                    <label class="specifications">Select a subject you wish to learn:</label>
+                    <label class="specifications">Select a subject(s) you wish to learn:</label>
                     <div class="form-floating">
-                        @foreach (var topic in Model.TopicList)
-                        {
-                            <div>
-                                <input type="radio"
-                                       asp-for="Input.TopicToLearn"
-                                       value="@topic.Id"
-                                       id="@("learn" + topic.Title)" />
-                                <label class="label form-floating mb-2" for="@("learn" + topic.Title)"> @topic.Title </label>
-                            </div>
-                        }
-                        <span asp-validation-for="Input.TopicToLearn"></span>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="specifications">Select a subject you want to teach:</label>
-                    <div class="form-floating">
-                        @foreach (var topic in Model.TopicList)
-                        {
-                            <div>
-                                <input type="radio"
-                                       asp-for="Input.TopicToTeach"
-                                       value="@topic.Id"
-                                       id="@("teach" + topic.Title)" />
-                                <label class="label form-floating mb-2" for="@("teach" + topic.Title)"> @topic.Title </label>
-                            </div>
-                        }
+                        <select asp-for="Input.TopicsToLearn" multiple id="topicsToLearn" class="form-control">
+                            @foreach (var topic in Model.TopicList)
+                            {
+                                <option value="@topic.Id">@topic.Title</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Input.TopicsToLearn" class="text-danger"></span>
                     </div>
                 </div>
             </div>
+<!-- Users topics to learn -->
+
+<!-- Users topics to teach -->
+            <div class="edit_row_container">
+                <div>
+                    <label class="specifications">Select a subject(s) you wish to teach:</label>
+                    <div class="form-floating">
+                        <select asp-for="Input.TopicsToTeach" multiple id="topicsToTeach" class="form-control">
+                            @foreach (var topic in Model.TopicList)
+                            {
+                                <option value="@topic.Id">@topic.Title</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Input.TopicsToTeach" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+<!-- Users topics to teach -->
+
+<!-- Submit -->
             <div class="form-floating mb-3"></div>
             <button id="registerSubmit" type="submit" class=" round_corners login">Register</button>
         </div>
     </form>
 </div>
 
+<!-- Adding multiple select -->
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
+    <script>
+    $(document).ready(function() {
+        try {
+            $('#topicsToLearn').select2();
+            $('#topicsToTeach').select2(); // Add this line
+        } catch (error) {
+            console.error(error);
+        }
+    });
+    </script>
+
+    <!-- Add a little bit of CSS to ensure that the Select2 dropdown fits within the Bootstrap form field -->
+    <style>
+    .select2 {
+        width: 100% !important;
+    }
+    </style>
 }

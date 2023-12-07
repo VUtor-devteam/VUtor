@@ -1,7 +1,4 @@
-﻿
-#nullable disable
-
-using DataAccessLibrary.Data;
+﻿using DataAccessLibrary.Data;
 using DataAccessLibrary.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -30,8 +27,6 @@ namespace VUtor.Areas.Identity.Pages.Account.Manage
         public string Username { get; set; }
         public List<TopicEntity> TopicList { get; set; } = new List<TopicEntity>();
 
-
-
         [TempData]
         public string StatusMessage { get; set; }
 
@@ -58,40 +53,29 @@ namespace VUtor.Areas.Identity.Pages.Account.Manage
             public CourseYear CourseYear { get; set; }
 
             [Display(Name = "Topic To Learn")]
-            public int TopicToLearn { get; set; }
+            public List<int> TopicsToLearn { get; set; } = new List<int>();
 
             [Display(Name = "Topic To Teach")]
-            public int TopicToTeach { get; set; }
+            public List<int> TopicsToTeach { get; set; } = new List<int>();
 
         }
 
         private async Task LoadAsync(ProfileEntity user)
         {
-            TopicList = _context.Topics.ToList();
+            TopicList = await _context.Topics.ToListAsync();
             Username = await _userManager.GetUserNameAsync(user);
+            var profile = _context.Profiles.Where(p => p.Id == user.Id).Include(p => p.TopicsToLearn).Include(p => p.TopicsToTeach).First();
 
-            var profile = _context.Profiles.Where(p => p.Id == user.Id)
-                                           .Include(p => p.TopicsToLearn)
-                                           .Include(p => p.TopicsToTeach)
-                                           .FirstOrDefault(); // Changed from First() to FirstOrDefault()
-
-            if (profile != null) // Check if profile is not null
+            // Assign users data to to show the current info
+            Input = new InputModel
             {
-                Input = new InputModel
-                {
-                    Name = user.Name,
-                    Surname = user.Surname,
-                    CourseName = (CourseName)user.CourseInfo.CourseName,
-                    CourseYear = (CourseYear)user.CourseInfo.CourseYear,
-                    // Use FirstOrDefault and check for null before accessing properties
-                    TopicToLearn = profile.TopicsToLearn.FirstOrDefault()?.Id ?? 0,
-                    TopicToTeach = profile.TopicsToTeach.FirstOrDefault()?.Id ?? 0
-                };
-            }
-            else
-            {
-                // Handle the case when the profile is not found
-            }
+                Name = user.Name,
+                Surname = user.Surname,
+                CourseName = (CourseName)user.CourseInfo.CourseName,
+                CourseYear = (CourseYear)user.CourseInfo.CourseYear,
+                TopicsToLearn = profile.TopicsToLearn.Select(e => e.Id).ToList(),
+                TopicsToTeach = profile.TopicsToTeach.Select(e => e.Id).ToList()
+            };
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -110,7 +94,12 @@ namespace VUtor.Areas.Identity.Pages.Account.Manage
         {
             TopicList = _context.Topics.ToList();
             var user = await _userManager.GetUserAsync(User);
-            var profile = _context.Profiles.Where(p => p.Id == user.Id).Include(p => p.TopicsToLearn).Include(p => p.TopicsToTeach).FirstOrDefault();
+            var profile = _context.Profiles
+                .Where(p => p.Id == user.Id)
+                .Include(p => p.TopicsToLearn)
+                .Include(p => p.TopicsToTeach)
+                .FirstOrDefault();
+
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
@@ -124,47 +113,67 @@ namespace VUtor.Areas.Identity.Pages.Account.Manage
 
             if (Input.Name != user.Name)
             {
+                // Update the user's name
                 user.Name = Input.Name;
             }
 
             if (Input.Surname != user.Surname)
             {
+                // Update the user's surname
                 user.Surname = Input.Surname;
             }
 
             var newCourseInfo = new CourseData((int)Input.CourseName, (int)Input.CourseYear);
             if (!user.CourseInfo.Equals(newCourseInfo))
             {
+                // Update the user's course year and name
                 user.CourseInfo = newCourseInfo;
             }
 
-            var TopicLearn = _context.Topics.Where(p => p.Id.Equals(Input.TopicToLearn)).FirstOrDefault();
-            if (!profile.TopicsToLearn.Contains(TopicLearn))
+            // Retrieve the new topics the user has chosen
+            var newTopicsToLearn = _context.Topics.Where(t => Input.TopicsToLearn.Contains(t.Id)).ToList();
+            var newTopicsToTeach = _context.Topics.Where(t => Input.TopicsToTeach.Contains(t.Id)).ToList();
+
+            // Update the user's topics to learn
+            foreach (var topic in user.TopicsToLearn.ToList())
             {
-                var currentTopic = profile.TopicsToLearn.FirstOrDefault();
-                var removedTopic = _context.Topics.Where(p => p.Id == currentTopic.Id).Include(p => p.LearningProfiles).FirstOrDefault();
-                if (TopicLearn != null)
+                if (!newTopicsToLearn.Contains(topic))
                 {
-                    removedTopic.LearningProfiles.Remove(user);
-                    user.TopicsToLearn.Remove(removedTopic);
-                    user.TopicsToLearn.Add(TopicLearn);
-                    TopicLearn.LearningProfiles.Add(user);
+                    // Remove the user from the topic's learning profiles and remove the topic from the user's topics
+                    topic.LearningProfiles.Remove(user);
+                    user.TopicsToLearn.Remove(topic);
+                }
+            }
+            foreach (var topic in newTopicsToLearn)
+            {
+                if (!user.TopicsToLearn.Contains(topic))
+                {
+                    // Add the user to the topic's learning profiles and add the topic to the user's topics
+                    topic.LearningProfiles.Add(user);
+                    user.TopicsToLearn.Add(topic);
                 }
             }
 
-            var TopicTeach = _context.Topics.Where(p => p.Id.Equals(Input.TopicToTeach)).First();
-            if (!user.TopicsToTeach.Contains(TopicTeach))
+            // Update the user's topics to teach
+            foreach (var topic in user.TopicsToTeach.ToList())
             {
-                var currentTopic = profile.TopicsToTeach.FirstOrDefault();
-                var removedTopic = _context.Topics.Where(p => p.Id == currentTopic.Id).Include(p => p.TeachingProfiles).First();
-                if (TopicTeach != null)
+                if (!newTopicsToTeach.Contains(topic))
                 {
-                    removedTopic.TeachingProfiles.Remove(user);
-                    user.TopicsToTeach.Remove(removedTopic);
-                    user.TopicsToTeach.Add(TopicTeach);
-                    TopicTeach.TeachingProfiles.Add(user);
+                    // Remove the user from the topic's teaching profiles and remove the topic from the user's topics
+                    topic.TeachingProfiles.Remove(user);
+                    user.TopicsToTeach.Remove(topic);
                 }
             }
+            foreach (var topic in newTopicsToTeach)
+            {
+                if (!user.TopicsToTeach.Contains(topic))
+                {
+                    // Add the user to the topic's teaching profiles and add the topic to the user's topics
+                    topic.TeachingProfiles.Add(user);
+                    user.TopicsToTeach.Add(topic);
+                }
+            }           
+
             await _context.SaveChangesAsync();
             await _userManager.UpdateAsync(user);
 

@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VUtor", "VUtor\VUtor.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLibrary", "DataAccessLibrary\DataAccessLibrary.csproj", "{D27CB4C5-6058-4E89-B92B-93B562D4719F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VUtor.UnitTests", "VUtor.UnitTests\VUtor.UnitTests.csproj", "{793E70BF-20F9-4C40-BE55-531F5B1972E0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{D27CB4C5-6058-4E89-B92B-93B562D4719F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D27CB4C5-6058-4E89-B92B-93B562D4719F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D27CB4C5-6058-4E89-B92B-93B562D4719F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{793E70BF-20F9-4C40-BE55-531F5B1972E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{793E70BF-20F9-4C40-BE55-531F5B1972E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{793E70BF-20F9-4C40-BE55-531F5B1972E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{793E70BF-20F9-4C40-BE55-531F5B1972E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
