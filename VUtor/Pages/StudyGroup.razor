@@ -61,9 +61,6 @@
                                     <div class="form-group mb-2">
                                         <InputText id="subject" class="form-control round_corners" @bind-Value="@studyGroup.Subject" placeholder="Subject"/>
                                     </div>
-                                    <div class="form-group mb-2">
-                                        <InputText id="creatorId" class="form-control round_corners" @bind-Value="@studyGroup.CreatorId" placeholder="Creator ID" />
-                                    </div>
                                 </div>
                                 <div class="form-floating mb-2 description">
                                     <textarea @bind="@studyGroup.Description" type="text" name="filter" class="description" placeholder="Enter a description" rows=" 10" cols="50" />
@@ -115,13 +112,20 @@ else
                     <td class="library_td">@group.Subject</td>
                     <td class="library_td">@group.MemberNumber</td>
                     <td class="library_td">
-                        @if (isMember)
+                        @if (group.CreatorId == userId)
                         {
-                            <button class="round_corners btn btn-outline-secondary" @onclick="()=> LeaveStudyGroup(group.Id)">Leave Group</button>
+                            <button class="round_corners btn btn-danger" @onclick="() => DeleteStudyGroup(group.Id)">Delete Group</button>
                         }
                         else
                         {
-                            <button class="round_corners btn btn-outline-secondary" @onclick="()=> JoinStudyGroup(group.Id)">Join This Study Group</button>
+                            @if (isMember)
+                            {
+                                <button class="round_corners btn btn-outline-secondary" @onclick="()=> LeaveStudyGroup(group.Id)">Leave Group</button>
+                            }
+                            else
+                            {
+                                <button class="round_corners btn btn-outline-secondary" @onclick="()=> JoinStudyGroup(group.Id)">Join This Study Group</button>
+                            }
                         }
                     </td>
                 </tr>
@@ -148,7 +152,7 @@ else
     {
         var userId = await GetUserId();
         await studyGroupRepo.AddMemberAsync(studyGroupId, userId);
-        await IncrementMemberCount(studyGroupId);
+        await UpdateMemberCount(studyGroupId);
         studyGroupsWithMembership = await studyGroupRepo.GetStudyGroupsWithMembershipStatus(userId);
     }
 
@@ -156,12 +160,30 @@ else
     {
         var userId = await GetUserId();
         await studyGroupRepo.RemoveMemberAsync(studyGroupId, userId);
-        await DecrementMemberCount(studyGroupId);
-        // Refresh the list or UI as needed
+        await UpdateMemberCount(studyGroupId);
         studyGroupsWithMembership = await studyGroupRepo.GetStudyGroupsWithMembershipStatus(userId);
     }
 
-    private async Task IncrementMemberCount(int studyGroupId)
+    private async Task DeleteStudyGroup(int studyGroupId)
+    {
+        var userId = await GetUserId();
+        await studyGroupRepo.DeleteStudyGroupAsync(studyGroupId);
+        studyGroups = await studyGroupRepo.GetAllStudyGroupsAsync();
+        studyGroupsWithMembership = await studyGroupRepo.GetStudyGroupsWithMembershipStatus(userId);
+    }
+
+    private async Task UpdateMemberCount(int studyGroupId)
+    {
+        var memberCount = await studyGroupRepo.GetMemberCountAsync(studyGroupId);
+        var studyGroup = await studyGroupRepo.GetStudyGroupByIdAsync(studyGroupId);
+        if (studyGroup != null)
+        {
+            studyGroup.MemberNumber = memberCount;
+            await studyGroupRepo.UpdateStudyGroupAsync(studyGroup);
+        }
+    }
+
+    private async Task IncrementMemberCount(int studyGroupId) //check if needed
     {
         var studyGroup = await studyGroupRepo.GetStudyGroupByIdAsync(studyGroupId);
         if (studyGroup != null)
@@ -171,7 +193,7 @@ else
         }
     }
 
-    private async Task DecrementMemberCount(int studyGroupId)
+    private async Task DecrementMemberCount(int studyGroupId) //check if needed
     {
         var studyGroup = await studyGroupRepo.GetStudyGroupByIdAsync(studyGroupId);
         if (studyGroup != null && studyGroup.MemberNumber > 0)
@@ -255,7 +277,11 @@ else
     {
         try
         {
+            studyGroup.CreatorId = await GetUserId();
             await studyGroupRepo.AddStudyGroupAsync(studyGroup);
+            studyGroups = await studyGroupRepo.GetAllStudyGroupsAsync();
+            studyGroupsWithMembership = await studyGroupRepo.GetStudyGroupsWithMembershipStatus(userId);
+
             // Implement post-submission logic here (e.g., navigation or notification)
         }
         catch (Exception ex)

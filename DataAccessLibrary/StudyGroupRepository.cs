@@ -34,11 +34,30 @@ namespace DataAccessLibrary
             _context.StudyGroups.Update(studyGroup);
             await _context.SaveChangesAsync();
         }
+        public async Task<int> GetMemberCountAsync(int studyGroupId)
+        {
+            return await _context.StudyGroupMembers.CountAsync(m => m.StudyGroupId == studyGroupId);
+        }
 
         public async Task AddStudyGroupAsync(StudyGroup group)
         {
             _context.StudyGroups.Add(group);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteStudyGroupAsync(int studyGroupId)
+        {
+            var studyGroup = await _context.StudyGroups.FindAsync(studyGroupId);
+            if (studyGroup != null)
+            {
+                // Delete all associated members from StudyGroupMembers
+                var members = _context.StudyGroupMembers.Where(m => m.StudyGroupId == studyGroupId);
+                _context.StudyGroupMembers.RemoveRange(members);
+
+                // Delete the study group
+                _context.StudyGroups.Remove(studyGroup);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<bool> IsMember(int studyGroupId, string userId)
