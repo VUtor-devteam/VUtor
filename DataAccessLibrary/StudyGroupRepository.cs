@@ -39,9 +39,17 @@ namespace DataAccessLibrary
             return await _context.StudyGroupMembers.CountAsync(m => m.StudyGroupId == studyGroupId);
         }
 
-        public async Task AddStudyGroupAsync(StudyGroup group)
+        public async Task AddStudyGroupAsync(StudyGroup group, string creatorId)
         {
             _context.StudyGroups.Add(group);
+            await _context.SaveChangesAsync();
+
+            var member = new StudyGroupMember
+            {
+                StudyGroupId = group.Id,
+                ParticipantId = creatorId
+            };
+            _context.StudyGroupMembers.Add(member);
             await _context.SaveChangesAsync();
         }
 

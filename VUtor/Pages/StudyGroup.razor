@@ -13,6 +13,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<ProfileEntity> userManager
 @inject StudyGroupRepository studyGroupRepo
+@inject NavigationManager navigationManger
 
 @inject IJSRuntime JS;
 @inject IConfiguration config
@@ -106,10 +107,13 @@ else
             @foreach (var (group, isMember) in studyGroupsWithMembership)
             {
                 <tr class="library_tr">
-                    <td class="library_td">@group.CreatorId</td>
+                    <td class="library_td" @onclick="() => GoToProfile(group.CreatorId)">@group.CreatorId</td>
                     <td class="library_td">@(DateOnly.FromDateTime(group.GroupDate))</td>
                     <td class="library_td">@(group.GroupPlace ? "Live" : "Online")</td>
-                    <td class="library_td">@group.Subject</td>
+                    <td class="library_td tooltip-custom">
+                        @group.Subject
+                        <span class="tooltip-text">@group.Description</span>
+                    </td>
                     <td class="library_td">@group.MemberNumber</td>
                     <td class="library_td">
                         @if (group.CreatorId == userId)
@@ -217,6 +221,11 @@ else
         return visiterProfile.Id;
 
     }
+
+    private async Task GoToProfile(string id)
+    {
+        navigationManger.NavigateTo($"profile/{id}");
+    }
     @* --------------------------MODULE------------------------------------*@
 
     private IJSObjectReference module;
@@ -278,11 +287,12 @@ else
         try
         {
             studyGroup.CreatorId = await GetUserId();
-            await studyGroupRepo.AddStudyGroupAsync(studyGroup);
+            await studyGroupRepo.AddStudyGroupAsync(studyGroup, studyGroup.CreatorId);
             studyGroups = await studyGroupRepo.GetAllStudyGroupsAsync();
+            await UpdateMemberCount(studyGroup.Id);
             studyGroupsWithMembership = await studyGroupRepo.GetStudyGroupsWithMembershipStatus(userId);
 
-            // Implement post-submission logic here (e.g., navigation or notification)
+            ResetStudyGroup();
         }
         catch (Exception ex)
         {
@@ -291,5 +301,11 @@ else
             errorMessage = "An error occurred while creating the study group. Please try again.";
 
         }
+    }
+
+    private void ResetStudyGroup()
+    {
+        // Reset the studyGroup object to its initial state or a new instance
+        studyGroup = new DataAccessLibrary.Models.StudyGroup() { GroupDate = DateTime.Now };
     }
 }

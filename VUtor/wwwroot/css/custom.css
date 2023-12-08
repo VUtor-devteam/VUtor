@@ -403,20 +403,22 @@ full {
 
 /*Tooptip*/
 
-.tooltip {
-    position: relative;
+.tooltip-custom {
     display: inline-block;
-    border-bottom: 1px dotted black;
+    position: relative;
+    cursor: help;
 }
 
-    .tooltip .tooltiptext {
+    .tooltip-custom .tooltip-text {
         visibility: hidden;
-        width: 120px;
-        background-color: black;
-        color: #fff;
+        min-width: 200px;
+        max-width: 300px;
+        background-color: #f8f9fa; /* Soft grey background */
+        color: #333333; /* Darker text color for contrast */
         text-align: center;
         border-radius: 6px;
         padding: 5px 0;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Optional: adds a slight shadow for depth */
         /* Position the tooltip */
         position: absolute;
         z-index: 1;
@@ -425,6 +427,6 @@ full {
         margin-left: -60px;
     }
 
-    .tooltip:hover .tooltiptext {
+    .tooltip-custom:hover .tooltip-text {
         visibility: visible;
     }
