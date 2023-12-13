@@ -15,6 +15,31 @@
     <link href="VUtor.styles.css" rel="stylesheet" />
     <link rel="icon" type="image/png" href="favicon.png"/>
     <link href="blazored-modal.css" rel="stylesheet" />
+    <script>
+        Blazor.defaultReconnectionHandler._reconnectCallback = function (detailedError) {
+            var modal = document.getElementById('reconnectionModal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'reconnectionModal';
+                modal.setAttribute('style', 'position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 1000; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center;');
+                modal.innerHTML = '<div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">Reconnecting</h5></div><div class="modal-body"><p>Connection lost. Trying to reconnect...</p></div><div class="modal-footer"><button id="reloadButton" type="button" class="btn btn-primary">Reload</button></div></div></div>';
+                document.body.appendChild(modal);
+
+                document.getElementById('reloadButton').addEventListener('click', function () {
+                    location.reload();
+                });
+            }
+
+            modal.style.display = 'flex';
+        };
+
+        Blazor.defaultReconnectionHandler._reconnectionCompleteCallback = function () {
+            var modal = document.getElementById('reconnectionModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        };
+    </script>
     <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
 </head>
 <body>

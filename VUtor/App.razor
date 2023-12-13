@@ -1,6 +1,6 @@
 ﻿<CascadingBlazoredModal>
     <CascadingAuthenticationState>
-        <ErrorBoundary>
+        <ErrorBoundary @ref="errorBoundary">
             <ChildContent>
                 <Router AppAssembly="@typeof(App).Assembly">
                     <Found Context="routeData">
@@ -23,3 +23,12 @@
         </ErrorBoundary>
     </CascadingAuthenticationState>
 </CascadingBlazoredModal>
+
+@code {
+    ErrorBoundary errorBoundary;
+
+    protected override void OnParametersSet()
+    {
+        errorBoundary?.Recover();
+    }
+}

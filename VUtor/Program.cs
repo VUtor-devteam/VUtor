@@ -20,6 +20,7 @@ using Serilog;
 using Serilog.Events;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
+using Microsoft.AspNetCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 var credential = new DefaultAzureCredential();
@@ -40,7 +41,10 @@ Log.Logger = new LoggerConfiguration()
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("AzureSql") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+{
+    options.UseSqlServer(connectionString);
+});
+  
 var storageConnectionString = builder.Configuration.GetConnectionString("Storage");
 builder.Services.AddAzureClients(options =>
 {
@@ -77,10 +81,28 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseExceptionHandler(errorApp =>
+    {
+        errorApp.Run(async context =>
+        {
+            context.Response.StatusCode = 500; // or another status code of your choice
+            context.Response.ContentType = "text/html";
+
+            var exceptionHandlerPathFeature =
+                context.Features.Get<IExceptionHandlerPathFeature>();
+
+            if (exceptionHandlerPathFeature?.Error is Exception ex)
+            {
+                Log.Error(ex, "An unhandled exception has occurred while executing the request.");
+            }
+
+            // Redirect to error page
+            context.Response.Redirect("/Error");
+        });
+    });
+} // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
-}
+
 
 app.UseHttpsRedirection();
 app.UseDatabaseErrorPage();
