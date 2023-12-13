@@ -13,7 +13,16 @@
         </div>
 
         <article class="content px-4">
-            @Body
+            <ErrorBoundary>
+                <ChildContent>
+                    @Body
+                </ChildContent>
+                <ErrorContent>
+                    <div style="display: flex; justify-content: center; align-items: center; height: 100vh; font-size: 2em;">
+                        <p>Oops! Something went wrong. Go back to the main page.</p>
+                    </div>
+                </ErrorContent>
+            </ErrorBoundary>
         </article>
     </main>
 </div>

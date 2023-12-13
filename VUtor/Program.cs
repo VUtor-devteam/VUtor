@@ -12,8 +12,30 @@ using DataAccessLibrary.WebSearch;
 using DataAccessLibrary.ProfileRepo;
 using DataAccessLibrary.RatingRepo;
 using DataAccessLibrary.GenericRepo;
+using Blazored.Modal;
+using Azure.Identity;
+using Microsoft.AspNetCore.Components.Server.Circuits;
+using VUtor.Handlers;
+using Serilog;
+using Serilog.Events;
+using Microsoft.ApplicationInsights.Extensibility;
+using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
 
 var builder = WebApplication.CreateBuilder(args);
+var credential = new DefaultAzureCredential();
+var token = await credential.GetTokenAsync(
+     new Azure.Core.TokenRequestContext(
+         new[] { "https://database.windows.net/.default" }));
+
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+    .Enrich.FromLogContext()
+    .WriteTo.ApplicationInsights(new TelemetryConfiguration
+    {
+        InstrumentationKey = builder.Configuration["ApplicationInsights:InstrumentationKey"]
+    }, TelemetryConverter.Traces)
+    .CreateLogger();
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("AzureSql") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -29,21 +51,24 @@ builder.Services.AddDefaultIdentity<ProfileEntity>(options => options.SignIn.Req
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddRazorPages();
+
 builder.Services.AddServerSideBlazor();
+builder.Services.AddSingleton<CircuitHandler, CustomHandler>();
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IFileRepository, FileRepository>();
 builder.Services.AddScoped<IFolderRepository, FolderRepository>();
 builder.Services.AddScoped<ISearch, Search>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<RatingRepository>();
+builder.Services.AddScoped<StudyGroupRepository>();
 builder.Services.AddControllers();
+builder.Services.AddBlazoredModal();
 
 var app = builder.Build();
 // Apply migrations at runtime
 using (var serviceScope = app.Services.CreateScope())
 {
     var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    //context.Database.Migrate();
 };
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -58,9 +83,9 @@ else
 }
 
 app.UseHttpsRedirection();
-
+app.UseDatabaseErrorPage();
 app.UseStaticFiles();
-
+app.UseWebSockets();
 app.UseRouting();
 
 app.UseAuthentication();
@@ -71,3 +96,4 @@ app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 app.Run();
+Log.CloseAndFlush();

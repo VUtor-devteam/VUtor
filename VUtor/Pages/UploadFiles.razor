@@ -17,8 +17,6 @@
 @inject IFileRepository fileRepo
 @inject IFolderRepository folderRepo
 
-<h3>Upload Files</h3>
-
 <EditForm Model="@UploadFile" OnSubmit="SubmitForm">
     <!-- File title-->
     <div>
@@ -26,14 +24,12 @@
         <InputText id="title" class="form-control" @bind-Value="UploadFile.Title"></InputText>
     </div>
     <!-- File title-->
-
     <!-- File description-->
     <div>
         <label for="Description" class="custom_small_text">Enter a short description</label>
         <InputText id="description" class="form-control" @bind-Value="UploadFile.Description"></InputText>
     </div>
     <!-- File description-->
-
     <!-- Choosing File topics-->
     <div>
         <label for="TopicId" class="custom_small_text">Choose topic</label>
@@ -46,7 +42,6 @@
         </select>
     </div>
     <!-- Choosing File topics-->
-
     <!-- Editing File topics-->
     <div>
         @if (UploadFile.TopicsId.Any())
@@ -60,7 +55,6 @@
         }
     </div>
     <!-- Editing File topics-->
-
     <!-- File folder-->
     <div>
         <label for="FoldersId" class="custom_small_text">Choose where to store</label>
@@ -99,22 +93,34 @@
         </div>
     </div>
     <!-- File folder-->
-
     <!-- File folder-->
     <div>
         <label for="File" class="custom_small_text">Upload your file</label>
-        <InputFile OnChange="@LoadFiles" style="margin-bottom: 10px" class="form-control" />
+        @if (showInput)
+        {
+            <InputFile OnChange="@LoadFiles" style="margin-bottom: 10px" class="form-control" />
+        }
     </div>
     <button @onclick="CaptureFile" style="margin-bottom: 10px; width: 100px; padding: 0 10px 0 10px" class="round_corners btn btn-outline-secondary" type="submit">Upload</button>
-</EditForm>
+    @if (isLoading)
+    {
+        <div class="loading-overlay">
+            <div class="loading-spinner">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    }
+    </EditForm>
 
-@if (Errors.Count() > 0)
+    @if (Errors.Count() > 0)
 {
     <h2>Errors</h2>
     <ul class="text-danger">
         @foreach (var error in Errors)
         {
-            <li>@error</li>
+            <li @onclick="ClearErrorMsg">@error</li>
         }
     </ul>
 }
@@ -143,6 +149,9 @@
 
     // New folder name
     private string NewFolderName;
+
+    private bool showInput = true;
+    private bool isLoading = false;
 
     // Upload file model
     public class UploadFileModel
@@ -295,15 +304,22 @@
             return;
         }
 
+        isLoading = true;
         try
         {
             // Upload the file to the repository
             await fileRepo.UploadFileAsync(File, File.Name, UploadFile.Title, UploadFile.Description, UploadFile.TopicsId, SelectedFolder.Id, Profile.Id);
-            Console.WriteLine(SelectedFolder.Path);
+            isLoading = false;
             UploadFile.Title = String.Empty;
             UploadFile.Description = String.Empty;
             UploadFile.TopicsId.Clear();
             SelectedFolder = null;
+
+            // Clear the file input
+            showInput = false;
+            StateHasChanged();
+            showInput = true;
+            File = null;
         }
         catch (Exception ex)
         {
@@ -314,7 +330,12 @@
     // Submit form
     public async Task SubmitForm()
     {
+    }
+
+    private void ClearErrorMsg()
+    {
         Errors.Clear();
     }
+
 }
 
