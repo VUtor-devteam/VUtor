@@ -23,7 +23,10 @@ using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
 using Microsoft.AspNetCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
-var credential = new DefaultAzureCredential();
+
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+var credential = new ManagedIdentityCredential();
 var token = await credential.GetTokenAsync(
      new Azure.Core.TokenRequestContext(
          new[] { "https://database.windows.net/.default" }));
