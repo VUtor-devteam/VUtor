@@ -96,9 +96,37 @@
                 </div>
             </div>
             <div>
-                <label class="specifications"> Rating:</label>
-                <div class="mb-2">
-                <label>@averageRating.ToString("0.##")</label>
+                <div>
+                    <label class="specifications">How to reach me:</label>
+                @if (!string.IsNullOrEmpty(userProfile.FacebookProfile))
+                {
+                    <div>
+                        <label>Facebook:</label>
+                        <a href="@GetSocialMediaLink("Facebook", userProfile.FacebookProfile)" target="_blank">@userProfile.FacebookProfile</a>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(userProfile.InstagramProfile))
+                {
+                    <div>
+                        <label>Instagram:</label>
+                        <a href="@GetSocialMediaLink("Instagram", userProfile.InstagramProfile)" target="_blank">@userProfile.InstagramProfile</a>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(userProfile.XProfile))
+                {
+                    <div>
+                        <label>X Profile:</label>
+                        <a href="@GetSocialMediaLink("X", userProfile.XProfile)" target="_blank">@userProfile.XProfile</a> <!-- Modify as needed -->
+                    </div>
+                }
+                </div>
+                <div>
+                    <label class="specifications"> Rating:</label>
+                    <div class="mb-2">
+                    <label>@averageRating.ToString("0.##")</label>
+                    </div>
                 </div>
             </div>
             <div class="mb-2">
@@ -131,6 +159,18 @@
 
         averageRating = await ratingRepo.GetAverageRatingAsync(userProfile.Id); // Ensure userProfile.Id is a string
 
+    }
+
+    private string GetSocialMediaLink(string platform, string handle)
+    {
+        // Modify this logic based on how you store the handles
+        return platform switch
+        {
+            "Facebook" => $"https://www.facebook.com/{handle}",
+            "Instagram" => $"https://www.instagram.com/{handle}",
+            "X" => $"https://www.twitter.com/{handle}",
+            _ => handle,
+        };
     }
     #endregion
 
