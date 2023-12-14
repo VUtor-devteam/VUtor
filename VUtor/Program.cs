@@ -12,6 +12,7 @@ using DataAccessLibrary.WebSearch;
 using DataAccessLibrary.ProfileRepo;
 using DataAccessLibrary.RatingRepo;
 using DataAccessLibrary.GenericRepo;
+using DataAccessLibrary.MatchmakingServ;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,9 +37,9 @@ builder.Services.AddScoped<IFolderRepository, FolderRepository>();
 builder.Services.AddScoped<ISearch, Search>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<RatingRepository>();
+builder.Services.AddScoped<IMatchmakingService, MatchmakingService>();
 builder.Services.AddScoped<StudyGroupRepository>();
 builder.Services.AddControllers();
-builder.Services.AddScoped<IMatchmakingService, MatchmakingService>();
 
 var app = builder.Build();
 // Apply migrations at runtime

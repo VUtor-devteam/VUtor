@@ -2,6 +2,7 @@
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.Components.Authorization
 @using DataAccessLibrary.Models
+@using DataAccessLibrary.MatchmakingServ
 @using System.Security.Claims
 @using System.Diagnostics;
 @using DataAccessLibrary
@@ -9,16 +10,35 @@
 @inject UserManager<ProfileEntity> UserManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IMatchmakingService MatchmakingService
+@inject NavigationManager navigationManger
+@inject IProfileRepository repoProfiles
+@inject StudyGroupRepository studyGroupRepo
 
 <PageTitle>Dashboard</PageTitle>
 
-@if (MatchedTutors != null && MatchedTutors.Any())
+<h1>Possible tutors for you:</h1>
+@if (MatchedTutors == null)
 {
-    <h1>Possible tutors for you:</h1>
+    <p><em>Loading...</em></p>
+}
+else if (MatchedTutors.Any())
+{
     <ul>
         @foreach (var tutor in MatchedTutors)
         {
-            <li>@tutor.Name  @tutor.Surname</li>
+            <li>
+                <button @onclick="() => GoToProfile(tutor.Id)" style="border: none; background-color: transparent; cursor: pointer;
+                    color: darkblue; text-decoration: underline;">
+                    @tutor.Name @tutor.Surname
+                </button>
+
+                <ul>
+                    @foreach (var topic in tutor.TopicsToTeach)
+                    {
+                        <li>@topic.Title</li>
+                    }
+                </ul>
+            </li>
         }
     </ul>
 }
@@ -27,11 +47,109 @@ else
     <p>No possible tutors found.</p>
 }
 
+<h1>Possible learners for you:</h1>
+@if (MatchedLearners == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (MatchedLearners.Any())
+{
+    <ul>
+        @foreach (var learner in MatchedLearners)
+        {
+            <li>
+                <button @onclick="() => GoToProfile(learner.Id)" style="border: none; background-color: transparent; cursor: pointer;
+                    color: darkblue; text-decoration: underline;">
+                    @learner.Name @learner.Surname
+                </button>
 
+                <ul>
+                    @foreach (var topic in learner.TopicsToLearn)
+                    {
+                        <li>@topic.Title</li>
+                    }
+                </ul>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>No possible learners found.</p>
+}
+
+<h1>Files for you:</h1>
+@if (FilesForLearning == null)
+{
+    <p><em>Loading...</em></p>
+    
+}
+else if (FilesForLearning.Any())
+{
+    <ul>
+        @foreach (var file in FilesForLearning)
+        {
+            <li>
+                <span style="font-weight: bold;">@file.Title</span> - @file.Description
+
+                <p style="margin-bottom: 0;">The file is about these topics: </p>
+                <ul>
+                    @foreach (var topic in file.Topics)
+                    {
+                        <li>@topic.Title</li>
+                    }
+                </ul>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>No relevant files found.</p>
+}
+
+<h1>Available study groups:</h1>      <!--feel like this should be formulated better??-->
+@if (recentStudyGroups == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (recentStudyGroups.Any())
+{
+    <ul>
+        @foreach (var group in recentStudyGroups)
+        {
+            <li>
+                <p style="margin-bottom: 0; margin-inline-end: 0;">Creator: </p>
+                <button @onclick="() => GoToProfile(group.CreatorId)" style="border: none; background-color: transparent; cursor: pointer;
+                    color: darkblue; font-weight: bold;  text-decoration: underline;">
+                    @group.CreatorId
+                </button>
+                <p style="text-decoration: underline;">@group.Subject</p> <p style="margin-bottom: 0;"></p>
+                @(group.GroupPlace ? "Live" : "Online") - @group.GroupDate
+                <p style="margin-bottom: 0;">Current members' count: </p> @(studyGroupRepo.GetMemberCount(group.Id) + 1)
+                <p style="margin-bottom: 0;"></p> <button @onclick="()=> JoinStudyGroup(group.Id)">Join This Study Group</button>
+            </li>
+        }
+    </ul>
+}
+else 
+{
+    <p>No recent study groups found.</p>
+}
+
+<button @onclick="() => GoToStudyGroups()">More...</button>
 
 @code {
 
     private List<ProfileEntity> MatchedTutors { get; set; }
+
+    private List<ProfileEntity> MatchedLearners { get; set; }
+
+    private List<UserFile> FilesForLearning { get; set; }
+
+    private List<DataAccessLibrary.Models.StudyGroup> recentStudyGroups { get; set; }
+
+    private ProfileEntity visiterProfile;
 
     protected override async Task OnInitializedAsync()
     {
@@ -39,5 +157,52 @@ else
         var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         MatchedTutors = await MatchmakingService.FindTutors(userId) ?? new List<ProfileEntity>();
+
+        MatchedLearners = await MatchmakingService.FindLearners(userId) ?? new List<ProfileEntity>();
+
+        FilesForLearning = await MatchmakingService.GetFilesForTopics(userId) ?? new List<UserFile>();
+
+        recentStudyGroups = MatchmakingService.GetRecentStudyGroups(5);
+    }
+
+    private async Task GoToProfile(string id)
+    {
+        navigationManger.NavigateTo($"profile/{id}");
+    }
+
+    private async Task JoinStudyGroup(int studyGroupId)
+    {
+        var userId = await GetUserId(); // Use await to get the result of the asynchronous method
+        if (userId == null)
+        {
+            // Handle the case where the user ID couldn't be retrieved
+            return;
+        }
+
+        var isAlreadyMember = await studyGroupRepo.IsMember(studyGroupId, userId);
+
+        if (!isAlreadyMember)
+        {
+            await studyGroupRepo.AddMemberAsync(studyGroupId, userId);
+            // Implement UI update or success notification
+        }
+    }
+
+    private async Task<string> GetUserId()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user.Identity.IsAuthenticated)
+        {
+            var email = user.Identity.Name; // Assuming the email is used as the username
+            visiterProfile = await repoProfiles.GetProfileByEmailAsync(email);
+        }
+
+        return visiterProfile.Id;
+    }
+
+    private void GoToStudyGroups()
+    {
+        navigationManger.NavigateTo("/studygroups");
     }
 }
