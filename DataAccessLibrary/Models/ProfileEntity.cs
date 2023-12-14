@@ -12,7 +12,6 @@ namespace DataAccessLibrary.Models
         public List<TopicEntity> TopicsToLearn { get; set; } = new List<TopicEntity>();
         public List<TopicEntity> TopicsToTeach { get; set; } = new List<TopicEntity>();
         public List<UserItem> UserItems { get; set; } = new List<UserItem>();
-        public bool ShowRating { get; set; }
         public bool ShowPublicly { get; set; }
         public string? FacebookProfile { get; set; }
         public string? InstagramProfile { get; set; }

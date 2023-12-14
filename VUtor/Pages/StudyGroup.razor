@@ -23,21 +23,21 @@
 
 <div class="row">
     <div calss="col-lg-12"> 
-        <button type="button" @onclick='eventArgs=>ShowModal("exampleModalCenter")' class="round_corners long btn btn-outline-secondary" data-toggle="modal" data-target="#exampleModalCenter">
+        <button type="button" @onclick='eventArgs=>ShowModal("creationModal")' class="round_corners long btn btn-outline-secondary" data-toggle="modal" data-target="#creationModal">
             Create your own study group
         </button>
     </div>
 
     <div calss="col-lg-12">
-        <!-- Modal -->
-        <div class="modal fade show" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="display:none; background: #00000080">
+        <!-- Create Modal -->
+        <div class="modal fade show" id="creationModal" tabindex="-1" role="dialog" aria-labelledby="creationModal" aria-hidden="true" style="display:none; background: #00000080">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div>
                         <div class="publication gray_text">
                             New study group
                         </div>
-                        <button type="button" @onclick='eventargs => HideModal("exampleModalCenter")' class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" @onclick='eventargs => HideModal("creationModal")' class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -69,12 +69,61 @@
                             </div>
 
                             <div class="modal-footer edit_row_container">
-                                <button type="submit" @onclick='eventargs => SaveModal("exampleModalCenter")' class="round_corners edit" data-dismiss="modal">Save</button>
-                                <button type="button" @onclick='eventargs => HideModal("exampleModalCenter")' class="round_corners edit" data-dismiss="modal">Close</button>
+                                <button type="submit" @onclick='eventargs => SaveModal("creationModal")' class="round_corners edit" data-dismiss="modal">Save</button>
+                                <button type="button" @onclick='eventargs => HideModal("creationModal")' class="round_corners edit" data-dismiss="modal">Close</button>
                             </div>
                         </EditForm>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* --------------------------------------------------------------*@
+    <div calss="col-lg-12">
+        <!-- Edit Modal -->
+        <div class="modal fade show" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModal" aria-hidden="true" style="display:none; background: #00000080">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div>
+                        <div class="publication gray_text">
+                            Edit study group
+                        </div>
+                        <button type="button" @onclick='eventargs => HideModal("editModal")' class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="form-floating mb-3"></div>
+                    <div class="modal-body full">
+                        <EditForm Model="@studyGroup" OnValidSubmit="@HandleValidSubmitEdit">
+                            <div>
+                                <div class="edit_row_container mb-2">
+                                    <div class="form-group mb-2 gray_text">
+                                        <label for="groupDate">Group Date:</label>
+                                        <InputDate id="groupDate" class="form-control round_corners" @bind-Value="@studyGroup.GroupDate" />
+                                    </div>
+                                    <div class="form-group mb-2 gray_text">
+                                        <label for="groupPlace">Group Place:</label>
+                                        <InputSelect id="groupPlace" class="form-control round_corners" @bind-Value="@studyGroup.GroupPlace" placeholder="Group place">
+                                            <option value="true">Live</option>
+                                            <option value="false">Online</option>
+                                        </InputSelect>
+                                    </div>
+                                </div>
+                                <div class="edit_row_container mb-2">
+                                    <div class="form-group mb-2">
+                                        <InputText id="subject" class="form-control round_corners" @bind-Value="@studyGroup.Subject" placeholder="Subject" />
+                                    </div>
+                                </div>
+                                <div class="form-floating mb-2 description">
+                                    <textarea @bind="@studyGroup.Description" type="text" name="filter" class="description" placeholder="Enter a description" rows=" 10" cols="50" />
+                                </div>
+                            </div>
 
-
+                            <div class="modal-footer edit_row_container">
+                                <button type="submit" @onclick='eventargs => EditModal("editModal")' class="round_corners edit" data-dismiss="modal">Save</button>
+                                <button type="button" @onclick='eventargs => HideModal("editModal")' class="round_corners edit" data-dismiss="modal">Close</button>
+                            </div>
+                        </EditForm>
                     </div>
                 </div>
             </div>
@@ -82,7 +131,11 @@
     </div>
 
 
+
+
 </div>
+
+
 
 @* --------------------------------------------------------------*@
 
@@ -118,7 +171,8 @@ else
                     <td class="library_td">
                         @if (group.CreatorId == userId)
                         {
-                            <button class="round_corners btn btn-danger" @onclick="() => DeleteStudyGroup(group.Id)">Delete Group</button>
+                            <button class="round_corners short btn btn-danger delete" @onclick="() => DeleteStudyGroup(group.Id)">Delete</button>
+                            <button class="round_corners short btn btn-danger edit" @onclick="() => OpenEditModal(group.Id)" data-toggle="modal" data-target="#editModal">Edit</button>
                         }
                         else
                         {
@@ -128,7 +182,7 @@ else
                             }
                             else
                             {
-                                <button class="round_corners btn btn-outline-secondary" @onclick="()=> JoinStudyGroup(group.Id)">Join This Study Group</button>
+                                <button class="round_corners btn btn-outline-secondary" @onclick="()=> JoinStudyGroup(group.Id)">Join This Group</button>
                             }
                         }
                     </td>
@@ -276,6 +330,21 @@ else
             await module.InvokeAsync<string>("HideModal", elementID);   //--JS function
         }
     }
+
+    protected async void EditModal(string elementID)
+    {
+        if (module != null)
+        {
+            await module.InvokeAsync<string>("HideModal", elementID);
+        }
+        else
+        {
+            module = await JS.InvokeAsync<IJSObjectReference>("import", "./Pages/StudyGroup.razor.js");
+            await module.InvokeAsync<string>("HideModal", elementID);   //--JS function
+        }
+    }
+
+
     @* -----------------------------CREATING A GROUP---------------------------------*@
 
     private DataAccessLibrary.Models.StudyGroup studyGroup = new DataAccessLibrary.Models.StudyGroup() { GroupDate = DateTime.Now };
@@ -297,7 +366,6 @@ else
         catch (Exception ex)
         {
             Console.WriteLine($"An error occurred: {ex.Message}");
-            // Update the UI to inform the user
             errorMessage = "An error occurred while creating the study group. Please try again.";
 
         }
@@ -308,4 +376,42 @@ else
         // Reset the studyGroup object to its initial state or a new instance
         studyGroup = new DataAccessLibrary.Models.StudyGroup() { GroupDate = DateTime.Now };
     }
+
+    @* -----------------------------EDITING A GROUP---------------------------------*@
+
+    private async Task HandleValidSubmitEdit()
+    {
+        try
+        {
+            // Logic for updating an existing study group
+            await studyGroupRepo.UpdateStudyGroupAsync(studyGroup);
+
+            // Common post-update logic
+            studyGroups = await studyGroupRepo.GetAllStudyGroupsAsync();
+            studyGroupsWithMembership = await studyGroupRepo.GetStudyGroupsWithMembershipStatus(userId);
+            ResetStudyGroup();
+            HideModal("editModal"); // Close the edit modal
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred: {ex.Message}");
+            errorMessage = "An error occurred while updating the study group. Please try again.";
+        }
+    }
+
+    private async Task OpenEditModal(int groupIdToEdit)
+    {
+        // Fetch the full details of the study group based on groupIdToEdit
+        studyGroup = await studyGroupRepo.GetStudyGroupByIdAsync(groupIdToEdit);
+
+        if (studyGroup != null)
+        {
+            ShowModal("editModal"); // Open the edit modal only if the study group is found
+        }
+        else
+        {
+            // Handle the case where the study group is not found (optional)
+        }
+    }
 }
+

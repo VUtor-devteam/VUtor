@@ -92,7 +92,6 @@ namespace DataAccessLibrary
             }
         }
 
-        // Method to get study groups with membership status
         public async Task<List<(StudyGroup studyGroup, bool isMember)>> GetStudyGroupsWithMembershipStatus(string userId)
         {
             return await _context.StudyGroups

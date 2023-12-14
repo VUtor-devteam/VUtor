@@ -49,6 +49,10 @@
     border-radius: 18px;
 }
 
+.short {
+    width: 108px;
+}
+
 .register_email {
     width: 445px;
 }
