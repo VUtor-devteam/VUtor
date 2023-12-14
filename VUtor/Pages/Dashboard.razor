@@ -126,18 +126,18 @@ else if (recentStudyGroups.Any())
                 </button>
                 <p style="text-decoration: underline;">@group.Subject</p> <p style="margin-bottom: 0;"></p>
                 @(group.GroupPlace ? "Live" : "Online") - @group.GroupDate
-                <p style="margin-bottom: 0;">Current members' count: </p> @(studyGroupRepo.GetMemberCount(group.Id) + 1)
+                <p style="margin-bottom: 0;">Current members' count: </p> @group.MemberNumber
                 <p style="margin-bottom: 0;"></p> <button @onclick="()=> JoinStudyGroup(group.Id)">Join This Study Group</button>
             </li>
         }
     </ul>
+    <button @onclick="() => GoToStudyGroups()">More...</button>
 }
 else 
 {
     <p>No recent study groups found.</p>
+    <button @onclick="() => GoToStudyGroups()">More...</button>
 }
-
-<button @onclick="() => GoToStudyGroups()">More...</button>
 
 @code {
 
