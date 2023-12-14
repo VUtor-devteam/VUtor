@@ -15,5 +15,8 @@ namespace DataAccessLibrary.Models
         public DateTime GroupDate { get; set; }
         public bool GroupPlace { get; set; }
         public string Subject { get; set; }
+        public int MemberNumber { get; set; }
+        public string Description { get; set; }
+
     }
 }
