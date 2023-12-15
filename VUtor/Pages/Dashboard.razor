@@ -15,8 +15,6 @@
 
 <PageTitle>Dashboard</PageTitle>
 
-<!--<h1>Welcome to VUtor, @user.Name @user.Surname</h1>-->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,7 +60,10 @@
                             <ul>
                                 @foreach (var topic in tutor.TopicsToTeach)
                                 {
-                                    <li>@topic.Title</li>
+                                    if (loggedInUser.TopicsToLearn.Any(userTopic => userTopic.Title == topic.Title))
+                                    {
+                                        <li>@topic.Title</li>
+                                    }
                                 }
                             </ul>
                         </li>
@@ -95,7 +96,10 @@
                             <ul>
                                 @foreach (var topic in learner.TopicsToLearn)
                                 {
-                                    <li>@topic.Title</li>
+                                    if (loggedInUser.TopicsToTeach.Any(userTopic => userTopic.Title == topic.Title))
+                                    {
+                                        <li>@topic.Title</li>
+                                    }
                                 }
                             </ul>
                         </li>
@@ -178,22 +182,24 @@
 </html>
 
 @code {
-
+    private ProfileEntity loggedInUser;
     private List<ProfileEntity> MatchedTutors { get; set; }
-
     private List<ProfileEntity> MatchedLearners { get; set; }
-
     private List<UserFile> FilesForLearning { get; set; }
-
     private List<DataAccessLibrary.Models.StudyGroup> recentStudyGroups { get; set; }
-
     private ProfileEntity visiterProfile;
-
     private List<(DataAccessLibrary.Models.StudyGroup studyGroup, bool isMember)> studyGroupsWithMembership;
 
     protected override async Task OnInitializedAsync()
     {
-        var user = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user.Identity.IsAuthenticated)
+        {
+            var email = user.Identity.Name; // Assuming the email is used as the username
+            loggedInUser = await repoProfiles.GetProfileByEmailAsync(email);
+        }
+
         var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         MatchedTutors = await MatchmakingService.FindTutorsAsync(userId) ?? new List<ProfileEntity>();
