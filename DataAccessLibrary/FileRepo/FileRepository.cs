@@ -137,7 +137,7 @@ namespace DataAccessLibrary.FileRepo
             {
                 try
                 {
-                    var file = await _context.UserFiles.Include(x => x.Profile).Include(x => x.Topics).Where(x => blobUrl.StartsWith(x.BlobUri)).FirstAsync();
+                    var file = await _context.UserFiles.AsSplitQuery().Include(x => x.Profile).Include(x => x.Topics).Where(x => blobUrl.StartsWith(x.BlobUri)).FirstAsync();
                     files.Add(file);
                 }
                 catch { }
@@ -148,12 +148,12 @@ namespace DataAccessLibrary.FileRepo
         // Retrieves a list of files for the given user ID
         public async Task<List<UserFile>> GetFilesForUserAsync(string userId)
         {
-            return await _context.UserFiles.Include(e => e.ProfileId)
+            return await _context.UserFiles.AsSplitQuery().Include(e => e.ProfileId)
                 .Where(e => e.ProfileId == userId)
                 .ToListAsync();
         }
 
-        // Retrieves a file for the given title
+        /* Retrieves a file for the given title
         public async Task<UserFile> GetFilesForTitleAsync(string title)
         {
             try
@@ -166,7 +166,7 @@ namespace DataAccessLibrary.FileRepo
             {
                 return null;
             }
-        }
+        }*/
 
         // Retrieves a file for the given file ID
         public async Task<UserFile> GetFileAsync(int fileId)
@@ -217,6 +217,7 @@ namespace DataAccessLibrary.FileRepo
         public async Task<List<UserFile>> GetFilesForFolderAsync(int folderId)
         {
             return await _context.UserFiles
+                .AsSplitQuery()
                 .Include(e => e.Topics)
                 .Where(f => f.FolderId == folderId)
                 .ToListAsync();

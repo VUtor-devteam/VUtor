@@ -24,6 +24,17 @@ namespace DataAccessLibrary
              return await _context.StudyGroups.ToListAsync();
          }
 
+        public int GetMemberCount(int studyGroupId)
+        {
+              return _context.StudyGroupMembers
+                .Count(member => member.StudyGroupId == studyGroupId);
+        }
+
+        public async Task AddStudyGroupAsync(StudyGroup group)
+        {
+            _context.StudyGroups.Add(group);
+            await _context.SaveChangesAsync();
+        }
         public async Task<StudyGroup> GetStudyGroupByIdAsync(int studyGroupId)
         {
             return await _context.StudyGroups.FindAsync(studyGroupId);
