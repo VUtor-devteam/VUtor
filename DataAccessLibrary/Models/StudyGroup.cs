@@ -11,12 +11,12 @@ namespace DataAccessLibrary.Models
     {
         [Key]
         public int Id { get; set; }
-        public string CreatorId { get; set; }
+        public string? CreatorId { get; set; }
         public DateTime GroupDate { get; set; }
         public bool GroupPlace { get; set; }
-        public string Subject { get; set; }
+        public string? Subject { get; set; }
         public int MemberNumber { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
     }
 }
