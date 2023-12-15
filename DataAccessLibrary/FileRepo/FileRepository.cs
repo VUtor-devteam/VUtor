@@ -153,7 +153,7 @@ namespace DataAccessLibrary.FileRepo
                 .ToListAsync();
         }
 
-        // Retrieves a file for the given title
+        /* Retrieves a file for the given title
         public async Task<UserFile> GetFilesForTitleAsync(string title)
         {
             try
@@ -166,7 +166,7 @@ namespace DataAccessLibrary.FileRepo
             {
                 return null;
             }
-        }
+        }*/
 
         // Retrieves a file for the given file ID
         public async Task<UserFile> GetFileAsync(int fileId)
