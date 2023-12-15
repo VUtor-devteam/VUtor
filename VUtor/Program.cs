@@ -21,6 +21,8 @@ using Serilog.Events;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
 using Microsoft.AspNetCore.Diagnostics;
+using VUtor.Services.ExceptionTracker;
+using VUtor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var credential = new DefaultAzureCredential();
@@ -65,6 +67,7 @@ builder.Services.AddScoped<ISearch, Search>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<RatingRepository>();
 builder.Services.AddScoped<StudyGroupRepository>();
+builder.Services.AddScoped<IExceptionTracker, ExceptionTracker>();
 builder.Services.AddControllers();
 builder.Services.AddBlazoredModal();
 
@@ -85,7 +88,10 @@ else
     {
         errorApp.Run(async context =>
         {
-            context.Response.StatusCode = 500; // or another status code of your choice
+            var exceptionTracker = context.RequestServices.GetRequiredService<IExceptionTracker>();
+            exceptionTracker.ExceptionOccurred = true;
+
+            context.Response.StatusCode = 500; 
             context.Response.ContentType = "text/html";
 
             var exceptionHandlerPathFeature =
