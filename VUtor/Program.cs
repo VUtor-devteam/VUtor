@@ -1,24 +1,24 @@
 using DataAccessLibrary;
+using DataAccessLibrary.ConnectionRepo;
 using DataAccessLibrary.Data;
-using DataAccessLibrary.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Azure;
-using Microsoft.EntityFrameworkCore;
 using DataAccessLibrary.FileRepo;
-using Microsoft.AspNetCore.Builder;
 using DataAccessLibrary.FolderRepo;
-using DataAccessLibrary.Search;
-using DataAccessLibrary.WebSearch;
+using DataAccessLibrary.GenericRepo;
+using DataAccessLibrary.Models;
 using DataAccessLibrary.ProfileRepo;
 using DataAccessLibrary.RatingRepo;
-using DataAccessLibrary.GenericRepo;
+using DataAccessLibrary.Search;
+using DataAccessLibrary.WebSearch;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Azure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("AzureSql") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString), ServiceLifetime.Transient);
 var storageConnectionString = builder.Configuration.GetConnectionString("Storage");
 builder.Services.AddAzureClients(options =>
 {
@@ -33,6 +33,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
 builder.Services.AddScoped<IFileRepository, FileRepository>();
 builder.Services.AddScoped<IFolderRepository, FolderRepository>();
+builder.Services.AddScoped<IConnectionsRepository, ConnectionsRepository>();
 builder.Services.AddScoped<ISearch, Search>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<RatingRepository>();

@@ -1,0 +1,145 @@
+﻿@page "/usersearch"
+
+@namespace VUtor.Pages.Components
+
+@using DataAccessLibrary.Models
+@using DataAccessLibrary.GenericRepo
+@using DataAccessLibrary.ConnectionRepo
+
+@inject AuthenticationStateProvider authStateProvider
+@inject Microsoft.AspNetCore.Identity.UserManager<ProfileEntity> userManager
+@inject IGenericRepository<ProfileEntity> profileRepository
+@inject IConnectionsRepository connectionRepository
+
+@if(Profile == null)
+{
+    <h1>Loading...</h1>
+}
+else
+{
+    <body>
+
+        <link href="styles.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+        <div class="user-search">
+            <a class="no-deco" href="@_userUrl">
+                <div class="user-info-lg lexend">
+                    <div class="user-picture-lg-div">
+                        <img class="user-picture-lg" src="profPic.JPG" alt="Profile Picture" />
+                    </div>
+                    <div class="user-info-text">
+                        <div>
+                            <h class="user-name">@_fullName</h>
+                        </div>
+                        <h class="user-course">@_fullCourse</h>
+                    </div>
+                </div>
+            </a>
+            <div class="add-connection">
+                <button @onclick="ProccessConnection" class="add-connection-button material-symbols-outlined @_requestState">@_icon</button>
+            </div>
+        </div>
+    </body>
+}
+
+@code {
+    [Parameter]
+    public ProfileEntity Profile { get; set; }
+
+    public ProfileEntity _currentUser;
+    public string _requestState;
+    public string _icon;
+
+    public string _fullName;
+    public string _fullCourse;
+    public string _userUrl;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await authStateProvider.GetAuthenticationStateAsync(); // get current user-course
+        var user = authState.User;
+
+        if (user.Identity != null && user.Identity.IsAuthenticated)
+        {
+            var currentUser = await userManager.GetUserAsync(user);
+            _currentUser = currentUser;
+        }
+
+        _fullName = await GetUserNameSurname();
+        _fullCourse = await GetUserCourseInfo();
+        _userUrl = await GenerateUserUrl();
+
+        await connectionRepository.GenerateLists(Profile);
+        await connectionRepository.GenerateLists(_currentUser);
+
+        await IdentifyConnection();
+    }
+
+    private async Task IdentifyConnection()
+    {
+        if(await connectionRepository.HaveConnection(Profile, _currentUser))
+        {
+            _requestState = "added";
+            _icon = "person_check";
+        }
+        else if(await connectionRepository.HaveOutgoingRequest(_currentUser, Profile))
+        {
+            _requestState = "pending";
+            _icon = "person_cancel";
+        }
+        else
+        {
+            _requestState = "add";
+            _icon = "person_add";
+        }
+    }
+
+    private async Task ProccessConnection()
+    {
+        System.Console.Out.WriteLine("Proccessing connection");
+        if (await connectionRepository.HaveConnection(Profile, _currentUser))
+        {
+            var connection = await connectionRepository.GetConnectionByUsers(Profile, _currentUser);
+
+            await connectionRepository.RemoveConnection(connection);
+            _requestState = "add";
+            _icon = "person_add";
+            System.Console.Out.WriteLine("Removed connection");
+        }
+        else if (await connectionRepository.HaveOutgoingRequest(_currentUser, Profile))
+        {
+            var request = await connectionRepository.GetConnectionRequestByUsers(_currentUser, Profile);
+
+            await connectionRepository.CancelRequest(request);
+            _requestState = "add";
+            _icon = "person_add";
+            System.Console.Out.WriteLine("Cancelled connection request");
+        }
+        else
+        {
+            await connectionRepository.SendConnectionRequest(_currentUser, Profile);
+            _requestState = "pending";
+            _icon = "person_cancel";
+            System.Console.Out.WriteLine("Sent connection request");
+        }
+    }
+
+    private async Task<string> GetUserNameSurname()
+    {
+        return Profile.Name + " " + Profile.UserName;
+    }
+
+    private async Task<string> GetUserCourseInfo()
+    {
+        return Profile.CourseInfo.GetName() + ", Bachelor " + Profile.CourseInfo.GetYear() + " year";   
+    }
+
+    private async Task<string> GenerateUserUrl()
+    {
+        return "http://localhost/Public_profile/" + Profile.Id + "?returnurl=http://localhost/uitesting";
+    }   
+}

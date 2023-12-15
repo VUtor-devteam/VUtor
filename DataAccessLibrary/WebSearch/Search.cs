@@ -1,13 +1,10 @@
 ﻿using Azure;
-using System.Text;
 using Azure.Search.Documents;
 using Azure.Search.Documents.Models;
-using Microsoft.Extensions.Configuration;
-using Azure.Search.Documents.Indexes.Models;
-using ServiceStack;
 using DataAccessLibrary.WebSearch;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using ServiceStack;
+using System.Text;
 
 namespace DataAccessLibrary.Search
 {

@@ -94,7 +94,7 @@ namespace VUtor.Areas.Identity.Pages.Account
             TopicList = await _context.Topics.ToListAsync();
             ReturnUrl = returnUrl;
         }
-    
+
         [HttpPost]
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
@@ -109,17 +109,19 @@ namespace VUtor.Areas.Identity.Pages.Account
                 user.Surname = Input.Surname;
                 user.CourseInfo = new CourseData((int)Input.CourseName, (int)Input.CourseYear);
                 user.CreationDate = new profileCreationDate();
+                user.Connections = new List<Connection>();
+                user.ConnectionRequests = new List<ConnectionRequest>();
                 _context.Attach(user);
                 Console.WriteLine(Input.TopicsToLearn.Count());
                 Console.WriteLine(Input.TopicsToTeach.Count());
 
                 foreach (var topic in TopicList)
                 {
-                    if(Input.TopicsToLearn.Contains(topic.Id))
+                    if (Input.TopicsToLearn.Contains(topic.Id))
                     {
                         user.TopicsToLearn.Add(topic);
                     }
-                    if(Input.TopicsToTeach.Contains(topic.Id))
+                    if (Input.TopicsToTeach.Contains(topic.Id))
                     {
                         user.TopicsToTeach.Add(topic);
                     }

@@ -172,7 +172,7 @@ namespace VUtor.Areas.Identity.Pages.Account.Manage
                     topic.TeachingProfiles.Add(user);
                     user.TopicsToTeach.Add(topic);
                 }
-            }           
+            }
 
             await _context.SaveChangesAsync();
             await _userManager.UpdateAsync(user);

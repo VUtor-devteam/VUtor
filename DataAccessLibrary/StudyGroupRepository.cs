@@ -1,33 +1,28 @@
 ﻿using DataAccessLibrary.Data;
 using DataAccessLibrary.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccessLibrary
 {
     public class StudyGroupRepository
     {
-        
-         private readonly ApplicationDbContext _context;
 
-         public StudyGroupRepository(ApplicationDbContext context)
-         {
-             _context = context;
-         }
+        private readonly ApplicationDbContext _context;
 
-         public async Task<List<StudyGroup>> GetAllStudyGroupsAsync()
-         {
-             return await _context.StudyGroups.ToListAsync();
-         }
+        public StudyGroupRepository(ApplicationDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<List<StudyGroup>> GetAllStudyGroupsAsync()
+        {
+            return await _context.StudyGroups.ToListAsync();
+        }
 
         public int GetMemberCount(int studyGroupId)
         {
-              return _context.StudyGroupMembers
-                .Count(member => member.StudyGroupId == studyGroupId);
+            return _context.StudyGroupMembers
+              .Count(member => member.StudyGroupId == studyGroupId);
         }
 
         public async Task AddStudyGroupAsync(StudyGroup group)

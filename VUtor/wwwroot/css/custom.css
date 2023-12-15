@@ -396,6 +396,151 @@ full {
     font-weight: 500;
 }
 
+/* Body of box */
+.user-search {
+    border: 1px solid #ccc;
+    border-radius: 36px;
+    display: inline-flex;
+    align-items: center;
+    height: 86px;
+    width: 544px;
+    position: relative;
+}
+
+/* Picture div style */
+.user-picture-lg {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+}
+
+.user-picture-lg-div {
+    padding-left: 10px;
+    padding-right: 15px;
+}
+
+/* User info div style */
+.user-info-lg {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    width: 440px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.no-deco {
+    text-decoration: none;
+}
+
+.user-info-lg:hover,
+.user-info-lg:focus {
+    text-decoration: underline;
+    text-decoration-color: #344054;
+}
+
+.user-info-text {
+    display: flexbox;
+    justify-content: flex-start;
+}
+
+/* Text and font */
+.lexend {
+    font-family: Lexend;
+}
+
+.user-name {
+    font-size: 32px;
+    color: #101828;
+    font: bold;
+}
+
+.user-course {
+    font-size: 16px;
+    color: #344054;
+}
+
+.material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24
+}
+
+.add-connection {
+    position: absolute;
+    right: 20px;
+    padding-left: 15px;
+}
+
+.add-connection-button {
+    border: none;
+    height: 46px;
+    width: 46px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.add {
+    background-color: #80043C;
+    color: white;
+}
+
+    .add:hover,
+    .add:focus {
+        background-color: #680431;
+        box-shadow: 0px 2px 1px #929ab1;
+    }
+.added {
+    background-color: #d0bec6;
+    color: #101828;
+}
+
+.added:hover,
+.added:focus {
+    content: "person_remove";
+    box-shadow: 0px 2px 1px #786f73;
+}
+
+.pending {
+    background-color: #d0bec6;
+    color: #101828;
+}
+
+.pending:hover,
+.pending:focus {
+    content: "person_remove";
+    box-shadow: 0px 2px 1px #786f73;
+}
+
+.study-group {
+    display: inline-flex;
+    width: 544px;
+    height: 100px;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 36px;
+    border-color: #101828;
+    position: relative;
+    font-size: 32px;
+}
+
+.group-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.group-name {
+    font-size: 32px;
+    color: #101828;
+    font: bold;
+}
+
 #HASH {
     display: flex;
     justify-content: space-between;

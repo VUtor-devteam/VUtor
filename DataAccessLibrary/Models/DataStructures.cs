@@ -18,10 +18,11 @@ namespace DataAccessLibrary.Models
         {
             if (!dateAsString.IsNullOrEmpty())
             {
-                try 
+                try
                 {
                     Date = DateTime.ParseExact(dateAsString, "MM/dd/yyyy", CultureInfo.CurrentCulture);
-                }catch (FormatException) 
+                }
+                catch (FormatException)
                 {
                     Date = DateTime.ParseExact(dateAsString, "MM/d/yyyy", CultureInfo.CurrentCulture);
                 }

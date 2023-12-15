@@ -1,0 +1,42 @@
+﻿@page "/uitesting"
+
+@using DataAccessLibrary.Models;
+@using DataAccessLibrary.GenericRepo;
+@using DataAccessLibrary.ConnectionRepo;
+@using VUtor.Pages.Components;
+
+@inject IGenericRepository<ProfileEntity> profileRepository
+@inject IConnectionsRepository connectionRepository
+
+<body>
+  <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1>UI Testing</h1>
+                <p>Testing the UI</p>
+            </div>
+        </div>
+    </div>
+
+    
+@if(_profile != null)
+    {
+        <UserSearch Profile="@_profile" />
+    }
+else
+{
+    <h1>Loading...</h1>
+}
+</body>
+
+
+@code {
+    public ProfileEntity _profile;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var profiles = await profileRepository.LoadData();
+
+        _profile = profiles.FirstOrDefault();
+    }
+}

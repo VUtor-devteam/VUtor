@@ -64,6 +64,37 @@ namespace DataAccessLibrary.Data
                 e.HasMany(p => p.TopicsToTeach)
                     .WithMany(t => t.TeachingProfiles)
                     .UsingEntity(j => j.ToTable("ProfilesTeachingTopics"));
+
+            });
+
+            modelBuilder.Entity<Connection>(e =>
+            {
+                e.HasKey(e => e.Id);
+
+                e.HasOne(e => e.User)
+                    .WithMany(e => e.Connections)
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                e.HasOne(e => e.Friend)
+                    .WithMany()
+                    .HasForeignKey(e => e.FriendId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<ConnectionRequest>(e =>
+            {
+                e.HasKey(e => e.Id);
+
+                e.HasOne(e => e.Sender)
+                    .WithMany(e => e.ConnectionRequests)
+                    .HasForeignKey(e => e.SenderId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                e.HasOne(e => e.Receiver)
+                    .WithMany()
+                    .HasForeignKey(e => e.ReceiverId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<TopicEntity>(e =>
@@ -81,26 +112,26 @@ namespace DataAccessLibrary.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<UserItem>(e =>
-            { 
+            {
                 e.HasOne(e => e.Profile)
                     .WithMany(e => e.UserItems)
                     .HasForeignKey(e => e.ProfileId);
 
-                 e.Property(e => e.CreationDate)
-                      .HasConversion(
-                          v => v.ToString(),
-                          v => new profileCreationDate(v))
-                      .HasMaxLength(250);
+                e.Property(e => e.CreationDate)
+                     .HasConversion(
+                         v => v.ToString(),
+                         v => new profileCreationDate(v))
+                     .HasMaxLength(250);
             });
 
             modelBuilder.Entity<UserFile>(e =>
-            { 
+            {
                 e.HasOne(e => e.Folder)
                     .WithMany(e => e.Files)
                     .HasForeignKey(e => e.FolderId)
                     .IsRequired();
 
-                e.HasMany(e=> e.Topics)
+                e.HasMany(e => e.Topics)
                     .WithMany(e => e.UserFiles)
                     .UsingEntity(j => j.ToTable("TopicToFiles"));
 

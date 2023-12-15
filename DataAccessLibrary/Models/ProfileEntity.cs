@@ -12,5 +12,7 @@ namespace DataAccessLibrary.Models
         public List<TopicEntity> TopicsToLearn { get; set; } = new List<TopicEntity>();
         public List<TopicEntity> TopicsToTeach { get; set; } = new List<TopicEntity>();
         public List<UserItem> UserItems { get; set; } = new List<UserItem>();
+        public List<Connection>? Connections { get; set; }
+        public List<ConnectionRequest>? ConnectionRequests { get; set; }
     }
 }

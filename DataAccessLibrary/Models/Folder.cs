@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace DataAccessLibrary.Models
 {
@@ -16,6 +11,6 @@ namespace DataAccessLibrary.Models
         public int? ParentFolderId { get; set; }
         public Folder? ParentFolder { get; set; }
         public List<UserFile> Files { get; set; } = new List<UserFile>();
-        public List<Folder> SubFolders { get; set; } = new List<Folder>();  
+        public List<Folder> SubFolders { get; set; } = new List<Folder>();
     }
 }

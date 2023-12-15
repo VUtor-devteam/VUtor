@@ -37,7 +37,7 @@ namespace DataAccessLibrary.FolderRepo
                         .Where(e => e.ParentFolderId == parentFolderId)
                         .FirstAsync();
                 }
-                catch{}
+                catch { }
             }
 
             if (parentFolder == null)
@@ -78,7 +78,7 @@ namespace DataAccessLibrary.FolderRepo
                 }
                 catch { }
                 Console.WriteLine(parentFolder.Name);
-                if(parentFolder != null)
+                if (parentFolder != null)
                 {
                     var folder = new Folder
                     {
@@ -117,7 +117,8 @@ namespace DataAccessLibrary.FolderRepo
             .ToListAsync();
         }
 
-        public async Task<List<Folder>> GetParentFolders(){
+        public async Task<List<Folder>> GetParentFolders()
+        {
             return await _context.Folders
             .Include(x => x.SubFolders)
             .Include(x => x.Files)
