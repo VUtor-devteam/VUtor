@@ -17,7 +17,7 @@ namespace DataAccessLibrary.MatchmakingServ
             _context = context;
         }
 
-        public async Task<List<ProfileEntity>> FindTutors(string userId)
+        public async Task<List<ProfileEntity>> FindTutorsAsync(string userId)
         {
             var user = await _context.Users
                 .Include(user => user.TopicsToLearn)
@@ -45,7 +45,7 @@ namespace DataAccessLibrary.MatchmakingServ
             return matchedTutors;
         }
 
-        public async Task<List<ProfileEntity>> FindLearners(string userId)
+        public async Task<List<ProfileEntity>> FindLearnersAsync(string userId)
         {
             var user = await _context.Users
                 .Include(user => user.TopicsToTeach)
@@ -73,7 +73,7 @@ namespace DataAccessLibrary.MatchmakingServ
             return matchedLearners;
         }
 
-        public async Task<List<UserFile>> GetFilesForTopics(string userId) 
+        public async Task<List<UserFile>> GetFilesForTopicsAsync(string userId) 
         {
             var user = await _context.Users
                 .Include(user => user.TopicsToLearn)

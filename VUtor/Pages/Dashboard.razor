@@ -7,7 +7,6 @@
 @using System.Diagnostics;
 @using DataAccessLibrary
 
-@inject UserManager<ProfileEntity> UserManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject IMatchmakingService MatchmakingService
 @inject NavigationManager navigationManger
@@ -16,128 +15,167 @@
 
 <PageTitle>Dashboard</PageTitle>
 
-<h1>Possible tutors for you:</h1>
-@if (MatchedTutors == null)
-{
-    <p><em>Loading...</em></p>
-}
-else if (MatchedTutors.Any())
-{
-    <ul>
-        @foreach (var tutor in MatchedTutors)
-        {
-            <li>
-                <button @onclick="() => GoToProfile(tutor.Id)" style="border: none; background-color: transparent; cursor: pointer;
-                    color: darkblue; text-decoration: underline;">
-                    @tutor.Name @tutor.Surname
-                </button>
+<!--<h1>Welcome to VUtor, @user.Name @user.Surname</h1>-->
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Style to create two columns */
+        .column {
+            float: left;
+            width: 50%; /* Adjust the width based on your needs */
+            padding: 10px;
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+    </style>
+    <title>Dashboard</title>
+</head>
+<body>
+
+    <div class="row">
+        <div class="column">
+            <h2>Possible tutors for you:</h2>
+            @if (MatchedTutors == null)
+            {
+                <p><em>Loading...</em></p>
+            }
+            else if (MatchedTutors.Any())
+            {
                 <ul>
-                    @foreach (var topic in tutor.TopicsToTeach)
+                    @foreach (var tutor in MatchedTutors)
                     {
-                        <li>@topic.Title</li>
+                        <li>
+                            <button @onclick="() => GoToProfile(tutor.Id)" style="border: none; background-color: transparent; cursor: pointer;
+                                color: darkblue; text-decoration: underline;">
+                                @tutor.Name @tutor.Surname
+                            </button>
+
+                            <ul>
+                                @foreach (var topic in tutor.TopicsToTeach)
+                                {
+                                    <li>@topic.Title</li>
+                                }
+                            </ul>
+                        </li>
                     }
                 </ul>
-            </li>
-        }
-    </ul>
-}
-else
-{
-    <p>No possible tutors found.</p>
-}
+            }
+            else
+            {
+                <p>No possible tutors found.</p>
+            }
+        </div>
 
-<h1>Possible learners for you:</h1>
-@if (MatchedLearners == null)
-{
-    <p><em>Loading...</em></p>
-}
-else if (MatchedLearners.Any())
-{
-    <ul>
-        @foreach (var learner in MatchedLearners)
-        {
-            <li>
-                <button @onclick="() => GoToProfile(learner.Id)" style="border: none; background-color: transparent; cursor: pointer;
-                    color: darkblue; text-decoration: underline;">
-                    @learner.Name @learner.Surname
-                </button>
-
+        <div class="column">
+            <h2>Possible learners for you:</h2>
+            @if (MatchedLearners == null)
+            {
+                <p><em>Loading...</em></p>
+            }
+            else if (MatchedLearners.Any())
+            {
                 <ul>
-                    @foreach (var topic in learner.TopicsToLearn)
+                    @foreach (var learner in MatchedLearners)
                     {
-                        <li>@topic.Title</li>
+                        <li>
+                            <button @onclick="() => GoToProfile(learner.Id)" style="border: none; background-color: transparent; cursor: pointer;
+                                color: darkblue; text-decoration: underline;">
+                                @learner.Name @learner.Surname
+                            </button>
+
+                            <ul>
+                                @foreach (var topic in learner.TopicsToLearn)
+                                {
+                                    <li>@topic.Title</li>
+                                }
+                            </ul>
+                        </li>
                     }
                 </ul>
-            </li>
-        }
-    </ul>
-}
-else
-{
-    <p>No possible learners found.</p>
-}
+            }
+            else
+            {
+                <p>No possible learners found.</p>
+            }
+        </div>
+    </div>
 
-<h1>Files for you:</h1>
-@if (FilesForLearning == null)
-{
-    <p><em>Loading...</em></p>
+    <div class="row">
+        <div class="column">
+            <h2>Files for you:</h2>
+            @if (FilesForLearning == null)
+            {
+                <p><em>Loading...</em></p>
     
-}
-else if (FilesForLearning.Any())
-{
-    <ul>
-        @foreach (var file in FilesForLearning)
-        {
-            <li>
-                <span style="font-weight: bold;">@file.Title</span> - @file.Description
-
-                <p style="margin-bottom: 0;">The file is about these topics: </p>
+            }
+            else if (FilesForLearning.Any())
+            {
                 <ul>
-                    @foreach (var topic in file.Topics)
+                    @foreach (var file in FilesForLearning)
                     {
-                        <li>@topic.Title</li>
+                        <li>
+                            <span style="font-weight: bold;">@file.Title</span> - @file.Description
+
+                            <p style="margin-bottom: 0;">The file is about these topics: </p>
+                            <ul>
+                                @foreach (var topic in file.Topics)
+                                {
+                                    <li>@topic.Title</li>
+                                }
+                            </ul>
+                        </li>
                     }
                 </ul>
-            </li>
-        }
-    </ul>
-}
-else
-{
-    <p>No relevant files found.</p>
-}
+                <button class="round_corners btn btn-outline-secondary" @onclick="() => GoToLibrary()">More...</button>
+            }
+            else
+            {
+                <p>No relevant files found.</p>
+                <button class="round_corners btn btn-outline-secondary" @onclick="() => GoToLibrary()">More...</button>
+            }
+        </div>
+    
+        <div class="column">
+            <h2>Study groups:</h2>
+            @if (recentStudyGroups == null)
+            {
+                <p><em>Loading...</em></p>
+            }
+            else if (recentStudyGroups.Any())
+            {
+                <ul>
+                     @foreach (var group in recentStudyGroups)
+                     {
+                         <li>
+                             <p style="text-decoration: underline; margin-bottom: 0;">@group.Subject</p>
+                             @(group.GroupPlace ? "Live" : "Online") - @group.GroupDate
+                             <p style="margin-bottom: 0;">Current members' count: @group.MemberNumber</p>
+                             <button class="round_corners btn btn-outline-secondary" @onclick="()=> JoinStudyGroup(group.Id)">Join This Study Group</button>
+                             <button class="round_corners btn btn-outline-secondary" @onclick="()=> LeaveStudyGroup(group.Id)">Leave This Study Group</button>
+                         </li>
+                     }
+                </ul>
+                <button class="round_corners btn btn-outline-secondary" @onclick="() => GoToStudyGroups()">More...</button>
+            }
+            else
+            {
+                <p>No recent study groups found.</p>
+                <button class="round_corners btn btn-outline-secondary" @onclick="() => GoToStudyGroups()">More...</button>
+            }
+        </div>
+    </div>
 
-<h1>Available study groups:</h1>      <!--feel like this should be formulated better??-->
-@if (recentStudyGroups == null)
-{
-    <p><em>Loading...</em></p>
-}
-else if (recentStudyGroups.Any())
-{
-    <ul>
-        @foreach (var group in recentStudyGroups)
-        {
-            <li>
-                <p style="margin-bottom: 0; margin-inline-end: 0;">Creator: </p>
-                <button @onclick="() => GoToProfile(group.CreatorId)" style="border: none; background-color: transparent; cursor: pointer;
-                    color: darkblue; font-weight: bold;  text-decoration: underline;">
-                    @group.CreatorId
-                </button>
-                <p style="text-decoration: underline;">@group.Subject</p> <p style="margin-bottom: 0;"></p>
-                @(group.GroupPlace ? "Live" : "Online") - @group.GroupDate
-                <p style="margin-bottom: 0;">Current members' count: </p> @group.MemberNumber
-                <p style="margin-bottom: 0;"></p> <button @onclick="()=> JoinStudyGroup(group.Id)">Join This Study Group</button>
-            </li>
-        }
-    </ul>
-    <button @onclick="() => GoToStudyGroups()">More...</button>
-}
-else 
-{
-    <p>No recent study groups found.</p>
-    <button @onclick="() => GoToStudyGroups()">More...</button>
-}
+</body>
+</html>
 
 @code {
 
@@ -151,16 +189,18 @@ else
 
     private ProfileEntity visiterProfile;
 
+    private List<(DataAccessLibrary.Models.StudyGroup studyGroup, bool isMember)> studyGroupsWithMembership;
+
     protected override async Task OnInitializedAsync()
     {
         var user = (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User;
         var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        MatchedTutors = await MatchmakingService.FindTutors(userId) ?? new List<ProfileEntity>();
+        MatchedTutors = await MatchmakingService.FindTutorsAsync(userId) ?? new List<ProfileEntity>();
 
-        MatchedLearners = await MatchmakingService.FindLearners(userId) ?? new List<ProfileEntity>();
+        MatchedLearners = await MatchmakingService.FindLearnersAsync(userId) ?? new List<ProfileEntity>();
 
-        FilesForLearning = await MatchmakingService.GetFilesForTopics(userId) ?? new List<UserFile>();
+        FilesForLearning = await MatchmakingService.GetFilesForTopicsAsync(userId) ?? new List<UserFile>();
 
         recentStudyGroups = MatchmakingService.GetRecentStudyGroups(5);
     }
@@ -172,19 +212,28 @@ else
 
     private async Task JoinStudyGroup(int studyGroupId)
     {
-        var userId = await GetUserId(); // Use await to get the result of the asynchronous method
-        if (userId == null)
-        {
-            // Handle the case where the user ID couldn't be retrieved
-            return;
-        }
+        var userId = await GetUserId();
+        await studyGroupRepo.AddMemberAsync(studyGroupId, userId);
+        await UpdateMemberCount(studyGroupId);
+        studyGroupsWithMembership = await studyGroupRepo.GetStudyGroupsWithMembershipStatus(userId);
+    }
 
-        var isAlreadyMember = await studyGroupRepo.IsMember(studyGroupId, userId);
+    private async Task LeaveStudyGroup(int studyGroupId)
+    {
+        var userId = await GetUserId();
+        await studyGroupRepo.RemoveMemberAsync(studyGroupId, userId);
+        await UpdateMemberCount(studyGroupId);
+        studyGroupsWithMembership = await studyGroupRepo.GetStudyGroupsWithMembershipStatus(userId);
+    }
 
-        if (!isAlreadyMember)
+    private async Task UpdateMemberCount(int studyGroupId)
+    {
+        var memberCount = await studyGroupRepo.GetMemberCountAsync(studyGroupId);
+        var studyGroup = await studyGroupRepo.GetStudyGroupByIdAsync(studyGroupId);
+        if (studyGroup != null)
         {
-            await studyGroupRepo.AddMemberAsync(studyGroupId, userId);
-            // Implement UI update or success notification
+            studyGroup.MemberNumber = memberCount;
+            await studyGroupRepo.UpdateStudyGroupAsync(studyGroup);
         }
     }
 
@@ -199,6 +248,11 @@ else
         }
 
         return visiterProfile.Id;
+    }
+
+    private void GoToLibrary()
+    {
+        navigationManger.NavigateTo("/library");
     }
 
     private void GoToStudyGroups()
