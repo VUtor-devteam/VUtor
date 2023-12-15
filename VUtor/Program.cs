@@ -23,6 +23,7 @@ using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
 using Microsoft.AspNetCore.Diagnostics;
 using VUtor.Services.ExceptionTracker;
 using VUtor.Services;
+using DataAccessLibrary.MatchmakingServ;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,6 +70,7 @@ builder.Services.AddScoped<IFolderRepository, FolderRepository>();
 builder.Services.AddScoped<ISearch, Search>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<RatingRepository>();
+builder.Services.AddScoped<IMatchmakingService, MatchmakingService>();
 builder.Services.AddScoped<StudyGroupRepository>();
 builder.Services.AddScoped<IExceptionTracker, ExceptionTracker>();
 builder.Services.AddControllers();

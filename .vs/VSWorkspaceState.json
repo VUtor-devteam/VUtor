@@ -1,0 +1,17 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\DataAccessLibrary",
+    "\\DataAccessLibrary\\FileRepo",
+    "\\DataAccessLibrary\\MatchmakingServ",
+    "\\VUtor",
+    "\\VUtor\\Areas",
+    "\\VUtor\\Areas\\Identity",
+    "\\VUtor\\Areas\\Identity\\Pages",
+    "\\VUtor\\Areas\\Identity\\Pages\\Account",
+    "\\VUtor\\Areas\\Identity\\Pages\\Account\\Manage",
+    "\\VUtor\\Pages"
+  ],
+  "SelectedNode": "\\VUtor.sln",
+  "PreviewInSolutionExplorer": false
+}
