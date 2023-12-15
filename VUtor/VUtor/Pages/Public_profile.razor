@@ -1,0 +1,225 @@
+﻿@page "/profile/{id}"
+
+@using DataAccessLibrary.Data
+@using DataAccessLibrary.GenericRepo;
+@using DataAccessLibrary.Models
+@using DataAccessLibrary
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Identity;
+@using DataAccessLibrary.RatingRepo;
+
+@inject IGenericRepository<TopicEntity> repoGenericTopics
+@inject IProfileRepository repoProfiles
+@inject ApplicationDbContext context
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+@inject RatingRepository ratingRepo
+
+<PageTitle>Profile</PageTitle>
+<h1>Profile</h1>
+
+
+@if (userProfile != null)
+{
+    <div class="edit_container">
+        <div class="edit_row_container">
+            <div class="edit_container">
+                <div>
+                    <label class="specifications">Name:</label>
+                    <div class="mb-2">
+                        <label>@userProfile.Name</label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="specifications">Surname:</label>
+                    <div class="mb-2">
+                        <label>@userProfile.Surname</label>
+                    </div>
+                </div>
+            </div>
+
+            <img class="round_img" src="css/Images/user.jpg" alt="Default user image">
+        </div>
+
+        <div class="edit_row_container">
+            <div>
+                <label class="specifications">Course:</label>
+                <div class="mb-2">
+                    <label>@userProfile.CourseInfo.GetName()</label>
+                </div>
+            </div>
+
+            <div>
+                <label class="specifications">Academic year:</label>
+                <div class="mb-2">
+                    <label>@userProfile.CourseInfo.GetYear()</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="edit_row_container">
+            <div>
+                <label class="specifications">Subject you want to learn:</label>
+                <div class="mb-2">
+                    @foreach (var topic in @userProfile.TopicsToLearn)
+                    {
+                        <li>@topic.Title</li>
+                    }
+
+                    <!--<label>Subject you want to learn</label>-->
+                </div>
+            </div>
+
+            <div>
+                <label class="specifications">Subject you want to teach:</label>
+                <div class="mb-2">
+                    @foreach (var topic in @userProfile.TopicsToTeach)
+                    {
+                        <li>@topic.Title</li>
+                    }
+                    <!--<label>Subject you want to teach</label>-->
+                </div>
+            </div>
+        </div>
+        <div>
+            <label class="specifications"> Rating:</label>
+            <div class="mb-2">
+                <label>@averageRating.ToString("0.##")</label>
+            </div>
+        </div>
+
+        @if (id != currentUserId)
+        {
+            <div>
+                <label class="specifications">Select a rating:</label>
+                <div class="form-floating">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        <div>
+                            <input type="radio"
+                            asp-for="Input.Rating"
+                            value="@i"
+                            id="@("rating" + i)"
+                            name="Rating"
+                            checked="@(selectedRating == i)"
+                            @onchange="UpdateRating" />
+                            <label class="label form-floating mb-2" for="@("rating" + i)"> @i </label>
+                        </div>
+                    }
+                    <span asp-validation-for="Input.Rating"></span>
+                </div>
+                <label class="specifications">Selected rating: @selectedRating</label>
+            </div>
+        }
+
+    </div>
+}
+
+@code {
+
+    [Parameter]
+    public string id { get; set; } //pataisyti pavadinimus
+
+    public double averageRating { get; set; }
+
+    private string currentUserId;
+
+    private ProfileEntity userProfile;
+
+    private ProfileEntity visiterProfile;
+
+    private int selectedRating { get; set; }
+
+
+    #region Tasks
+
+    // Actions executed on page initialization
+    protected override async Task OnInitializedAsync()
+    {
+        userProfile = await repoProfiles.GetProfileByIdAsync(id);
+
+        currentUserId = await GetCurrentUserIdAsync(); // Get current user's ID
+        var existingRating = await ratingRepo.GetRatingByReviewerAsync(id, currentUserId);
+
+        if (existingRating != null)
+        {
+            selectedRating = existingRating.Score;
+        }
+        else
+        {
+            selectedRating = 0; // Default value if no rating exists
+        }
+        averageRating = await ratingRepo.GetAverageRatingAsync(id);
+    }
+    #endregion
+
+    private async Task UpdateRating(ChangeEventArgs e)
+    {
+        selectedRating = Convert.ToInt32(e.Value.ToString());
+
+        var rating = new Rating
+            {
+                RecipientId = id, // Assuming 'id' is the recipient's ID
+                ReviewerId = await GetCurrentUserIdAsync(), // You need to implement this method to get the current user's ID
+                Score = selectedRating
+            };
+
+        await ratingRepo.AddOrUpdateRatingAsync(rating);
+
+        averageRating = await ratingRepo.GetAverageRatingAsync(id); // Ensure userProfile.Id is a string
+    }
+
+    private async Task<string> GetCurrentUserIdAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user.Identity.IsAuthenticated)
+        {
+            var email = user.Identity.Name; // Assuming the email is used as the username
+            visiterProfile = await repoProfiles.GetProfileByEmailAsync(email);
+        }
+
+        return visiterProfile.Id;
+
+    }
+
+    #region Fields
+
+    private List<TopicEntity> _topics = new List<TopicEntity>();
+    private List<ProfileEntity> _topicsDisplay = new List<ProfileEntity>();
+
+    private List<ProfileEntity> _users = new List<ProfileEntity>();
+    private List<ProfileEntity> _usersDisplay = new List<ProfileEntity>();
+
+    private string? _insertUserMessage;
+    private string? _resultInsert;
+    private string? _filterListMessage;
+    private string? _resultFilter;
+
+    #endregion
+
+    #region Models
+
+    // UserModel
+    public class UserModel
+    {
+        // Personal data
+        public string? Name { get; set; }
+        public string? Surname { get; set; }
+
+        // Course info
+        public int CourseName { get; set; }
+        public int CourseYear { get; set; }
+
+        // Topics
+        public int TopicToLearnId { get; set; }
+        public int TopicToTeachId { get; set; }
+    }
+
+    private UserModel? NewUser = new UserModel();
+    private UserModel? Filter = new UserModel();
+
+    #endregion
+
+}

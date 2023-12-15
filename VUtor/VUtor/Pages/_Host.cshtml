@@ -1,0 +1,62 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.Components.Web
+@namespace VUtor.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
+    <link href="css/site.css" rel="stylesheet" />
+    <link href="css/custom.css" rel="stylesheet" />
+    <link href="VUtor.styles.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="favicon.png"/>
+    <link href="blazored-modal.css" rel="stylesheet" />
+    <script>
+        Blazor.defaultReconnectionHandler._reconnectCallback = function (detailedError) {
+            var modal = document.getElementById('reconnectionModal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'reconnectionModal';
+                modal.setAttribute('style', 'position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 1000; background-color: #f8f9fa; display: flex; align-items: center; justify-content: center;');
+                modal.innerHTML = '<div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">Reconnecting</h5></div><div class="modal-body"><p>Connection lost. Trying to reconnect...</p></div><div class="modal-footer"><button id="reloadButton" type="button" class="btn btn-primary">Reload</button></div></div></div>';
+                document.body.appendChild(modal);
+
+                document.getElementById('reloadButton').addEventListener('click', function () {
+                    location.reload();
+                });
+            }
+
+            modal.style.display = 'flex';
+        };
+
+        Blazor.defaultReconnectionHandler._reconnectionCompleteCallback = function () {
+            var modal = document.getElementById('reconnectionModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        };
+    </script>
+    <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
+</head>
+<body>
+    <component type="typeof(App)" render-mode="ServerPrerendered" />
+
+    <div id="blazor-error-ui">
+        <environment include="Staging,Production">
+            An error has occurred. This application may no longer respond until reloaded.
+        </environment>
+        <environment include="Development">
+            An unhandled exception has occurred. See browser dev tools for details.
+        </environment>
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="_content/Blazored.Typeahead/blazored-typeahead.js"></script>
+    <script src="_framework/blazor.server.js"></script>
+</body>
+</html>

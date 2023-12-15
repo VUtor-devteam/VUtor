@@ -1,0 +1,341 @@
+﻿@page "/uploadfiles"
+
+@using DataAccessLibrary.Data
+@using DataAccessLibrary.FileRepo;
+@using DataAccessLibrary.FolderRepo;
+@using DataAccessLibrary.Models
+@using DataAccessLibrary
+@using Microsoft.AspNetCore.Identity;
+@using Microsoft.EntityFrameworkCore
+@using VUtor.Components;
+@using DataAccessLibrary.GenericRepo;
+
+@inject IConfiguration config
+@inject IGenericRepository<TopicEntity> topicRepo
+@inject UserManager<ProfileEntity> userManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IFileRepository fileRepo
+@inject IFolderRepository folderRepo
+
+<EditForm Model="@UploadFile" OnSubmit="SubmitForm">
+    <!-- File title-->
+    <div>
+        <label for="Title" class="custom_small_text">Enter resource title</label>
+        <InputText id="title" class="form-control" @bind-Value="UploadFile.Title"></InputText>
+    </div>
+    <!-- File title-->
+    <!-- File description-->
+    <div>
+        <label for="Description" class="custom_small_text">Enter a short description</label>
+        <InputText id="description" class="form-control" @bind-Value="UploadFile.Description"></InputText>
+    </div>
+    <!-- File description-->
+    <!-- Choosing File topics-->
+    <div>
+        <label for="TopicId" class="custom_small_text">Choose topic</label>
+        <select id="topics" class="form-control" @onchange="UpdateTopicsId">
+            <option value="">Select a topic...</option>
+            @foreach (var topic in TopicList)
+            {
+                <option value="@topic.Id" class="custom_small_text">@topic.Title</option>
+            }
+        </select>
+    </div>
+    <!-- Choosing File topics-->
+    <!-- Editing File topics-->
+    <div>
+        @if (UploadFile.TopicsId.Any())
+        {
+            <label style="margin-top: 10px" class="custom_small_text">Selected Topics:</label>
+            @foreach (var topicId in UploadFile.TopicsId)
+            {
+                var topic = TopicList.First(t => t.Id == topicId);
+            <li>@topic.Title <button @onclick="() => RemoveTopic(topicId)" type="button" class="round_corners_small btn btn-outline-secondary">X</button></li>
+            }
+        }
+    </div>
+    <!-- Editing File topics-->
+    <!-- File folder-->
+    <div>
+        <label for="FoldersId" class="custom_small_text">Choose where to store</label>
+        <div>
+            @if (SelectedFolder != null)
+            {
+                <p class="custom_small_text">@SelectedFolder.Path</p>
+            }
+        </div>
+        <div>
+            @if (SelectedFolder == null)
+            {
+                <div>
+                    @if (FolderList != null)
+                    {
+                        <select id="folder" style="margin-bottom: 10px" class="form-control-sm" @onchange="FolderSelected">
+                            <option value="">Select a folder...</option>
+                            @foreach (var folder in FolderList)
+                            {
+                                <option value="@folder.Id" class="custom_small_text">@folder.Name</option>
+                            }
+                        </select>
+                    }
+                </div>
+                <div>
+                    <input type="text" style="margin-bottom: 10px" @bind="NewFolderName" placeholder="New folder name" />
+                </div>
+                <div>
+                    <button @onclick="CreateNewFolder" style="margin-bottom: 10px; width: 170px; padding: 0 10px 0 10px" type="button" class="round_corners btn btn-outline-secondary">Create New Folder</button>
+                </div>
+            }
+            else
+            {
+                <FolderComp CurrentFolder="@SelectedFolder" OnFolderSelected="HandleFolderSelected" />
+            }
+        </div>
+    </div>
+    <!-- File folder-->
+    <!-- File folder-->
+    <div>
+        <label for="File" class="custom_small_text">Upload your file</label>
+        @if (showInput)
+        {
+            <InputFile OnChange="@LoadFiles" style="margin-bottom: 10px" class="form-control" />
+        }
+    </div>
+    <button @onclick="CaptureFile" style="margin-bottom: 10px; width: 100px; padding: 0 10px 0 10px" class="round_corners btn btn-outline-secondary" type="submit">Upload</button>
+    @if (isLoading)
+    {
+        <div class="loading-overlay">
+            <div class="loading-spinner">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    }
+    </EditForm>
+
+    @if (Errors.Count() > 0)
+{
+    <h2>Errors</h2>
+    <ul class="text-danger">
+        @foreach (var error in Errors)
+        {
+            <li @onclick="ClearErrorMsg">@error</li>
+        }
+    </ul>
+}
+
+@code {
+    // Model for uploading files
+    public UploadFileModel UploadFile = new UploadFileModel();
+
+    // List of topics
+    private List<TopicEntity> TopicList = new List<TopicEntity>();
+
+    // List of errors
+    public List<string> Errors = new();
+
+    // Selected folder
+    private Folder SelectedFolder;
+
+    // Selected file
+    private IBrowserFile? File;
+
+    // List of folders
+    private List<Folder> FolderList;
+
+    // User profile
+    private ProfileEntity? Profile;
+
+    // New folder name
+    private string NewFolderName;
+
+    private bool showInput = true;
+    private bool isLoading = false;
+
+    // Upload file model
+    public class UploadFileModel
+    {
+        public string Title { get; set; }
+        public string? Description { get; set; }
+        public List<int> TopicsId { get; set; } = new List<int>();
+    }
+
+    // Loading data for page and uploading actions
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Get the list of topics from the database
+            TopicList = await topicRepo.LoadData();
+
+            // Get the list of folders from the repository
+            FolderList = await folderRepo.GetParentFolders();
+
+            // Get the current authentication state
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            // Get the user profile if the user is authenticated
+            if (user.Identity.IsAuthenticated)
+            {
+                Profile = await userManager.GetUserAsync(user);
+            }
+        }
+        catch (Exception ex)
+        {
+            Errors.Add("Error initializing page.");
+        }
+    }
+
+    // Folder selecting/creating system
+    private async Task FolderSelected(ChangeEventArgs e)
+    {
+        try
+        {
+            var selectedFolderId = int.Parse(e.Value.ToString());
+            SelectedFolder = await folderRepo.GetFolder(selectedFolderId);
+        }
+        catch (Exception ex)
+        {
+            Errors.Add("Error selecting folder.");
+        }
+    }
+
+    private async Task CreateNewFolder()
+    {
+        try
+        {
+            if (!string.IsNullOrEmpty(NewFolderName))
+            {
+                // Create a new folder with the given name
+                await folderRepo.CreateFolder(NewFolderName);
+
+                // Update the folder list
+                await UpdateFolderList();
+            }
+            NewFolderName = string.Empty;
+        }
+        catch (Exception ex)
+        {
+            Errors.Add("Error creating new folder.");
+        }
+    }
+
+    private void HandleFolderSelected(Folder folder)
+    {
+        SelectedFolder = folder;
+    }
+
+    public async Task UpdateFolderList()
+    {
+        try
+        {
+            // Update the list of folders from the repository
+            FolderList = await folderRepo.GetParentFolders();
+        }
+        catch (Exception ex)
+        {
+            Errors.Add("Error updating folder list.");
+        }
+    }
+
+    // Update topics ID
+    public void UpdateTopicsId(ChangeEventArgs e)
+    {
+        try
+        {
+            var selectedOption = int.Parse(e.Value.ToString());
+            if (!UploadFile.TopicsId.Contains(selectedOption))
+            {
+                UploadFile.TopicsId.Add(selectedOption);
+            }
+        }
+        catch (Exception ex)
+        {
+            Errors.Add("Error updating topics ID.");
+        }
+    }
+
+    // Remove topic from the list
+    private void RemoveTopic(int topicId)
+    {
+        if (UploadFile.TopicsId.Contains(topicId))
+        {
+            UploadFile.TopicsId.Remove(topicId);
+        }
+        else
+        {
+            Errors.Add($"Topic ID {topicId} not found in list.");
+        }
+    }
+
+    // Load files
+    private void LoadFiles(InputFileChangeEventArgs e)
+    {
+        try
+        {
+            File = e.File;
+        }
+        catch (Exception ex)
+        {
+            Errors.Add("Error loading file.");
+        }
+    }
+
+    // Capture file
+    private async Task CaptureFile()
+    {
+        if (File == null || File.Name == null)
+        {
+            Errors.Add("No file was loaded.");
+            return;
+        }
+
+        if (SelectedFolder == null)
+        {
+            Errors.Add("No folder selected.");
+            return;
+        }
+
+        if (Profile == null)
+        {
+            Errors.Add("No profile found.");
+            return;
+        }
+
+        isLoading = true;
+        try
+        {
+            // Upload the file to the repository
+            await fileRepo.UploadFileAsync(File, File.Name, UploadFile.Title, UploadFile.Description, UploadFile.TopicsId, SelectedFolder.Id, Profile.Id);
+            isLoading = false;
+            UploadFile.Title = String.Empty;
+            UploadFile.Description = String.Empty;
+            UploadFile.TopicsId.Clear();
+            SelectedFolder = null;
+
+            // Clear the file input
+            showInput = false;
+            StateHasChanged();
+            showInput = true;
+            File = null;
+        }
+        catch (Exception ex)
+        {
+            Errors.Add($"File: {File.Name} Error.");
+        }
+    }
+
+    // Submit form
+    public async Task SubmitForm()
+    {
+    }
+
+    private void ClearErrorMsg()
+    {
+        Errors.Clear();
+    }
+
+}
+

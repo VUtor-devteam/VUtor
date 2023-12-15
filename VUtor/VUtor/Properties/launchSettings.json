@@ -1,0 +1,23 @@
+{
+  "iisSettings": { 
+    "windowsAuthentication": false,      
+    "anonymousAuthentication": true, 
+    "iisExpress": {
+      "applicationUrl": "http://localhost:39762",
+      "sslPort": 44374
+    }
+  },
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      
+      // Disable debugging
+      "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
+     
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production" 
+      }
+    }
+  }
+}
