@@ -13,7 +13,7 @@
                 @if (CurrentFolder.SubFolders.Count() == 1)
                 {
                     <div>
-                        <label class="custom_small_text" for="SubFoldersIdOne">Choose a subfolder</label>
+                        <label id="only" class="custom_small_text" for="SubFoldersIdOne">Choose a subfolder</label>
                     </div>
                     <div>
                         <button style="margin-bottom: 10px" type="button" class="round_corners btn btn-outline-secondary" @onclick="() => SelectFolder(CurrentFolder.SubFolders.First())">
@@ -40,15 +40,15 @@
             }
             <!-- To create a new (sub)folder-->
             <div>
-                <input style="margin-bottom: 10px" type="text" @bind="newSubFolderName" placeholder="New sub-folder name" />
+                <input id="newSubFolderName" style="margin-bottom: 10px" type="text" @bind="newSubFolderName" placeholder="New sub-folder name" />
             </div>
             <div>
-                <button style="margin-bottom: 10px; width: 120px; padding: 0 10px 0 10px" 
+                <button id="newsub" style="margin-bottom: 10px; width: 120px; padding: 0 10px 0 10px" 
                 type="button" class="round_corners btn btn-outline-secondary"
                 @onclick="CreateNewSubFolder">Create</button>
             </div>
             <div>
-                <button style="margin-bottom: 10px; width: 200px; padding: 0 10px 0 10px" 
+                <button id="goback" style="margin-bottom: 10px; width: 200px; padding: 0 10px 0 10px" 
                 type="button" class="round_corners btn btn-outline-secondary" 
                 @onclick="GoBackAFolder">Go back one folder</button>
             </div>
@@ -82,8 +82,8 @@
     [Parameter]
     public EventCallback<Folder> OnFolderSelected { get; set; } // Event callback for when a folder is selected
 
-    private Folder SelectedFolder { get; set; } // The currently selected subfolder
-    private List<string> errors = new(); // List to store any errors that occur
+    public Folder SelectedFolder { get; set; } // The currently selected subfolder
+    public List<string> errors = new(); // List to store any errors that occur
     private string newSubFolderName; // The name of the new subfolder to be created
 
     // Method to select a folder
@@ -104,7 +104,7 @@
     }
 
     // Method to go back to the parent folder
-    private async Task GoBackAFolder()
+    public async Task GoBackAFolder()
     {
         try
         {
@@ -150,7 +150,7 @@
     }
 
     // Method to handle the selection of a subfolder
-    private async Task SubFolderSelected(ChangeEventArgs e)
+    public async Task SubFolderSelected(ChangeEventArgs e)
     {
         try
         {
@@ -168,7 +168,7 @@
     }
 
     // Method to create a new subfolder
-    private async Task CreateNewSubFolder()
+    public async Task CreateNewSubFolder()
     {
         try
         {
@@ -186,7 +186,7 @@
     }
 
     // Method to update the list of subfolders
-    private async Task UpdateSubFolderList()
+    public async Task UpdateSubFolderList()
     {
         try
         {

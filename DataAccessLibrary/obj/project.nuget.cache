@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "GA0Xomey1JcnoPlLk20BC2HIngp+l36Jbnbtks5wsTQNe2isXCWDnsuaO3sT/uwtD6ld0xN3RK6AKTbn3W5m8A==",
+  "dgSpecHash": "TjeTaHiEvw3tRKZgrEQbxicKyT0pIMI3Bn3C2lyTDKFC/6dGx5lbltqmWT894P7T0G6vKo4ntFhYEp+k05zacg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-dev\\VUtor\\DataAccessLibrary\\DataAccessLibrary.csproj",
+  "projectFilePath": "c:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-dev\\VUtor\\DataAccessLibrary\\DataAccessLibrary.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\aiste\\.nuget\\packages\\azure.core\\1.36.0\\azure.core.1.36.0.nupkg.sha512",
     "C:\\Users\\aiste\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",

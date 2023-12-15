@@ -1,37 +1,36 @@
 ﻿@page
+@using Microsoft.AspNetCore.Components;
+@using VUtor.Services.ExceptionTracker;
 @model VUtor.Pages.ErrorModel
 
-<!DOCTYPE html>
-<html lang="en">
+@inject IExceptionTracker ExceptionTracker
+@inject NavigationManager navigation
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Error</title>
-    <link href="~/css/bootstrap/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
-</head>
+@if (ExceptionTracker.ExceptionOccurred)
+{
+    <!DOCTYPE html>
+    <html lang="en">
 
-<body>
-    <div class="main">
-        <div class="content px-4">
-            <h1 class="text-danger">Error.</h1>
-            <h2 class="text-danger">An error occurred while processing your request.</h2>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <title>Error</title>
+        <link href="~/css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+        <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
+    </head>
 
-            @if (Model.ShowRequestId)
-            {
-                <p>
-                    <strong>Request ID:</strong> <code>@Model.RequestId</code>
-                </p>
-            }
-
-            <h3>Development Mode</h3>
-            <p>
-                Swapping to the <strong>Development</strong> environment displays detailed information about the error that occurred.
-            </p>
-
+    <body>
+        <div class="main">
+            <div class="content px-4">
+                <h1 class="text-danger">Error.</h1>
+                <h2 class="text-danger">An error occurred while processing your request.</h2>
+            </div>
         </div>
-    </div>
-</body>
+    </body>
 
-</html>
+    </html>
+}
+else
+{
+    navigation.NavigateTo("/");
+}

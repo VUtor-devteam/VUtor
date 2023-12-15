@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-dev\\VUtor\\DataAccessLibrary\\DataAccessLibrary.csproj": {}
+    "c:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-dev\\VUtor\\DataAccessLibrary\\DataAccessLibrary.csproj": {}
   },
   "projects": {
-    "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-dev\\VUtor\\DataAccessLibrary\\DataAccessLibrary.csproj": {
+    "c:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-dev\\VUtor\\DataAccessLibrary\\DataAccessLibrary.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-dev\\VUtor\\DataAccessLibrary\\DataAccessLibrary.csproj",
+        "projectUniqueName": "c:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-dev\\VUtor\\DataAccessLibrary\\DataAccessLibrary.csproj",
         "projectName": "DataAccessLibrary",
-        "projectPath": "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-dev\\VUtor\\DataAccessLibrary\\DataAccessLibrary.csproj",
+        "projectPath": "c:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-dev\\VUtor\\DataAccessLibrary\\DataAccessLibrary.csproj",
         "packagesPath": "C:\\Users\\aiste\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-dev\\VUtor\\DataAccessLibrary\\obj\\",
+        "outputPath": "c:\\Users\\aiste\\OneDrive\\Desktop\\VUtor-dev\\VUtor\\DataAccessLibrary\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -124,7 +124,7 @@ namespace VUtor.Areas.Identity.Pages.Account
                         user.TopicsToTeach.Add(topic);
                     }
                 }
-                await _userManager.SetUserNameAsync(user, user.Id);
+                await _userManager.SetUserNameAsync(user, user.Email);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
