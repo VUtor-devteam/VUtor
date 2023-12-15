@@ -269,7 +269,6 @@ else
         {
             var email = user.Identity.Name; // Assuming the email is used as the username
             visiterProfile = await repoProfiles.GetProfileByEmailAsync(email);
-
         }
 
         return visiterProfile.Id;

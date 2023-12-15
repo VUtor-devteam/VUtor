@@ -13,6 +13,7 @@
 @inject IFolderRepository folderRepo
 @inject NavigationManager navigationManager
 @inject IGenericRepository<TopicEntity> topicRepo
+@inject ILogger<EditFile> Logger
 
 <h1>Edit File</h1>
 
@@ -158,7 +159,7 @@ else
         }
         catch (Exception ex)
         {
-            // errors.Add("Error selecting folder.");
+            Logger.LogError("Error selecteing folder - Edit File", ex);
         }
     }
 
@@ -175,7 +176,7 @@ else
         }
         catch (Exception ex)
         {
-            //errors.Add("Error creating new folder.");
+            Logger.LogError("Error creating folder - Edit File", ex);
         }
     }
 
@@ -187,7 +188,7 @@ else
         }
         catch (Exception ex)
         {
-            //errors.Add("Error updating folder list.");
+            Logger.LogError("Error updating folder list - Edit File", ex);
         }
     }
 
@@ -208,7 +209,7 @@ else
         }
         catch (Exception ex)
         {
-            //errors.Add($"Error updating topics ID: {ex.Message}");
+            Logger.LogError("Error updating topics - Edit File", ex);
         }
     }
 
@@ -220,7 +221,7 @@ else
         }
         else
         {
-            //errors.Add($"Topic ID {topicId} not found in list.");
+            Logger.LogTrace("Tried remove topic not in list - Edit File");
         }
     }
 

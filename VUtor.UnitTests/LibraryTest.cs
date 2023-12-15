@@ -12,6 +12,7 @@ using ServiceStack;
 using DataAccessLibrary.Models;
 using System.Security.Claims;
 using DataAccessLibrary.WebSearch;
+using Blazored.Modal.Services;
 
 public class LibraryTests
 {
@@ -28,6 +29,7 @@ public class LibraryTests
         var mockFileRepo = new Mock<IFileRepository>();
         var mockFolderRepo = new Mock<IFolderRepository>();
         var mockSearch = new Mock<ISearch>();
+        var mockModalService = new Mock<IModalService>(); // Add this line
 
         var testUserId = "test-user-id";
 
@@ -60,15 +62,17 @@ public class LibraryTests
         _ctx.Services.AddSingleton(mockHttpContext.Object);
         _ctx.Services.AddSingleton(mockFolderRepo.Object);
         _ctx.Services.AddSingleton(mockSearch.Object);
+        _ctx.Services.AddSingleton(mockModalService.Object); // Add this line
 
         var cut = _ctx.RenderComponent<Library>();
-        cut.Instance.SelectedFolder = new Folder(); // Initialize SelectedFolder
+        cut.Instance.SelectedFolder = new Folder();
     }
 
     [Fact]
     public void LibraryComponentRendersWithoutThrowing()
     {
         var cut = _ctx.RenderComponent<Library>();
+        cut.Instance.SelectedFolder = new Folder(); // Initialize SelectedFolder
         cut.Render(); // This will throw an exception if the component throws an exception when rendered
     }
 
@@ -93,7 +97,8 @@ public class LibraryTests
     public void LibraryComponentRendersErrorMessage()
     {
         // Arrange
-        IRenderedComponent<Library> cut = _ctx.RenderComponent<Library>();
+        var cut = _ctx.RenderComponent<Library>();
+        cut.Instance.SelectedFolder = new Folder(); // Initialize SelectedFolder
         cut.Instance.ErrorMessage = "Error fetching folders.";
 
         // Act

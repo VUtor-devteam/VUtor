@@ -19,6 +19,7 @@ namespace DataAccessLibrary.ProfileRepo
             if (!string.IsNullOrWhiteSpace(id))
             {
                 var profile = await _context.Profiles
+                    .AsSplitQuery()
                     .Include(x => x.TopicsToLearn)
                     .Include(x => x.TopicsToTeach)
                     .Include(x => x.UserItems)
@@ -34,6 +35,7 @@ namespace DataAccessLibrary.ProfileRepo
             if (!profiles.IsNullOrEmpty())
             {
                 profiles = await _context.Profiles
+                    .AsSplitQuery()
                     .Include(x => x.TopicsToLearn)
                     .Include(x => x.TopicsToTeach)
                     .Include(x => x.UserItems)
@@ -67,6 +69,7 @@ namespace DataAccessLibrary.ProfileRepo
             {
                 // Updated query without StringComparison
                 var profile = await _context.Profiles
+                                            .AsSplitQuery()
                                             .Include(p => p.TopicsToLearn)  // Include TopicsToLearn
                                             .Include(p => p.TopicsToTeach)  // Include TopicsToTeach
                                             .FirstOrDefaultAsync(p => p.Email.ToLower() == email.ToLower());
@@ -86,6 +89,7 @@ namespace DataAccessLibrary.ProfileRepo
             {
                 // Updated query without StringComparison
                 var profile = await _context.Profiles
+                                            .AsSplitQuery()
                                             .Include(p => p.TopicsToLearn)  // Include TopicsToLearn
                                             .Include(p => p.TopicsToTeach)  // Include TopicsToTeach
                                             .FirstOrDefaultAsync(p => p.Id.ToLower() == id.ToLower());

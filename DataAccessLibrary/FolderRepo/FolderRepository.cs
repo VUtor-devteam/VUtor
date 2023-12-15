@@ -103,6 +103,7 @@ namespace DataAccessLibrary.FolderRepo
         {
             return await _context
                 .Folders
+                .AsSplitQuery()
                 .Include(x => x.SubFolders)
                 .Include(x => x.Files)
                 .Where(x => x.Id == id)
@@ -112,6 +113,7 @@ namespace DataAccessLibrary.FolderRepo
         public async Task<List<Folder>> GetFolders()
         {
             return await _context.Folders
+            .AsSplitQuery()
             .Include(x => x.SubFolders)
             .Include(e => e.Files)
             .ToListAsync();
@@ -119,6 +121,7 @@ namespace DataAccessLibrary.FolderRepo
 
         public async Task<List<Folder>> GetParentFolders(){
             return await _context.Folders
+            .AsSplitQuery()
             .Include(x => x.SubFolders)
             .Include(x => x.Files)
             .Where(x => x.ParentFolderId == null)
@@ -143,6 +146,7 @@ namespace DataAccessLibrary.FolderRepo
         {
             var folder = await _context
                 .Folders
+                .AsSplitQuery()
                 .Include(e => e.SubFolders)
                 .Where(e => e.Id == id)
                 .SingleAsync();
@@ -154,6 +158,7 @@ namespace DataAccessLibrary.FolderRepo
                     try
                     {
                         var parentFolder = await _context.Folders
+                            .AsSplitQuery()
                             .Include(e => e.SubFolders)
                             .Where(e => e.ParentFolderId == folder.ParentFolderId)
                             .FirstAsync();
