@@ -2,9 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\DataAccessLibrary",
-    "\\DataAccessLibrary\\FileRepo",
-    "\\DataAccessLibrary\\MatchmakingServ",
+    "\\DataAccessLibrary\\RatingRepo",
     "\\VUtor",
+    "\\VUtor.UnitTests",
     "\\VUtor\\Areas",
     "\\VUtor\\Areas\\Identity",
     "\\VUtor\\Areas\\Identity\\Pages",

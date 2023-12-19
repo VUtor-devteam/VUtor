@@ -15763,23 +15763,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ALGIS\\.nuget\\packages\\": {},
+    "C:\\Users\\Lenovo\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ALGIS\\Source\\Repos\\VUtor-devteam\\VUtor\\VUtor\\VUtor.csproj",
+      "projectUniqueName": "C:\\Users\\Lenovo\\Desktop\\VUtor\\VUtor\\VUtor.csproj",
       "projectName": "VUtor",
-      "projectPath": "C:\\Users\\ALGIS\\Source\\Repos\\VUtor-devteam\\VUtor\\VUtor\\VUtor.csproj",
-      "packagesPath": "C:\\Users\\ALGIS\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ALGIS\\Source\\Repos\\VUtor-devteam\\VUtor\\VUtor\\obj\\",
+      "projectPath": "C:\\Users\\Lenovo\\Desktop\\VUtor\\VUtor\\VUtor.csproj",
+      "packagesPath": "C:\\Users\\Lenovo\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Lenovo\\Desktop\\VUtor\\VUtor\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\ALGIS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -15788,15 +15788,14 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "C:\\Users\\ALGIS\\Source\\Repos\\VUtor-devteam\\VUtor\\DataAccessLibrary\\DataAccessLibrary.csproj": {
-              "projectPath": "C:\\Users\\ALGIS\\Source\\Repos\\VUtor-devteam\\VUtor\\DataAccessLibrary\\DataAccessLibrary.csproj"
+            "C:\\Users\\Lenovo\\Desktop\\VUtor\\DataAccessLibrary\\DataAccessLibrary.csproj": {
+              "projectPath": "C:\\Users\\Lenovo\\Desktop\\VUtor\\DataAccessLibrary\\DataAccessLibrary.csproj"
             }
           }
         }
@@ -15905,7 +15904,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
       }
     }
   }
