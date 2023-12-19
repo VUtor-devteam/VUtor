@@ -39,6 +39,14 @@
     padding: 0 5px 0 5px;
 }
 
+.round_corners_edit {
+    border-radius: 13px;
+    border: 1px solid #6855c9;
+    width: 40px;
+    height: 25px;
+    padding: 0 5px 0 5px;
+}
+
 .long { /*use to exted .round_corners*/
     width: 300px;
 }

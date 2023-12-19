@@ -9,139 +9,137 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = VUtor
 build_property.RootNamespace = VUtor
-build_property.ProjectDir = C:\Users\ALGIS\source\repos\VUtor-devteam\VUtor\VUtor\
-build_property.EnableComHosting = 
-build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.ProjectDir = C:\Users\Lenovo\Desktop\VUtor\VUtor\
 build_property.RazorLangVersion = 7.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\ALGIS\source\repos\VUtor-devteam\VUtor\VUtor
+build_property.MSBuildProjectDirectory = C:\Users\Lenovo\Desktop\VUtor\VUtor
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/App.razor]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/App.razor]
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Components/FolderComp.razor]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Components/FolderComp.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xGb2xkZXJDb21wLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Pages/Dashboard.razor]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/Dashboard.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGFzaGJvYXJkLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Pages/EditFile.razor]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/EditFile.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRWRpdEZpbGUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Pages/FetchStudentList.razor]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/FetchStudentList.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRmV0Y2hTdHVkZW50TGlzdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Pages/Index.razor]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/Index.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Pages/Library.razor]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/Library.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTGlicmFyeS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Pages/Profile.razor]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/Profile.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvZmlsZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Pages/Public_profile.razor]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/Public_profile.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHVibGljX3Byb2ZpbGUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Pages/StudyGroup.razor]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/StudyGroup.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3R1ZHlHcm91cC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Pages/StudyGroupCreate.razor]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/StudyGroupCreate.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU3R1ZHlHcm91cENyZWF0ZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Pages/UploadFiles.razor]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/UploadFiles.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVXBsb2FkRmlsZXMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Shared/LoginDisplay.razor]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Shared/LoginDisplay.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXExvZ2luRGlzcGxheS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/_Imports.razor]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Shared/MainLayout.razor]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Shared/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-8hyod69ikx
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Shared/NavMenu.razor]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Shared/NavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE5hdk1lbnUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-lez05xduuu
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Areas/Identity/Pages/Account/Login.cshtml]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Areas/Identity/Pages/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Areas/Identity/Pages/Account/LogOut.cshtml]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Areas/Identity/Pages/Account/LogOut.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxMb2dPdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Areas/Identity/Pages/Account/Manage/Index.cshtml]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Areas/Identity/Pages/Account/Manage/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxNYW5hZ2VcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Areas/Identity/Pages/Account/Manage/_ManageNav.cshtml]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Areas/Identity/Pages/Account/Manage/_ManageNav.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxNYW5hZ2VcX01hbmFnZU5hdi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Areas/Identity/Pages/Account/Register.cshtml]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Areas/Identity/Pages/Account/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Areas/Identity/Pages/Account/_ViewImports.cshtml]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Areas/Identity/Pages/Account/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcQWNjb3VudFxfVmlld0ltcG9ydHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Areas/Identity/Pages/Shared/_LoginPartial.cshtml]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Areas/Identity/Pages/Shared/_LoginPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcU2hhcmVkXF9Mb2dpblBhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Areas/Identity/Pages/_ValidationScriptsPartial.cshtml]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Areas/Identity/Pages/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZhbGlkYXRpb25TY3JpcHRzUGFydGlhbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Areas/Identity/Pages/_ViewImports.cshtml]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Areas/Identity/Pages/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Areas/Identity/Pages/_ViewStart.cshtml]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Areas/Identity/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcSWRlbnRpdHlcUGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Pages/Error.cshtml]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Pages/Shared/_Layout.cshtml]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Pages/Shared/_LoginPartial.cshtml]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/Shared/_LoginPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9Mb2dpblBhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Pages/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Pages/_Host.cshtml]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/_Host.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX0hvc3QuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/ALGIS/source/repos/VUtor-devteam/VUtor/VUtor/Pages/_ViewImports.cshtml]
+[C:/Users/Lenovo/Desktop/VUtor/VUtor/Pages/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
