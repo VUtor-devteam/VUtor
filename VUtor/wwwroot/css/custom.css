@@ -31,6 +31,22 @@
     padding: 0 10px 0 10px;
 }
 
+.round_corners_small { /*used for buttons too*/
+    border-radius: 13px;
+    border: 1px solid #606061;
+    width: 30px;
+    height: 30px;
+    padding: 0 5px 0 5px;
+}
+
+.round_corners_edit {
+    border-radius: 13px;
+    border: 1px solid #6855c9;
+    width: 40px;
+    height: 25px;
+    padding: 0 5px 0 5px;
+}
+
 .long { /*use to exted .round_corners*/
     width: 300px;
 }
@@ -39,6 +55,10 @@
     width: 400px;
     height: 40px;
     border-radius: 18px;
+}
+
+.short {
+    width: 108px;
 }
 
 .register_email {
@@ -161,6 +181,18 @@ h1 {
     color: #626063;
     font-size: 25px;
     text-align: center;
+}
+
+.congrats_h2_left {
+    color: #626063;
+    font-size: 25px;
+    text-align: left;
+}
+
+.congrats_h2_right {
+    color: #626063;
+    font-size: 25px;
+    text-align: right;
 }
 
 .specifications {
@@ -310,3 +342,103 @@ full {
     font-size: 16px;
     font-weight: 500;
 }
+
+.folder_table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 15px;
+    vertical-align: top;
+    margin-bottom: 1rem;
+}
+
+.folder_tr {
+    outline: thin solid;
+    border-radius: 10px;
+    border-color: #606061;
+}
+
+.folder_td {
+    padding: 4px 0px 4px 7px;
+    cursor: pointer;
+    color: #606061;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.folder_th {
+    padding: 2px 0px 2px 7px;
+    color: #606061;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.file_table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 15px;
+    vertical-align: top;
+    margin-bottom: 1rem;
+}
+
+.file_tr {
+    outline: thin solid;
+    border-radius: 10px;
+    border-color: #606061;
+}
+
+.file_td {
+    padding: 4px 0px 4px 7px;
+    cursor: pointer;
+    color: #606061;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.file_th {
+    padding: 2px 0px 2px 7px;
+    color: #606061;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.custom_small_text {
+    padding: 0px 0px 2px 7px;
+    color: #606061;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+#HASH {
+    display: flex;
+    justify-content: space-between;
+}
+
+/*Tooptip*/
+
+.tooltip-custom {
+    display: inline-block;
+    position: relative;
+    cursor: help;
+}
+
+    .tooltip-custom .tooltip-text {
+        visibility: hidden;
+        min-width: 200px;
+        max-width: 300px;
+        background-color: #f8f9fa; /* Soft grey background */
+        color: #333333; /* Darker text color for contrast */
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Optional: adds a slight shadow for depth */
+        /* Position the tooltip */
+        position: absolute;
+        z-index: 1;
+        bottom: 100%;
+        left: 50%;
+        margin-left: -60px;
+    }
+
+    .tooltip-custom:hover .tooltip-text {
+        visibility: visible;
+    }

@@ -93,7 +93,7 @@ namespace VUtor.Areas.Identity.Pages.Account
 
                 await _signInManager.SignInAsync(user.Result, true);
                 _logger.LogInformation("User logged in.");
-                return LocalRedirect(returnUrl);
+                return LocalRedirect("/dashboard"); //Redirection to the dashboard page after successful login
 
             }
 

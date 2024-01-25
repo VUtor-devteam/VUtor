@@ -1,0 +1,253 @@
+﻿@page "/editfile/{fileId}"
+@using DataAccessLibrary.Models;
+@using DataAccessLibrary.Data;
+@using DataAccessLibrary.FileRepo;
+@using DataAccessLibrary.FolderRepo;
+@using DataAccessLibrary;
+@using Microsoft.AspNetCore.Mvc;
+@using VUtor.Components;
+@using System.Diagnostics.CodeAnalysis;
+@using DataAccessLibrary.GenericRepo;
+
+@inject IFileRepository fileRepo
+@inject IFolderRepository folderRepo
+@inject NavigationManager navigationManager
+@inject IGenericRepository<TopicEntity> topicRepo
+@inject ILogger<EditFile> Logger
+
+<h1>Edit File</h1>
+
+@if (file == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <EditForm Model="@editFile">
+        <div>
+            <label for="Title" class="custom_small_text">Title</label>
+            <InputText id="title" class="form-control" @bind-Value="editFile.Title"></InputText>
+        </div>
+        <div>
+            <label for="Description" class="custom_small_text">Description</label>
+            <InputText id="description" class="form-control" @bind-Value="editFile.Description"></InputText>
+        </div>
+        <div>
+            <label for="TopicId" class="custom_small_text">Topics</label>
+            <select id="topics" class="form-control" @onchange="UpdateTopicsId">
+                <option value="">Select a topic...</option>
+                @foreach (var topic in topicList)
+                {
+                    <option value="@topic.Id" class="custom_small_text">@topic.Title</option>
+                }
+            </select>
+        </div>
+        <div>
+            @if (editFile.Topics.Any())
+            {
+                <label style="margin-top: 10px" class="custom_small_text">Selected Topics:</label>
+                @foreach (var topicId in editFile.Topics)
+                {
+                    var topic = topicList.First(t => t.Id == topicId);
+                    <li style="margin-left: 20px">@topic.Title <button @onclick="() => RemoveTopic(topicId)" type="button" class="round_corners_small btn btn-outline-secondary">X</button></li>
+                }
+            }
+        </div>
+        <div>
+            @if(changePath == false)
+            {
+                <label for="Folder" style="margin-top: 10px" class="custom_small_text">Current path</label>
+                <p class="congrats_h2_left" style="color:black; font-size: 20px; margin-left: 20px; margin-bottom: 0px">@editFile.Folder.Path</p>
+                <button type="button" style="width: 120px; padding: 0 10px 0 10px; margin-left: 20px; margin-bottom: 20px" 
+                class="round_corners btn btn-outline-secondary" @onclick="ChangePath">Change</button>
+            }
+            else
+            {
+                <div>
+                    <label for="FoldersId" class="custom_small_text">Choose where to store</label>
+                    <div>
+                        @if (selectedFolder != null)
+                        {
+                            <p class="custom_small_text">@selectedFolder.Path</p>
+                        }
+                    </div>
+                    <div>
+                        @if (selectedFolder == null)
+                        {
+                            <div>
+                                @if (folderList != null)
+                                {
+                                    <select id="folder" style="margin-bottom: 10px" class="form-control-sm" @onchange="FolderSelected">
+                                        <option value="">Select a folder...</option>
+                                        @foreach (var folder in folderList)
+                                        {
+                                            <option value="@folder.Id" class="custom_small_text">@folder.Name</option>
+                                        }
+                                    </select>
+                                }
+                            </div>
+                            <div>
+                                <input type="text" style="margin-bottom: 10px" @bind="newFolderName" placeholder="New folder name" />
+                            </div>
+                            <div>
+                                <button @onclick="CreateNewFolder" style="margin-bottom: 10px; width: 170px; padding: 0 10px 0 10px" type="button" class="round_corners btn btn-outline-secondary">Create New Folder</button>
+                            </div>
+                        }
+                        else
+                        {
+                            <FolderComp CurrentFolder="@selectedFolder" OnFolderSelected="HandleFolderSelected" />
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+        <button @onclick="SaveChanges" class="round_corners btn btn-outline-secondary">Save Changes</button>
+        <button @onclick="DeleteFile" class="round_corners btn btn-outline-secondary">Delete File</button>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public string fileId { get; set; }
+
+    private UserFile file;
+    private List<TopicEntity> topicList;
+    private List<Folder> folderList;
+    private bool changePath = false;
+    private Folder selectedFolder;
+    private string newFolderName;
+
+    [BindProperty]
+    private EditFileModel editFile { get; set; }
+
+    public class EditFileModel()
+    {
+        [AllowNull]
+        public string Title { get; set; }
+        [AllowNull]
+        public string? Description { get; set; }
+        [AllowNull]
+        public int FolderId { get; set; }
+        [AllowNull]
+        public Folder Folder { get; set; }
+        [AllowNull]
+        public List<int> Topics { get; set; } = new List<int>();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        topicList = await topicRepo.LoadData();
+        folderList = await folderRepo.GetParentFolders();
+        int id = int.Parse(fileId);
+        file = await fileRepo.GetFileAsync(id);
+        editFile = new EditFileModel
+            {
+                Title = file.Title,
+                Description = file.Description,
+                FolderId = file.FolderId,
+                Folder = file.Folder,
+                Topics = file.Topics.Select(x => x.Id).ToList()
+            };
+    }
+
+    private async Task FolderSelected(ChangeEventArgs e)
+    {
+        try
+        {
+            var selectedFolderId = int.Parse(e.Value.ToString());
+            selectedFolder = await folderRepo.GetFolder(selectedFolderId);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError("Error selecteing folder - Edit File", ex);
+        }
+    }
+
+    private async Task CreateNewFolder()
+    {
+        try
+        {
+            if (!string.IsNullOrEmpty(newFolderName))
+            {
+                await folderRepo.CreateFolder(newFolderName);
+                await UpdateFolderList();
+            }
+            newFolderName = string.Empty;
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError("Error creating folder - Edit File", ex);
+        }
+    }
+
+    private async Task UpdateFolderList()
+    {
+        try
+        {
+            folderList = await folderRepo.GetFolders();
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError("Error updating folder list - Edit File", ex);
+        }
+    }
+
+    private void HandleFolderSelected(Folder folder)
+    {
+        selectedFolder = folder;
+    }
+
+    private void UpdateTopicsId(ChangeEventArgs e)
+    {
+        try
+        {
+            var selectedOption = int.Parse(e.Value.ToString());
+            if (!editFile.Topics.Contains(selectedOption))
+            {
+                editFile.Topics.Add(selectedOption);
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError("Error updating topics - Edit File", ex);
+        }
+    }
+
+    private void RemoveTopic(int topicId)
+    {
+        if (editFile.Topics.Contains(topicId))
+        {
+            editFile.Topics.Remove(topicId);
+        }
+        else
+        {
+            Logger.LogTrace("Tried remove topic not in list - Edit File");
+        }
+    }
+
+    public async Task SaveChanges()
+    {
+        if(selectedFolder != null)
+        {
+            await fileRepo.EditFile(file, editFile.Title, editFile.Description, editFile.Topics, selectedFolder.Id);
+        }
+        else
+        {
+            await fileRepo.EditFile(file, editFile.Title, editFile.Description, editFile.Topics, editFile.Folder.Id);
+        }
+        //await fileRepo.UpdateFile(file);
+        navigationManager.NavigateTo("library");
+    }
+
+    private async Task DeleteFile()
+    {
+        await fileRepo.DeleteFileAsync(file.Id);
+        // await fileRepo.DeleteFile(file.Id);
+        navigationManager.NavigateTo("library");
+    }
+
+    private void ChangePath()
+    {
+        changePath = true;
+    }
+}

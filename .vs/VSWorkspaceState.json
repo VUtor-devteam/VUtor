@@ -1,6 +1,16 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\DataAccessLibrary",
+    "\\DataAccessLibrary\\RatingRepo",
+    "\\VUtor",
+    "\\VUtor.UnitTests",
+    "\\VUtor\\Areas",
+    "\\VUtor\\Areas\\Identity",
+    "\\VUtor\\Areas\\Identity\\Pages",
+    "\\VUtor\\Areas\\Identity\\Pages\\Account",
+    "\\VUtor\\Areas\\Identity\\Pages\\Account\\Manage",
+    "\\VUtor\\Pages"
   ],
   "SelectedNode": "\\VUtor.sln",
   "PreviewInSolutionExplorer": false

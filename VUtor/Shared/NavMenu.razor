@@ -12,8 +12,13 @@
         <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
             <nav class="flex-column">
                 <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                        <span class="oi oi-home" aria-hidden="true"></span> Home
+                    <NavLink class="nav-link" href="dashboard">
+                        <span class="oi oi-dashboard" aria-hidden="true"></span> Dashboard
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="profile">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Profile
                     </NavLink>
                 </div>
                 <div class="nav-item px-3">
@@ -22,21 +27,15 @@
                     </NavLink>
                 </div>
                 <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="review">
-                        <span class="oi oi-list-rich" aria-hidden="true"></span> Review
+                    <NavLink class="nav-link" href="library">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Library
                     </NavLink>
                 </div>
                 <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="courses">
-                        <span class="oi oi-list-rich" aria-hidden="true"></span> Courses page
+                    <NavLink class="nav-link" href="studygroups">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Study Groups
                     </NavLink>
                 </div>
-                <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="uploadfiles">
-                        <span class="oi oi-list-rich" aria-hidden="true"></span> Upload Files
-                    </NavLink>
-                </div>
-
             </nav>
         </div>
     </Authorized>
@@ -67,5 +66,22 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+}
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@code {
+    private string userName;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            userName = user.Identity.Name;
+        }
     }
 }
